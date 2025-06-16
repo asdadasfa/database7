@@ -1,0 +1,73 @@
+spring:
+  mail:
+    # SMTP服务器，这个是QQ邮箱的  其他邮箱请另行百度
+    host: smtp.qq.com
+    # 发送验证码的邮箱
+    username: 2330544464@qq.com
+    # 授权码
+    password: qgflmbznffrtecdg
+    # 编码
+    default-encoding: utf-8
+    # 其它参数
+    properties:
+      mail:
+        smtp:
+          # 如果是用 SSL 方式，需要配置如下属性,使用qq邮箱的话需要开启
+          ssl:
+            enable: true
+            required: true
+          # 邮件接收时间的限制，单位毫秒
+          timeout: 10000
+          # 连接时间的限制，单位毫秒
+          connectiontimeout: 10000
+          # 邮件发送时间的限制，单位毫秒
+          writetimeout: 10000
+
+#  application:
+#    name: sale
+#    multipart:
+#      enabled: true
+#      max-file-size: 300Mb
+#      max-request-size: 300Mb
+#    ssl:
+#      # 证书文件名
+#      key-store: classpath:test.p12
+#      # 证书密钥别名
+#      key-alias: myhttps
+#      # 密钥口令
+#      key-store-password: bfn159753
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/word?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
+    username: root
+    password: bfn159753
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  main:
+    allow-circular-references: true
+
+server:
+  port: ${server_port:8686} #9012
+  max-http-header-size: ${max_http_header_size:10000000}  #1024*1024*256 byte
+
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      field-strategy: not_empty
+
+
+feign:
+  hystrix:
+    enabled: false
+  client:
+    config:
+      default:  # 服务名，default表示所有服务
+        connectTimeout: 300000
+        readTimeout: 300000
+        loggerLevel: full
+
+
