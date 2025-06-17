@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.database_cli.mapper.OrderMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.database_cli.model.entity.Order">
+        <result column="buyer_id" property="buyerId" jdbcType="VARCHAR"/>
+        <result column="seller_id" property="sellerId" jdbcType="VARCHAR"/>
+        <result column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="sum" property="sum" jdbcType="DOUBLE"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        buyer_id, seller_id, goods_id, state, num, sum, time
+    </sql>
+
+    <!-- 根据买家ID查询订单 -->
+    <select id="selectByBuyerId" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE buyer_id = #{buyerId}
+    </select>
+
+    <!-- 根据卖家ID查询订单 -->
+    <select id="selectBySellerId" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE seller_id = #{sellerId}
+    </select>
+
+    <!-- 根据商品ID查询订单 -->
+    <select id="selectByGoodsId" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE goods_id = #{goodsId}
+    </select>
+
+    <!-- 根据订单状态查询 -->
+    <select id="selectByState" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE state = #{state}
+    </select>
+
+    <!-- 查询所有订单 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+    </select>
+
+    <!-- 插入订单 -->
+    <insert id="insert" parameterType="com.example.database_cli.model.entity.Order">
+        INSERT INTO `order` (buyer_id, seller_id, goods_id, state, num, sum, time)
+        VALUES (#{buyerId}, #{sellerId}, #{goodsId}, #{state}, #{num}, #{sum}, #{time})
+    </insert>
+
+    <!-- 更新订单信息 -->
+    <update id="update" parameterType="com.example.database_cli.model.entity.Order">
+        UPDATE `order`
+        SET state = #{state},
+            num = #{num},
+            sum = #{sum},
+            time = #{time}
+        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId}
+    </update>
+
+    <!-- 根据买家ID、卖家ID、商品ID删除订单 -->
+    <delete id="deleteByBuyerIdAndSellerIdAndGoodsId">
+        DELETE FROM `order`
+        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId}
+    </delete>
+
+    <!-- 更新订单状态 -->
+    <update id="updateState">
+        UPDATE `order`
+        SET state = #{state}
+        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId}
+    </update>
+
+    <!-- 根据时间范围查询订单 -->
+    <select id="selectByTimeRange" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <!-- 根据买家ID和状态查询订单 -->
+    <select id="selectByBuyerIdAndState" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE buyer_id = #{buyerId} AND state = #{state}
+    </select>
+
+    <!-- 根据卖家ID和状态查询订单 -->
+    <select id="selectBySellerIdAndState" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE seller_id = #{sellerId} AND state = #{state}
+    </select>
+
+</mapper> 

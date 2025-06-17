@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.database_cli.mapper.SellerMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.database_cli.model.entity.Seller">
+        <id column="seller_id" property="sellerId" jdbcType="VARCHAR"/>
+        <result column="seller_name" property="sellerName" jdbcType="VARCHAR"/>
+        <result column="seller_password" property="sellerPassword" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        seller_id, seller_name, seller_password
+    </sql>
+
+    <!-- 根据ID查询卖家 -->
+    <select id="selectById" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+        WHERE seller_id = #{sellerId}
+    </select>
+
+    <!-- 查询所有卖家 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+    </select>
+
+    <!-- 插入卖家 -->
+    <insert id="insert" parameterType="com.example.database_cli.model.entity.Seller">
+        INSERT INTO seller (seller_id, seller_name, seller_password)
+        VALUES (#{sellerId}, #{sellerName}, #{sellerPassword})
+    </insert>
+
+    <!-- 更新卖家信息 -->
+    <update id="update" parameterType="com.example.database_cli.model.entity.Seller">
+        UPDATE seller
+        SET seller_name = #{sellerName},
+            seller_password = #{sellerPassword}
+        WHERE seller_id = #{sellerId}
+    </update>
+
+    <!-- 根据ID删除卖家 -->
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM seller
+        WHERE seller_id = #{sellerId}
+    </delete>
+
+    <!-- 根据卖家名称查询 -->
+    <select id="selectBySellerName" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+        WHERE seller_name = #{sellerName}
+    </select>
+
+    <!-- 根据卖家名称和密码查询 -->
+    <select id="selectBySellerNameAndPassword" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+        WHERE seller_name = #{sellerName} AND seller_password = #{sellerPassword}
+    </select>
+
+</mapper> 

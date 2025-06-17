@@ -4,18 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f20378c3-818c-44c2-94a0-899355f8e161" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_cli/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/database_cli/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_cli/src/main/resources/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,14 +33,21 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/asdadasfa/database7&quot;,
+    &quot;url&quot;: &quot;https://github.com/asdadasfa/database7.git&quot;,
     &quot;accountId&quot;: &quot;e1132fd9-e518-4413-9c90-4d63754ac312&quot;
   }
 }</component>
+  <component name="PerforceDirect.Settings">
+    <option name="CHARSET" value="无" />
+  </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="2ya2f5DBgMHgYVCf5HVak1hSIf4" />
+  <component name="ProjectId" id="2yd2C0gkFl36SXSqAKoDd9EkQUJ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -45,7 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database7",
+    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database7/log/6.17",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -53,23 +65,23 @@
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "configurable.group.appearance",
     "vue.rearranger.settings.migration": "true"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora_aws"
-    ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\6.17" />
+      <recent name="C:\Users\白峰楠\IdeaProjects\database7\database_cli\src\main\java\com\example\database_cli" />
+      <recent name="C:\Users\白峰楠\IdeaProjects\database7\database_cli\src\main\java\com\example\database_cli\control" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.database_cli.model.result" />
+      <recent name="com.example.database_cli.config" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="database7" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="database7" />
-      <option name="filePath" />
+    <configuration name="DatabaseCliApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="database_cli" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.database_cli.DatabaseCliApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -86,32 +98,17 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
-      <changelist id="f20378c3-818c-44c2-94a0-899355f8e161" name="更改" comment="" />
-      <created>1750058463395</created>
+      <changelist id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="" />
+      <created>1750149997954</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1750058463395</updated>
-      <workItem from="1750058464644" duration="813000" />
-      <workItem from="1750059413460" duration="1489000" />
-      <workItem from="1750060931451" duration="976000" />
-      <workItem from="1750061926214" duration="22000" />
-      <workItem from="1750062725151" duration="12000" />
-      <workItem from="1750062752923" duration="675000" />
+      <updated>1750149997954</updated>
+      <workItem from="1750150000057" duration="20000" />
+      <workItem from="1750150029845" duration="6166000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
 </project>
