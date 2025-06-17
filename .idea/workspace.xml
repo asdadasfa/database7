@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="6.17">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/MarsCodeWorkspaceAppSettings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/material_theme_project_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/.idea/vcs.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,11 +109,24 @@
       <option name="presentableId" value="Default" />
       <updated>1750149997954</updated>
       <workItem from="1750150000057" duration="20000" />
-      <workItem from="1750150029845" duration="6166000" />
+      <workItem from="1750150029845" duration="7684000" />
     </task>
+    <task id="LOCAL-00001" summary="6.17">
+      <option name="closed" value="true" />
+      <created>1750159606780</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750159606780</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="6.17" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.17" />
   </component>
 </project>
