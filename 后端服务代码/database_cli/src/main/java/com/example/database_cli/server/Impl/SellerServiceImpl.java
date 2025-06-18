@@ -4,6 +4,8 @@ import com.example.database_cli.enums.ResultEnum;
 import com.example.database_cli.mapper.SellerMapper;
 import com.example.database_cli.model.entity.Seller;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoResSeller;
+import com.example.database_cli.model.vo.VoSeller;
 import com.example.database_cli.server.ISellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,22 +20,24 @@ public class SellerServiceImpl implements ISellerService {
     private SellerMapper sellerMapper;
 
     @Override
-    public Result register(Seller seller) {
+    public Result register(VoSeller voseller) {
         // 参数校验
-        if (seller == null || !StringUtils.hasText(seller.getSellerName()) 
-            || !StringUtils.hasText(seller.getSellerPassword())) {
+        if (voseller == null || !StringUtils.hasText(voseller.getSellerName())
+            || !StringUtils.hasText(voseller.getSellerPassword())) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
         // 检查用户名是否已存在
-        Seller existSeller = sellerMapper.selectBySellerName(seller.getSellerName());
+        Seller existSeller = sellerMapper.selectBySellerName(voseller.getSellerName());
         if (existSeller != null) {
             return Result.fail(ResultEnum.ERROR_NAMEDUPLICATION);
         }
 
         // 生成卖家ID
+        Seller seller = new Seller();
         seller.setSellerId(UUID.randomUUID().toString().replace("-", ""));
-        
+        seller.setSellerName(voseller.getSellerName());
+        seller.setSellerPassword(voseller.getSellerPassword());
         // 保存卖家信息
         int result = sellerMapper.insert(seller);
         if (result > 0) {
@@ -44,26 +48,28 @@ public class SellerServiceImpl implements ISellerService {
     }
 
     @Override
-    public Result login(String sellerName, String sellerPassword) {
+    public Result login(VoSeller voseller) {
         // 参数校验
-        if (!StringUtils.hasText(sellerName) || !StringUtils.hasText(sellerPassword)) {
+        if (!StringUtils.hasText(voseller.getSellerName()) || !StringUtils.hasText(voseller.getSellerPassword())) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
         // 查询卖家信息
-        Seller seller = sellerMapper.selectBySellerName(sellerName);
+        Seller seller = sellerMapper.selectBySellerName(voseller.getSellerName());
         if (seller == null) {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
 
         // 验证密码
-        if (!sellerPassword.equals(seller.getSellerPassword())) {
+        if (!voseller.getSellerPassword().equals(seller.getSellerPassword())) {
             return Result.fail(ResultEnum.ERROR_OPERATION);
         }
 
         // 登录成功，返回卖家信息
-        seller.setSellerPassword(null);
-        return Result.success(seller);
+        VoResSeller resSeller = new VoResSeller();
+        resSeller.setSellerId(seller.getSellerId());
+        resSeller.setSellerName(seller.getSellerName());
+        return Result.success(resSeller);
     }
 
     @Override

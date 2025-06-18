@@ -2,6 +2,7 @@ package com.example.database_cli.control;
 
 import com.example.database_cli.model.entity.Buyer;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoBuyer;
 import com.example.database_cli.server.IBuyerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class buyerControl {
      * @return 注册结果
      */
     @PostMapping("/register")
-    public Result register(@RequestBody Buyer buyer) {
+    public Result register(@RequestBody VoBuyer buyer) {
         log.info("买家注册请求: {}", buyer.getBuyerName());
         return buyerService.register(buyer);
     }

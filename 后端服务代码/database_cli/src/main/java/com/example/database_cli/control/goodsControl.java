@@ -27,62 +27,6 @@ public class goodsControl {
     @Autowired
     private IGoodsService goodsService;
     
-    /**
-     * 创建订单接口
-     * @param buyerId 买家ID
-     * @param goodsId 商品ID
-     * @param num 购买数量
-     * @return 创建结果
-     */
-    @PostMapping("/createOrder")
-    public Result<String> createOrder(@RequestParam String buyerId,
-                                     @RequestParam String goodsId,
-                                     @RequestParam int num) {
-        try {
-            // 1. 验证商品是否存在
-            Goods goods = goodsMapper.selectById(goodsId);
-            if (goods == null) {
-                return Result.fail();
-            }
-            
-            // 2. 验证库存是否充足
-            if (goods.getNum() < num) {
-                return Result.fail();
-            }
-            
-            // 3. 计算订单总金额
-            double totalSum = goods.getPrice() * num;
-            
-            // 4. 创建订单对象
-            Order order = new Order();
-            order.setBuyerId(buyerId);
-            order.setSellerId(goods.getSellerId());
-            order.setGoodsId(goodsId);
-            order.setState("待付款"); // 初始状态
-            order.setNum(num);
-            order.setSum(totalSum);
-            order.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            
-            // 5. 保存订单
-            int result = orderMapper.insert(order);
-            if (result > 0) {
-                // 6. 更新商品库存
-                int newStock = goods.getNum() - num;
-                goodsMapper.updateNum(goodsId, newStock);
-                
-                log.info("订单创建成功: 买家ID={}, 商品ID={}, 数量={}, 总金额={}", 
-                        buyerId, goodsId, num, totalSum);
-                return Result.success("订单创建成功");
-            } else {
-                log.error("订单创建失败: 数据库插入失败");
-                return Result.fail();
-            }
-            
-        } catch (Exception e) {
-            log.error("创建订单时发生异常: ", e);
-            return Result.fail();
-        }
-    }
 
     /**
      * 创建商品接口（使用服务层）

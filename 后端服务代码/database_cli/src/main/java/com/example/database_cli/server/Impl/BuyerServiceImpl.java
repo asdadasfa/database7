@@ -4,6 +4,8 @@ import com.example.database_cli.enums.ResultEnum;
 import com.example.database_cli.mapper.BuyerMapper;
 import com.example.database_cli.model.entity.Buyer;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoBuyer;
+import com.example.database_cli.model.vo.VoResBuyer;
 import com.example.database_cli.server.IBuyerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,20 +20,23 @@ public class BuyerServiceImpl implements IBuyerService {
     private BuyerMapper buyerMapper;
 
     @Override
-    public Result register(Buyer buyer) {
+    public Result register(VoBuyer vobuyer) {
         // 参数校验
-        if (buyer == null || !StringUtils.hasText(buyer.getBuyerName()) 
-            || !StringUtils.hasText(buyer.getBuyerPassword())) {
+        if (vobuyer == null || !StringUtils.hasText(vobuyer.getBuyerName())
+            || !StringUtils.hasText(vobuyer.getBuyerPassword())) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
         // 检查用户名是否已存在
-        Buyer existBuyer = buyerMapper.selectByBuyerName(buyer.getBuyerName());
+        Buyer existBuyer = buyerMapper.selectByBuyerName(vobuyer.getBuyerName());
         if (existBuyer != null) {
             return Result.fail(ResultEnum.ERROR_NAMEDUPLICATION);
         }
 
         // 生成买家ID
+        Buyer buyer = new Buyer();
+        buyer.setBuyerName(vobuyer.getBuyerName());
+        buyer.setBuyerPassword(vobuyer.getBuyerPassword());
         buyer.setBuyerId(UUID.randomUUID().toString().replace("-", ""));
         
         // 保存买家信息
@@ -44,26 +49,28 @@ public class BuyerServiceImpl implements IBuyerService {
     }
 
     @Override
-    public Result login(String buyerName, String buyerPassword) {
+    public Result login(VoBuyer vobuyer) {
         // 参数校验
-        if (!StringUtils.hasText(buyerName) || !StringUtils.hasText(buyerPassword)) {
+        if (!StringUtils.hasText(vobuyer.getBuyerName()) || !StringUtils.hasText(vobuyer.getBuyerPassword())) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
         // 查询买家信息
-        Buyer buyer = buyerMapper.selectByBuyerName(buyerName);
+        Buyer buyer = buyerMapper.selectByBuyerName(vobuyer.getBuyerName());
         if (buyer == null) {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
 
         // 验证密码
-        if (!buyerPassword.equals(buyer.getBuyerPassword())) {
+        if (!vobuyer.getBuyerPassword().equals(buyer.getBuyerPassword())) {
             return Result.fail(ResultEnum.ERROR_OPERATION);
         }
 
         // 登录成功，返回买家信息
-        buyer.setBuyerPassword(null);
-        return Result.success(buyer);
+        VoResBuyer voResBuyer = new VoResBuyer();
+        voResBuyer.setBuyerId(buyer.getBuyerId());
+        voResBuyer.setBuyerName(buyer.getBuyerName());
+        return Result.success(voResBuyer);
     }
 
     @Override

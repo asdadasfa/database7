@@ -2,23 +2,23 @@ package com.example.database_cli.server;
 
 import com.example.database_cli.model.entity.Buyer;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoBuyer;
 
 public interface IBuyerService {
     
     /**
      * 买家注册
-     * @param buyer 买家信息
+     * @param vobuyer 买家信息
      * @return 注册结果
      */
-    Result register(Buyer buyer);
+    Result register(VoBuyer vobuyer);
     
     /**
      * 买家登录
-     * @param buyerName 买家名称
-     * @param buyerPassword 买家密码
+     * @param vobuyer 买家登录信息
      * @return 登录结果
      */
-    Result login(String buyerName, String buyerPassword);
+    Result login(VoBuyer vobuyer);
     
     /**
      * 买家注销

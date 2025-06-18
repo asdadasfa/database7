@@ -2,23 +2,23 @@ package com.example.database_cli.server;
 
 import com.example.database_cli.model.entity.Seller;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoSeller;
 
 public interface ISellerService {
     
     /**
      * 卖家注册
-     * @param seller 卖家信息
+     * @param voseller 卖家信息
      * @return 注册结果
      */
-    Result register(Seller seller);
+    Result register(VoSeller voseller);
     
     /**
      * 卖家登录
-     * @param sellerName 卖家名称
-     * @param sellerPassword 卖家密码
+     * @param voseller 卖家登录信息
      * @return 登录结果
      */
-    Result login(String sellerName, String sellerPassword);
+    Result login(VoSeller voseller  );
     
     /**
      * 卖家注销
