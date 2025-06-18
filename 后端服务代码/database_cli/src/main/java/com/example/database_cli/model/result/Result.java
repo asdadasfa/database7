@@ -1,6 +1,8 @@
 package com.example.database_cli.model.result;
 import com.example.database_cli.enums.ResultEnum;
+import lombok.Data;
 
+@Data
 public class Result<T> {
     public int code;
     public String msg;
