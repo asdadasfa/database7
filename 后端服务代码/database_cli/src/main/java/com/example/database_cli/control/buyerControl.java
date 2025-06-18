@@ -18,25 +18,24 @@ public class buyerControl {
 
     /**
      * 买家注册
-     * @param buyer 买家信息
+     * @param vobuyer 买家信息
      * @return 注册结果
      */
     @PostMapping("/register")
-    public Result register(@RequestBody VoBuyer buyer) {
-        log.info("买家注册请求: {}", buyer.getBuyerName());
-        return buyerService.register(buyer);
+    public Result register(@RequestBody VoBuyer vobuyer) {
+        log.info("买家注册请求: {}", vobuyer.getBuyerName());
+        return buyerService.register(vobuyer);
     }
 
     /**
      * 买家登录
-     * @param buyerName 买家名称
-     * @param buyerPassword 买家密码
+     * @param vobuyer 买家信息
      * @return 登录结果
      */
     @PostMapping("/login")
-    public Result login(@RequestParam String buyerName, @RequestParam String buyerPassword) {
-        log.info("买家登录请求: {}", buyerName);
-        return buyerService.login(buyerName, buyerPassword);
+    public Result login(@RequestBody VoBuyer vobuyer) {
+        log.info("买家登录请求: {}", vobuyer.getBuyerName());
+        return buyerService.login(vobuyer);
     }
 
     /**

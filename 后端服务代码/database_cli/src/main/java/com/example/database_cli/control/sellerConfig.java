@@ -2,6 +2,7 @@ package com.example.database_cli.control;
 
 import com.example.database_cli.model.entity.Seller;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoSeller;
 import com.example.database_cli.server.ISellerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,24 @@ public class sellerConfig {
 
     /**
      * 卖家注册
-     * @param seller 卖家信息
+     * @param voseller 卖家信息
      * @return 注册结果
      */
     @PostMapping("/register")
-    public Result register(@RequestBody Seller seller) {
-        log.info("卖家注册请求: {}", seller.getSellerName());
-        return sellerService.register(seller);
+    public Result register(@RequestBody VoSeller voseller) {
+        log.info("卖家注册请求: {}", voseller.getSellerName());
+        return sellerService.register(voseller);
     }
 
     /**
      * 卖家登录
-     * @param sellerName 卖家名称
-     * @param sellerPassword 卖家密码
+     * @param voseller 卖家信息
      * @return 登录结果
      */
     @PostMapping("/login")
-    public Result login(@RequestParam String sellerName, @RequestParam String sellerPassword) {
-        log.info("卖家登录请求: {}", sellerName);
-        return sellerService.login(sellerName, sellerPassword);
+    public Result login(@RequestBody VoSeller voseller) {
+        log.info("卖家登录请求: {}", voseller.getSellerName());
+        return sellerService.login(voseller);
     }
 
     /**
