@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="初步实现了添加订单的接口">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/数据库/数据库设计.md" beforeDir="false" afterPath="$PROJECT_DIR$/数据库/数据库设计.md" afterDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了买者部分接口的错误">
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/package-lock.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,14 +29,17 @@
     &quot;assignee&quot;: &quot;asdadasfa&quot;
   }
 }</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="e1132fd9-e518-4413-9c90-4d63754ac312" />
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/asdadasfa/database7.git&quot;,
     &quot;accountId&quot;: &quot;e1132fd9-e518-4413-9c90-4d63754ac312&quot;
   }
 }</component>
-  <component name="PerforceDirect.Settings">
-    <option name="CHARSET" value="无" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -74,7 +71,7 @@
     "nodejs_package_manager_path": "npm",
     "npm.build.executor": "Run",
     "npm.dev.executor": "Run",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "settings.editor.selected.configurable": "vcs.Git",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -152,7 +149,8 @@
       <workItem from="1750232339790" duration="1146000" />
       <workItem from="1750233760560" duration="15829000" />
       <workItem from="1750292765981" duration="12249000" />
-      <workItem from="1750312765329" duration="4416000" />
+      <workItem from="1750312765329" duration="7841000" />
+      <workItem from="1750321636384" duration="583000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -250,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750303306713</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="修改了买者部分接口的错误">
+      <option name="closed" value="true" />
+      <created>1750317975109</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1750317975109</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,6 +285,13 @@
             <State>
               <option name="FILTERS">
                 <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
                   <entry key="user">
                     <value>
                       <list>
@@ -306,6 +319,7 @@
     <MESSAGE value="实现了后端与购物车相关的部分接口" />
     <MESSAGE value="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改" />
     <MESSAGE value="初步实现了添加订单的接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步实现了添加订单的接口" />
+    <MESSAGE value="修改了买者部分接口的错误" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改了买者部分接口的错误" />
   </component>
 </project>
