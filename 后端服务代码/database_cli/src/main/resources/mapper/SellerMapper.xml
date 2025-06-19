@@ -7,11 +7,12 @@
         <id column="seller_id" property="sellerId" jdbcType="VARCHAR"/>
         <result column="seller_name" property="sellerName" jdbcType="VARCHAR"/>
         <result column="seller_password" property="sellerPassword" jdbcType="VARCHAR"/>
+        <result column="is_bool" property="isBool" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        seller_id, seller_name, seller_password
+        seller_id, seller_name, seller_password,is_bool
     </sql>
 
     <!-- 根据ID查询卖家 -->
@@ -19,7 +20,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM seller
-        WHERE seller_id = #{sellerId}
+        WHERE seller_id = #{sellerId} AND is_bool = 1
     </select>
 
     <!-- 查询所有卖家 -->
@@ -27,6 +28,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM seller
+        WHERE is_bool = 1
     </select>
 
     <!-- 插入卖家 -->
@@ -40,21 +42,20 @@
         UPDATE seller
         SET seller_name = #{sellerName},
             seller_password = #{sellerPassword}
-        WHERE seller_id = #{sellerId}
+        WHERE seller_id = #{sellerId} AND is_bool = 1
     </update>
 
     <!-- 根据ID删除卖家 -->
-    <delete id="deleteById" parameterType="string">
-        DELETE FROM seller
-        WHERE seller_id = #{sellerId}
-    </delete>
+    <update id="deleteById" parameterType="string">
+        UPDATE seller SET is_bool = 0 WHERE seller_id = #{sellerId}
+    </update>
 
     <!-- 根据卖家名称查询 -->
     <select id="selectBySellerName" parameterType="string" resultMap="BaseResultMap">
         SELECT 
         <include refid="Base_Column_List"/>
         FROM seller
-        WHERE seller_name = #{sellerName}
+        WHERE seller_name = #{sellerName} AND is_bool = 1
     </select>
 
     <!-- 根据卖家名称和密码查询 -->
@@ -62,7 +63,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM seller
-        WHERE seller_name = #{sellerName} AND seller_password = #{sellerPassword}
+        WHERE seller_name = #{sellerName} AND seller_password = #{sellerPassword} AND is_bool = 1
     </select>
 
 </mapper> 

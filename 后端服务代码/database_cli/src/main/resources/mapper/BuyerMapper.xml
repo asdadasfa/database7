@@ -12,7 +12,7 @@
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        buyer_id, buyer_name, buyer_password,id_bool
+        buyer_id, buyer_name, buyer_password,is_bool
     </sql>
 
     <!-- 根据ID查询买家 -->
