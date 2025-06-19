@@ -5,6 +5,7 @@ import com.example.database_cli.mapper.OrderMapper;
 import com.example.database_cli.model.entity.Goods;
 import com.example.database_cli.model.entity.Order;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoGoods;
 import com.example.database_cli.server.IGoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,27 +27,33 @@ public class goodsControl {
     
     @Autowired
     private IGoodsService goodsService;
-    
 
     /**
-     * 创建商品接口（使用服务层）
-     * @param goods 商品信息
+     * 创建商品接口（使用VoGoods接收数据，支持图片上传）
+     * @param voGoods 商品信息（包含图片文件）
      * @return 创建结果
      */
     @PostMapping("/addGoods")
-    public Result<String> addGoods(@RequestBody Goods goods) {
+    public Result<String> addGoods(@ModelAttribute VoGoods voGoods) {
         try {
-            Result result = goodsService.addGoods(goods);
+            // 基本参数校验
+            if (voGoods == null) {
+                return Result.fail("商品信息不能为空");
+            }
+
+            // 调用服务层处理业务逻辑
+            Result result = goodsService.addGoodsWithImages(voGoods);
+            
             if (result.getCode() == 200) {
-                log.info("商品创建成功: 商品ID={}, 商品名称={}", 
-                        goods.getGoodsId(), goods.getGoodsName());
+                log.info("商品创建成功: 商品名称={}", voGoods.getGoodsName());
             } else {
                 log.error("商品创建失败: {}", result.getMsg());
             }
+            
             return result;
         } catch (Exception e) {
             log.error("创建商品时发生异常: ", e);
-            return Result.fail();
+            return Result.fail("创建商品时发生异常: " + e.getMessage());
         }
     }
     

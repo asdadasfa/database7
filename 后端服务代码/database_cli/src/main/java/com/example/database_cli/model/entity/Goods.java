@@ -2,6 +2,8 @@ package com.example.database_cli.model.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Goods {
     String goodsId;
@@ -10,5 +12,5 @@ public class Goods {
     String type;
     double price;
     int num;
-    byte[] goodsImage;
+    List<String> images;
 }

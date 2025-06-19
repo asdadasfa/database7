@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
   mail:
     # SMTP服务器，这个是QQ邮箱的  其他邮箱请另行百度
     host: smtp.qq.com
@@ -38,7 +42,7 @@ spring:
 #      key-store-password: bfn159753
 
   datasource:
-    url: jdbc:mysql://localhost:3306/word?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
+    url: jdbc:mysql://localhost:3306/shop?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
     username: root
     password: bfn159753
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -46,9 +50,13 @@ spring:
   main:
     allow-circular-references: true
 
+# 静态资源映射配置
+resources:
+  static-locations: classpath:/static/,file:src/main/java/com/example/database_cli/images/
+
 server:
   port: ${server_port:8686} #9012
-  max-http-header-size: ${max_http_header_size:10000000}  #1024*1024*256 byte
+  max-http-request-header-size: ${max_http_header_size:10000000}
 
 
 mybatis:
@@ -68,5 +76,6 @@ feign:
         connectTimeout: 300000
         readTimeout: 300000
         loggerLevel: full
+
 
 

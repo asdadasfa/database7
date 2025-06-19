@@ -32,6 +32,14 @@ public class Result<T> {
         return new Result(resultEnum.getMsg(), resultEnum.getCode(), null);
     }
 
+    public static <T> Result fail(String msg){
+        return new Result(msg, ResultEnum.ERROR_UNKNOWN.getCode(), null);
+    }
+
+    public static <T> Result fail(String msg, int code){
+        return new Result(msg, code, null);
+    }
+
     public static <T> Result success(T data,int code, String msg) {
         Result<T> r = new Result<>( msg,code,data);
         return r;

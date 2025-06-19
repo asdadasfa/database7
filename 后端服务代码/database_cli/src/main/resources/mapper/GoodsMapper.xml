@@ -10,12 +10,13 @@
         <result column="type" property="type" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="DOUBLE"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
-        <result column="goods_image" property="goodsImage" jdbcType="BLOB"/>
+        <result column="images" property="images" jdbcType="VARCHAR" 
+                typeHandler="com.example.database_cli.config.JsonTypeHandler"/>
     </resultMap>
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        goods_id, goods_name, seller_id, type, price, num, goods_image
+        goods_id, goods_name, seller_id, type, price, num, images
     </sql>
 
     <!-- 根据ID查询商品 -->
@@ -35,8 +36,8 @@
 
     <!-- 插入商品 -->
     <insert id="insert" parameterType="com.example.database_cli.model.entity.Goods">
-        INSERT INTO goods (goods_id, goods_name, seller_id, type, price, num, goods_image)
-        VALUES (#{goodsId}, #{goodsName}, #{sellerId}, #{type}, #{price}, #{num}, #{goodsImage})
+        INSERT INTO goods (goods_id, goods_name, seller_id, type, price, num, images)
+        VALUES (#{goodsId}, #{goodsName}, #{sellerId}, #{type}, #{price}, #{num}, #{images, typeHandler=com.example.database_cli.config.JsonTypeHandler})
     </insert>
 
     <!-- 更新商品信息 -->
@@ -47,7 +48,7 @@
             type = #{type},
             price = #{price},
             num = #{num},
-            goods_image = #{goodsImage}
+            images = #{images, typeHandler=com.example.database_cli.config.JsonTypeHandler}
         WHERE goods_id = #{goodsId}
     </update>
 

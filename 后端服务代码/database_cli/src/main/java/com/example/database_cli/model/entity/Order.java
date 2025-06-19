@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Order {
+    String orderId;
     String buyerId;
     String sellerId;
     String goodsId;

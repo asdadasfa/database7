@@ -2,8 +2,16 @@ package com.example.database_cli.server;
 
 import com.example.database_cli.model.entity.Goods;
 import com.example.database_cli.model.result.Result;
+import com.example.database_cli.model.vo.VoGoods;
 
 public interface IGoodsService {
+    
+    /**
+     * 添加商品（包含图片上传功能）
+     * @param voGoods 商品信息（包含图片文件）
+     * @return 添加结果
+     */
+    Result addGoodsWithImages(VoGoods voGoods);
     
     /**
      * 添加商品
