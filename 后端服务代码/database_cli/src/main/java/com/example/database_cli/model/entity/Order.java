@@ -12,4 +12,5 @@ public class Order {
     int  num;
     double sum;
     String time;
+    boolean isBool=true;
 }

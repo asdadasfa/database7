@@ -7,4 +7,5 @@ public class Seller {
     String sellerId;
     String sellerName;
     String sellerPassword;
+    boolean isBool=true;
 }

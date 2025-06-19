@@ -13,4 +13,5 @@ public class Goods {
     double price;
     int num;
     List<String> images;
+    boolean isBool=true;
 }

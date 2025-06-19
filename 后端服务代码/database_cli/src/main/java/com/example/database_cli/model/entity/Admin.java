@@ -6,4 +6,5 @@ import lombok.Data;
 public class Admin {
     String id;
     String password;
+    boolean isBool=true;
 }

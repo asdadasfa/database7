@@ -7,11 +7,12 @@
         <result column="buyer_id" property="buyerId" jdbcType="VARCHAR"/>
         <result column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="is_bool" property="isBool" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        buyer_id, goods_id, num
+        buyer_id, goods_id, num, is_bool
     </sql>
 
     <!-- 根据买家ID和商品ID查询购物车项 -->
@@ -19,7 +20,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM cart
-        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId}
+        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId} AND is_bool = 1
     </select>
 
     <!-- 根据买家ID查询购物车 -->
@@ -27,7 +28,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM cart
-        WHERE buyer_id = #{buyerId}
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
     </select>
 
     <!-- 查询所有购物车项 -->
@@ -35,6 +36,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM cart
+        WHERE  is_bool = 1
     </select>
 
     <!-- 插入购物车项 -->
@@ -47,26 +49,26 @@
     <update id="update" parameterType="com.example.database_cli.model.entity.Cart">
         UPDATE cart
         SET num = #{num}
-        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId}
+        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId} AND is_bool = 1
     </update>
 
     <!-- 根据买家ID和商品ID删除购物车项 -->
     <delete id="deleteByBuyerIdAndGoodsId">
         DELETE FROM cart
-        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId}
+        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId} AND is_bool = 1
     </delete>
 
     <!-- 根据买家ID清空购物车 -->
     <delete id="deleteByBuyerId" parameterType="string">
         DELETE FROM cart
-        WHERE buyer_id = #{buyerId}
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
     </delete>
 
     <!-- 更新购物车项数量 -->
     <update id="updateNum">
         UPDATE cart
         SET num = #{num}
-        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId}
+        WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId} AND is_bool = 1
     </update>
 
 </mapper> 

@@ -7,4 +7,5 @@ public class Cart {
     String buyerId;
     String goodsId;
     int num;
+    boolean isBool=true;
 }

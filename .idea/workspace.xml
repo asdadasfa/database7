@@ -4,8 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="更换log里的图像">
-      <change beforePath="$PROJECT_DIR$/log/20250617.md" beforeDir="false" afterPath="$PROJECT_DIR$/log/20250617.md" afterDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/buyerControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/buyerControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/orderControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/orderControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/sellerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/sellerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Buyer.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Buyer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Goods.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Goods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Seller.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Seller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/vo/VoCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/vo/VoCart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/CartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/AdminMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/AdminMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/CartMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/CartMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/GoodsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/GoodsMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/OrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/OrderMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/数据库/数据库设计.md" beforeDir="false" afterPath="$PROJECT_DIR$/数据库/数据库设计.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,22 +69,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.DatabaseCliApplication.executor": "Run",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database7/log/6.17",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DatabaseCliApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/白峰楠/IdeaProjects/database7/log/6.17&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\6.17" />
@@ -109,7 +135,8 @@
       <workItem from="1750150000057" duration="20000" />
       <workItem from="1750150029845" duration="7684000" />
       <workItem from="1750232339790" duration="1146000" />
-      <workItem from="1750233760560" duration="2519000" />
+      <workItem from="1750233760560" duration="15829000" />
+      <workItem from="1750292765981" duration="9598000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -143,17 +170,117 @@
       <option name="project" value="LOCAL" />
       <updated>1750234969971</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="提交日志">
+      <option name="closed" value="true" />
+      <created>1750237370699</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750237370699</updated>
+    </task>
+    <task id="LOCAL-00006" summary="更新日志">
+      <option name="closed" value="true" />
+      <created>1750238619073</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750238619073</updated>
+    </task>
+    <task id="LOCAL-00007" summary="增加了添加商品的功能">
+      <option name="closed" value="true" />
+      <created>1750242465619</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750242465619</updated>
+    </task>
+    <task id="LOCAL-00008" summary="完善了部分卖家和卖家的部分接口">
+      <option name="closed" value="true" />
+      <created>1750247930882</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750247930882</updated>
+    </task>
+    <task id="LOCAL-00009" summary="完善了部分卖家和卖家的部分接口">
+      <option name="closed" value="true" />
+      <created>1750248145877</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1750248145877</updated>
+    </task>
+    <task id="LOCAL-00010" summary="实现了后端与购物车相关的部分接口">
+      <option name="closed" value="true" />
+      <created>1750251003033</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1750251003033</updated>
+    </task>
+    <task id="LOCAL-00011" summary="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改">
+      <option name="closed" value="true" />
+      <created>1750300176039</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1750300176039</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="user">
+                    <value>
+                      <list>
+                        <option value="*" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="6.17" />
     <MESSAGE value="文件格式修改" />
     <MESSAGE value="测试提交" />
     <MESSAGE value="更换log里的图像" />
-    <option name="LAST_COMMIT_MESSAGE" value="更换log里的图像" />
+    <MESSAGE value="提交日志" />
+    <MESSAGE value="更新日志" />
+    <MESSAGE value="增加了添加商品的功能" />
+    <MESSAGE value="完善了部分卖家和卖家的部分接口" />
+    <MESSAGE value="实现了后端与购物车相关的部分接口" />
+    <MESSAGE value="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改" />
   </component>
 </project>

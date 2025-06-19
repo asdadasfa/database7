@@ -2,6 +2,8 @@ package com.example.database_cli.model.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class VoCart {
     String buyerId;
@@ -12,5 +14,5 @@ public class VoCart {
     double price;
     int num;
     double sum;
-    byte[] goodsImage;
+    List<String> goodsImages;
 }

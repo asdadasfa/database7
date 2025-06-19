@@ -39,7 +39,7 @@ public class sellerConfig {
     }
 
     /**
-     * 卖家注销
+     * 卖家注销(逻辑删除)
      * @param sellerId 卖家ID
      * @return 注销结果
      */

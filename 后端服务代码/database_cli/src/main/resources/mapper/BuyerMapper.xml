@@ -7,11 +7,12 @@
         <id column="buyer_id" property="buyerId" jdbcType="VARCHAR"/>
         <result column="buyer_name" property="buyerName" jdbcType="VARCHAR"/>
         <result column="buyer_password" property="buyerPassword" jdbcType="VARCHAR"/>
+        <result column="id_bool" property="idBool" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        buyer_id, buyer_name, buyer_password
+        buyer_id, buyer_name, buyer_password,id_bool
     </sql>
 
     <!-- 根据ID查询买家 -->
@@ -19,7 +20,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM buyer
-        WHERE buyer_id = #{buyerId}
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
     </select>
 
     <!-- 查询所有买家 -->
@@ -27,6 +28,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM buyer
+        where is_bool = 1
     </select>
 
     <!-- 插入买家 -->
@@ -40,21 +42,20 @@
         UPDATE buyer
         SET buyer_name = #{buyerName},
             buyer_password = #{buyerPassword}
-        WHERE buyer_id = #{buyerId}
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
     </update>
 
     <!-- 根据ID删除买家 -->
-    <delete id="deleteById" parameterType="string">
-        DELETE FROM buyer
-        WHERE buyer_id = #{buyerId}
-    </delete>
+    <update id="deleteById" parameterType="string">
+        UPDATE buyer SET is_bool = 0 WHERE buyer_id = #{buyerId}
+    </update>
 
     <!-- 根据用户名查询买家 -->
     <select id="selectByBuyerName" parameterType="string" resultMap="BaseResultMap">
         SELECT 
         <include refid="Base_Column_List"/>
         FROM buyer
-        WHERE buyer_name = #{buyerName}
+        WHERE buyer_name = #{buyerName} AND is_bool = 1
     </select>
 
 </mapper> 

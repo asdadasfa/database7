@@ -12,11 +12,12 @@
         <result column="num" property="num" jdbcType="INTEGER"/>
         <result column="images" property="images" jdbcType="VARCHAR" 
                 typeHandler="com.example.database_cli.config.JsonTypeHandler"/>
+        <result column="is_bool" property="isBool" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        goods_id, goods_name, seller_id, type, price, num, images
+        goods_id, goods_name, seller_id, type, price, num, images,is_bool
     </sql>
 
     <!-- 根据ID查询商品 -->
@@ -24,7 +25,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
-        WHERE goods_id = #{goodsId}
+        WHERE goods_id = #{goodsId} AND is_bool = 1
     </select>
 
     <!-- 查询所有商品 -->
@@ -32,6 +33,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
+        WHERE is_bool = 1
     </select>
 
     <!-- 插入商品 -->
@@ -49,21 +51,20 @@
             price = #{price},
             num = #{num},
             images = #{images, typeHandler=com.example.database_cli.config.JsonTypeHandler}
-        WHERE goods_id = #{goodsId}
+        WHERE goods_id = #{goodsId} AND is_bool = 1
     </update>
 
     <!-- 根据ID删除商品 -->
-    <delete id="deleteById" parameterType="string">
-        DELETE FROM goods
-        WHERE goods_id = #{goodsId}
-    </delete>
+    <update id="deleteById" parameterType="string">
+        UPDATE goods SET is_bool = 0 WHERE goods_id = #{goodsId}
+    </update>
 
     <!-- 根据卖家ID查询商品 -->
     <select id="selectBySellerId" parameterType="string" resultMap="BaseResultMap">
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
-        WHERE seller_id = #{sellerId}
+        WHERE seller_id = #{sellerId} AND is_bool = 1
     </select>
 
     <!-- 根据商品类型查询 -->
@@ -71,7 +72,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
-        WHERE type = #{type}
+        WHERE type = #{type} AND is_bool = 1
     </select>
 
     <!-- 根据商品名称模糊查询 -->
@@ -79,7 +80,7 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
-        WHERE goods_name LIKE CONCAT('%', #{goodsName}, '%')
+        WHERE goods_name LIKE CONCAT('%', #{goodsName}, '%') AND is_bool = 1
     </select>
 
     <!-- 根据价格范围查询 -->
@@ -87,14 +88,14 @@
         SELECT 
         <include refid="Base_Column_List"/>
         FROM goods
-        WHERE price BETWEEN #{minPrice} AND #{maxPrice}
+        WHERE price BETWEEN #{minPrice} AND #{maxPrice} AND is_bool = 1
     </select>
 
     <!-- 更新商品库存 -->
     <update id="updateNum">
         UPDATE goods
         SET num = #{num}
-        WHERE goods_id = #{goodsId}
+        WHERE goods_id = #{goodsId} AND is_bool = 1
     </update>
 
 </mapper> 

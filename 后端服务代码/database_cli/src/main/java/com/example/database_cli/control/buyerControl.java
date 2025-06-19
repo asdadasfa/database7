@@ -39,7 +39,7 @@ public class buyerControl {
     }
 
     /**
-     * 买家注销
+     * 买家注销(逻辑删除)
      * @param buyerId 买家ID
      * @return 注销结果
      */

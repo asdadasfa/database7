@@ -114,7 +114,7 @@ public class CartServiceImpl implements ICartService {
                     voCart.setPrice(goods.getPrice());
                     voCart.setType(goods.getType());
                     voCart.setSellerId(goods.getSellerId());
-                    voCart.setGoodsImage(goods.getGoodsImage());
+                    voCart.setGoodsImages(goods.getImages());
                     voCart.setSum(goods.getPrice() * cartItem.getNum());
                     
                     totalAmount += goods.getPrice() * cartItem.getNum();
