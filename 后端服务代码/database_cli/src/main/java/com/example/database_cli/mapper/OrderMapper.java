@@ -49,4 +49,7 @@ public interface OrderMapper {
     
     // 根据卖家ID和状态查询订单
     List<Order> selectBySellerIdAndState(@Param("sellerId") String sellerId, @Param("state") String state);
+    
+    // 根据订单ID查询订单
+    Order selectById(@Param("orderId") String orderId);
 } 

@@ -22,4 +22,12 @@ public class orderControl {
     public Result createOrder(@RequestBody VoOrder voorder) {
         return orderService.createOrder(voorder);
     }
+
+    /**
+     * 支付订单接口
+     */
+    @PostMapping("/pay")
+    public Result payOrder(@RequestParam String orderId) {
+        return orderService.payOrder(orderId);
+    }
 }

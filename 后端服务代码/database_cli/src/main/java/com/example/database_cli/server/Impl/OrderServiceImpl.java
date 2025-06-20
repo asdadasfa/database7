@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.Duration;
 import java.util.UUID;
 
 @Service
@@ -55,5 +56,96 @@ public class OrderServiceImpl implements IOrderService {
         } else {
             return Result.fail("订单创建失败");
         }
+    }
+
+    @Override
+    @Transactional
+    public Result payOrder(String orderId) {
+        Order order = orderMapper.selectById(orderId);
+        if (order == null || !order.isBool()) {
+            return Result.fail("订单不存在或已被删除");
+        }
+        if (!"待支付".equals(order.getState())) {
+            return Result.fail("订单状态不是待支付，无法支付");
+        }
+        // 检查时间
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime orderTime = LocalDateTime.parse(order.getTime(), formatter);
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(orderTime, now);
+        if (duration.toMinutes() > 15) {
+            // 超时，设为取消
+            order.setState("取消");
+            orderMapper.update(order);
+            return Result.fail("订单已超时，已取消");
+        } else {
+            // 支付成功
+            order.setState("支付成功");
+            order.setTime(now.format(formatter));
+            orderMapper.update(order);
+            return Result.success("支付成功");
+        }
+    }
+
+    @Override
+    public Result selectByBuyerId(String buyerId) {
+        return Result.success(orderMapper.selectByBuyerId(buyerId));
+    }
+
+    @Override
+    public Result selectBySellerId(String sellerId) {
+        return Result.success(orderMapper.selectBySellerId(sellerId));
+    }
+
+    @Override
+    public Result selectByGoodsId(String goodsId) {
+        return Result.success(orderMapper.selectByGoodsId(goodsId));
+    }
+
+    @Override
+    public Result selectByState(String state) {
+        return Result.success(orderMapper.selectByState(state));
+    }
+
+    @Override
+    public Result selectAll() {
+        return Result.success(orderMapper.selectAll());
+    }
+
+    @Override
+    @Transactional
+    public Result deleteByBuyerIdAndSellerIdAndGoodsId(String buyerId, String sellerId, String goodsId) {
+        int res = orderMapper.deleteByBuyerIdAndSellerIdAndGoodsId(buyerId, sellerId, goodsId);
+        if (res > 0) {
+            return Result.success("删除成功");
+        } else {
+            return Result.fail("删除失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public Result updateState(String buyerId, String sellerId, String goodsId, String state) {
+        int res = orderMapper.updateState(buyerId, sellerId, goodsId, state);
+        if (res > 0) {
+            return Result.success("状态更新成功");
+        } else {
+            return Result.fail("状态更新失败");
+        }
+    }
+
+    @Override
+    public Result selectByTimeRange(String startTime, String endTime) {
+        return Result.success(orderMapper.selectByTimeRange(startTime, endTime));
+    }
+
+    @Override
+    public Result selectByBuyerIdAndState(String buyerId, String state) {
+        return Result.success(orderMapper.selectByBuyerIdAndState(buyerId, state));
+    }
+
+    @Override
+    public Result selectBySellerIdAndState(String sellerId, String state) {
+        return Result.success(orderMapper.selectBySellerIdAndState(sellerId, state));
     }
 } 

@@ -112,4 +112,12 @@
         WHERE seller_id = #{sellerId} AND state = #{state} AND is_bool = 1
     </select>
 
+    <!-- 根据订单ID查询订单 -->
+    <select id="selectById" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE order_id = #{orderId} AND is_bool = 1
+    </select>
+
 </mapper> 
