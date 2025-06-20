@@ -4,25 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="完删了订单状态转换功能，并修复测试了商品的部分接口">
-      <change afterPath="$PROJECT_DIR$/数据库/handle_timeout_orders.sql" afterDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="日志和前端主页面初步设计">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Register.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +155,7 @@
       <workItem from="1750321636384" duration="1034000" />
       <workItem from="1750322714629" duration="331000" />
       <workItem from="1750324043096" duration="2546000" />
-      <workItem from="1750330382938" duration="26328000" />
+      <workItem from="1750330382938" duration="27189000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -294,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750389510970</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="日志和前端主页面初步设计">
+      <option name="closed" value="true" />
+      <created>1750407043966</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1750407043966</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,6 +351,7 @@
     <MESSAGE value="修改了买者部分接口的错误" />
     <MESSAGE value="初步实现了订单状态的转换" />
     <MESSAGE value="完删了订单状态转换功能，并修复测试了商品的部分接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="完删了订单状态转换功能，并修复测试了商品的部分接口" />
+    <MESSAGE value="日志和前端主页面初步设计" />
+    <option name="LAST_COMMIT_MESSAGE" value="日志和前端主页面初步设计" />
   </component>
 </project>
