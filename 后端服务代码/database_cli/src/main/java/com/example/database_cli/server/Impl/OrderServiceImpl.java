@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.Duration;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -58,6 +59,16 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    /**
+     * 恢复商品库存
+     */
+    private void restoreGoodsStock(Order order) {
+        Goods goods = goodsMapper.selectById(order.getGoodsId());
+        if (goods != null) {
+            goodsMapper.updateNum(goods.getGoodsId(), goods.getNum() + order.getNum());
+        }
+    }
+
     @Override
     @Transactional
     public Result payOrder(String orderId) {
@@ -77,6 +88,7 @@ public class OrderServiceImpl implements IOrderService {
             // 超时，设为取消
             order.setState("取消");
             orderMapper.update(order);
+            restoreGoodsStock(order);
             return Result.fail("订单已超时，已取消");
         } else {
             // 支付成功
@@ -147,5 +159,67 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Result selectBySellerIdAndState(String sellerId, String state) {
         return Result.success(orderMapper.selectBySellerIdAndState(sellerId, state));
+    }
+
+    /**
+     * 处理超时订单：将待支付状态超过15分钟的订单转为取消，并将商品数量加回去
+     */
+    @Override
+    @Transactional
+    public Result handleTimeoutOrders() {
+        try {
+            // 获取所有待支付的订单
+            List<Order> pendingOrders = orderMapper.selectByState("待支付");
+            if (pendingOrders.isEmpty()) {
+                return Result.success("没有待处理的超时订单");
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            int processedCount = 0;
+            int restoredCount = 0;
+
+            for (Order order : pendingOrders) {
+                LocalDateTime orderTime = LocalDateTime.parse(order.getTime(), formatter);
+                Duration duration = Duration.between(orderTime, now);
+                
+                // 检查是否超过15分钟
+                if (duration.toMinutes() > 15) {
+                    // 更新订单状态为取消
+                    order.setState("取消");
+                    int updateResult = orderMapper.update(order);
+                    
+                    if (updateResult > 0) {
+                        processedCount++;
+                        restoreGoodsStock(order);
+                        restoredCount++;
+                    }
+                }
+            }
+
+            return Result.success(String.format("处理完成：%d个订单已取消，%d个商品库存已恢复", processedCount, restoredCount));
+        } catch (Exception e) {
+            return Result.fail("处理超时订单失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Result cancelOrder(String orderId) {
+        Order order = orderMapper.selectById(orderId);
+        if (order == null || !order.isBool()) {
+            return Result.fail("订单不存在或已被删除");
+        }
+        if (!"待支付".equals(order.getState())) {
+            return Result.fail("只有待支付订单才能取消");
+        }
+        order.setState("取消");
+        int updateRes = orderMapper.update(order);
+        if (updateRes > 0) {
+            restoreGoodsStock(order);
+            return Result.success("订单已取消，库存已恢复");
+        } else {
+            return Result.fail("订单取消失败");
+        }
     }
 } 

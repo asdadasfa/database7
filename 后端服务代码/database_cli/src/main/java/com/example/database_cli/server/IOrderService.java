@@ -28,4 +28,14 @@ public interface IOrderService {
     // 更新/删除相关
     Result deleteByBuyerIdAndSellerIdAndGoodsId(String buyerId, String sellerId, String goodsId);
     Result updateState(String buyerId, String sellerId, String goodsId, String state);
+    
+    /**
+     * 处理超时订单：将待支付状态超过15分钟的订单转为取消，并将商品数量加回去
+     */
+    Result handleTimeoutOrders();
+
+    /**
+     * 取消订单，将待支付订单状态设为取消并恢复库存
+     */
+    Result cancelOrder(String orderId);
 }

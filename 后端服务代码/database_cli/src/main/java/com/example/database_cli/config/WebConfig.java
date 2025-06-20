@@ -7,6 +7,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+import java.nio.file.Paths;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Override
@@ -23,8 +26,19 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 让 /images/** 映射到本地 images 目录
+        // 获取项目根目录
+        String projectPath = new File("").getAbsolutePath();
+        // 新的图片上传物理路径
+        String imagePath = Paths.get(projectPath, "uploaded_images").toString();
+
+        // 确保目录存在
+        File dir = new File(imagePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // 将 /images/** URL路径映射到新的物理路径
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:src/main/java/com/example/database_cli/images/");
+                .addResourceLocations("file:" + imagePath + File.separator);
     }
 }
