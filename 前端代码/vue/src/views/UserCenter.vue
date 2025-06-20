@@ -1,90 +1,124 @@
 <template>
   <div class="user-center">
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <template #header>
-            <h2>个人中心</h2>
-          </template>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h2>个人中心</h2>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-buttons">
+            <button 
+              :class="['tab-button', { active: activeTab === 'profile' }]"
+              @click="activeTab = 'profile'"
+            >
+              个人信息
+            </button>
+            <button 
+              :class="['tab-button', { active: activeTab === 'orders' }]"
+              @click="activeTab = 'orders'"
+            >
+              我的订单
+            </button>
+          </div>
           
-          <el-tabs v-model="activeTab">
-            <el-tab-pane label="个人信息" name="profile">
-              <el-form
-                ref="profileFormRef"
-                :model="profileForm"
-                :rules="profileRules"
-                label-width="100px"
-              >
-                <el-form-item label="买家ID" prop="buyerId">
-                  <el-input v-model="profileForm.buyerId" disabled />
-                </el-form-item>
-                <el-form-item label="用户名" prop="buyerName">
-                  <el-input v-model="profileForm.buyerName" />
-                </el-form-item>
-                <el-form-item label="新密码" prop="newPassword">
-                  <el-input
-                    v-model="profileForm.newPassword"
-                    type="password"
+          <div class="tab-content">
+            <!-- 个人信息 -->
+            <div v-if="activeTab === 'profile'" class="tab-pane">
+              <form class="form" @submit.prevent="updateProfile">
+                <div class="form-group">
+                  <label>买家ID</label>
+                  <input type="text" v-model="profileForm.buyerId" disabled class="form-control" />
+                </div>
+                <div class="form-group">
+                  <label>用户名</label>
+                  <input type="text" v-model="profileForm.buyerName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                  <label>新密码</label>
+                  <input 
+                    type="password" 
+                    v-model="profileForm.newPassword" 
+                    class="form-control"
                     placeholder="留空表示不修改密码"
-                    show-password
                   />
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="updateProfile" :loading="loading">
-                    保存修改
-                  </el-button>
-                </el-form-item>
-              </el-form>
-            </el-tab-pane>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" :disabled="loading">
+                    {{ loading ? '保存中...' : '保存修改' }}
+                  </button>
+                </div>
+              </form>
+            </div>
             
-            <el-tab-pane label="我的订单" name="orders">
+            <!-- 我的订单 -->
+            <div v-if="activeTab === 'orders'" class="tab-pane">
               <div v-if="orders.length === 0" class="empty-orders">
-                <el-empty description="暂无订单">
-                  <el-button type="primary" @click="$router.push('/goods')">
+                <div class="empty-content">
+                  <div class="empty-icon">📦</div>
+                  <p>暂无订单</p>
+                  <button class="btn btn-primary" @click="$router.push('/goods')">
                     去购物
-                  </el-button>
-                </el-empty>
+                  </button>
+                </div>
               </div>
-              <div v-else>
-                <el-table :data="orders" style="width: 100%">
-                  <el-table-column prop="orderId" label="订单号" width="180" />
-                  <el-table-column prop="goodsName" label="商品名称" />
-                  <el-table-column prop="num" label="数量" width="100" />
-                  <el-table-column prop="totalPrice" label="总价" width="120">
-                    <template #default="scope">
-                      ¥{{ scope.row.totalPrice }}
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="orderTime" label="下单时间" width="180" />
-                  <el-table-column label="状态" width="100">
-                    <template #default="scope">
-                      <el-tag :type="getOrderStatusType(scope.row.status)">
-                        {{ getOrderStatusText(scope.row.status) }}
-                      </el-tag>
-                    </template>
-                  </el-table-column>
-                </el-table>
+              <div v-else class="table-container">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>订单号</th>
+                      <th>商品名称</th>
+                      <th>数量</th>
+                      <th>总价</th>
+                      <th>下单时间</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="order in orders" :key="order.orderId">
+                      <td>{{ order.orderId }}</td>
+                      <td>{{ order.goodsName }}</td>
+                      <td>{{ order.num }}</td>
+                      <td>¥{{ order.totalPrice }}</td>
+                      <td>{{ order.orderTime }}</td>
+                      <td>
+                        <span :class="['status-tag', getOrderStatusType(order.status)]">
+                          {{ getOrderStatusText(order.status) }}
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            </el-tab-pane>
-          </el-tabs>
-        </el-card>
-      </el-col>
-    </el-row>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 消息提示 -->
+    <div v-if="message.show" :class="['message', message.type]">
+      {{ message.text }}
+    </div>
   </div>
 </template>
 
 <script>
 import { ref, reactive, onMounted } from 'vue'
 import { buyerAPI } from '../api'
-import { ElMessage } from 'element-plus'
 
 export default {
   name: 'UserCenter',
   setup() {
     const activeTab = ref('profile')
     const loading = ref(false)
-    const profileFormRef = ref()
     const orders = ref([])
+    
+    const message = reactive({
+      show: false,
+      text: '',
+      type: 'info'
+    })
     
     const profileForm = reactive({
       buyerId: '',
@@ -92,11 +126,13 @@ export default {
       newPassword: ''
     })
     
-    const profileRules = {
-      buyerName: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
-        { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-      ]
+    const showMessage = (text, type = 'info') => {
+      message.text = text
+      message.type = type
+      message.show = true
+      setTimeout(() => {
+        message.show = false
+      }, 3000)
     }
     
     const loadUserInfo = () => {
@@ -107,7 +143,6 @@ export default {
     
     const updateProfile = async () => {
       try {
-        await profileFormRef.value.validate()
         loading.value = true
         
         const updateData = {
@@ -121,17 +156,17 @@ export default {
         
         const response = await buyerAPI.update(updateData)
         if (response.code === 200) {
-          ElMessage.success('个人信息更新成功')
+          showMessage('个人信息更新成功', 'success')
           // 更新本地存储的用户信息
           const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
           userInfo.buyerName = profileForm.buyerName
           localStorage.setItem('userInfo', JSON.stringify(userInfo))
           profileForm.newPassword = ''
         } else {
-          ElMessage.error(response.msg || '更新失败')
+          showMessage(response.msg || '更新失败', 'error')
         }
       } catch (error) {
-        ElMessage.error('更新失败')
+        showMessage('更新失败', 'error')
       } finally {
         loading.value = false
       }
@@ -168,10 +203,9 @@ export default {
     return {
       activeTab,
       loading,
-      profileFormRef,
       profileForm,
-      profileRules,
       orders,
+      message,
       updateProfile,
       getOrderStatusType,
       getOrderStatusText
@@ -184,6 +218,107 @@ export default {
 .user-center {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.card-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.tabs {
+  padding: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-button.active {
+  border-bottom-color: #409eff;
+  color: #409eff;
+}
+
+.tab-pane {
+  min-height: 400px;
+}
+
+.form {
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #409eff;
+}
+
+.form-control:disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: #f5f5f5;
+}
+
+.btn-primary {
+  background: #409eff;
+  color: white;
+  border-color: #409eff;
+}
+
+.btn-primary:hover {
+  background: #337ecc;
 }
 
 .empty-orders {
@@ -191,7 +326,103 @@ export default {
   padding: 40px 0;
 }
 
-.el-form {
-  max-width: 500px;
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: #ccc;
+}
+
+.empty-content p {
+  color: #999;
+  font-size: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+}
+
+.status-tag.success {
+  background: #67c23a;
+}
+
+.status-tag.warning {
+  background: #e6a23c;
+}
+
+.status-tag.primary {
+  background: #409eff;
+}
+
+.status-tag.danger {
+  background: #f56c6c;
+}
+
+.status-tag.info {
+  background: #909399;
+}
+
+/* 消息提示样式 */
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  color: white;
+  z-index: 1001;
+  animation: slideIn 0.3s ease;
+}
+
+.message.success {
+  background: #67c23a;
+}
+
+.message.error {
+  background: #f56c6c;
+}
+
+.message.info {
+  background: #909399;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style> 

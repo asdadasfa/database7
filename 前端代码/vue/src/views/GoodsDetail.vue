@@ -71,7 +71,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { goodsAPI, cartAPI } from '../api'
-import { ElMessage } from 'element-plus'
+import Message from '../utils/message'
 
 export default {
   name: 'GoodsDetail',
@@ -93,7 +93,7 @@ export default {
         }
       } catch (error) {
         console.error('加载商品详情失败:', error)
-        ElMessage.error('加载商品详情失败')
+        Message.error('加载商品详情失败')
         goods.value = null
       } finally {
         loading.value = false
@@ -103,30 +103,30 @@ export default {
     const addToCart = async () => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
       if (!userInfo.buyerId) {
-        ElMessage.warning('请先登录')
+        Message.warning('请先登录')
         router.push('/login')
         return
       }
       
       if (goods.value.num <= 0) {
-        ElMessage.warning('商品库存不足')
+        Message.warning('商品库存不足')
         return
       }
       
       try {
         const response = await cartAPI.addToCart(userInfo.buyerId, goods.value.goodsId, quantity.value)
         if (response.code === 200) {
-          ElMessage.success('已添加到购物车')
+          Message.success('已添加到购物车')
         } else {
-          ElMessage.error(response.msg || '添加失败')
+          Message.error(response.msg || '添加失败')
         }
       } catch (error) {
-        ElMessage.error('添加失败')
+        Message.error('添加失败')
       }
     }
     
     const buyNow = () => {
-      ElMessage.info('购买功能开发中...')
+      Message.info('购买功能开发中...')
       // 这里可以跳转到结算页面
       // router.push('/checkout')
     }

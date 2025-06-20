@@ -52,7 +52,7 @@ spring:
 
 # 静态资源映射配置
 resources:
-  static-locations: classpath:/static/,file:src/main/java/com/example/database_cli/images/
+  static-locations: classpath:/static/,file:src/main/java/com/example/database_cli/unloaded_images/
 
 server:
   port: ${server_port:8686} #9012

@@ -1,7 +1,10 @@
 package com.example.database_cli.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -9,9 +12,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.io.IOException;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
+    private static final String IMAGE_UPLOAD_PATH = "uploaded_images";
+
+    public WebConfig() {
+        System.out.println("WebConfig 构造方法被调用");
+    }
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // 先设置映射
@@ -26,19 +40,45 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 获取项目根目录
-        String projectPath = new File("").getAbsolutePath();
-        // 新的图片上传物理路径
-        String imagePath = Paths.get(projectPath, "uploaded_images").toString();
-
-        // 确保目录存在
+        // 获取当前类文件的父目录（即 database_cli 目录）
+        String basePath = new File("").getAbsolutePath();
+        // 拼接 uploaded_images
+        String imagePath = Paths.get(basePath, "uploaded_images").toString();
         File dir = new File(imagePath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
-        // 将 /images/** URL路径映射到新的物理路径
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:" + imagePath + File.separator);
+        System.out.println("图片物理路径：" + imagePath);
+    }
+
+    private List<String> saveImages(List<MultipartFile> imageFiles) {
+        List<String> imagePaths = new ArrayList<>();
+        if (imageFiles == null || imageFiles.isEmpty()) {
+            return imagePaths;
+        }
+        File uploadDir = new File(IMAGE_UPLOAD_PATH);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        for (MultipartFile imageFile : imageFiles) {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                try {
+                    String originalFilename = imageFile.getOriginalFilename();
+                    String fileExtension = "";
+                    if (originalFilename != null && originalFilename.contains(".")) {
+                        fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                    }
+                    String fileName = "goods_" + UUID.randomUUID().toString().replace("-", "") + fileExtension;
+                    File destFile = new File(uploadDir, fileName);
+                    imageFile.transferTo(destFile);
+                    imagePaths.add("http://localhost:8686/images/" + fileName);
+                } catch (IOException e) {
+                    // 错误处理
+                }
+            }
+        }
+        return imagePaths;
     }
 }

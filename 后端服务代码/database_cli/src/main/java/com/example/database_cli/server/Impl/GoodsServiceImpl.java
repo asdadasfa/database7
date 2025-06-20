@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +26,14 @@ public class GoodsServiceImpl implements IGoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    // 图片保存路径
-    private static final String IMAGE_UPLOAD_PATH = "src/main/java/com/example/database_cli/images/";
+    // 图片保存路径 (始终相对于database_cli目录)
+    private static final String IMAGE_UPLOAD_PATH;
+    static {
+        // 获取当前项目根目录
+        String projectRoot = System.getProperty("user.dir");
+        // 拼接到后端服务代码/database_cli/uploaded_images
+        IMAGE_UPLOAD_PATH = java.nio.file.Paths.get(projectRoot, "后端服务代码", "database_cli", "uploaded_images").toString();
+    }
 
     @Override
     public Result addGoodsWithImages(VoGoods voGoods) {
@@ -81,9 +88,7 @@ public class GoodsServiceImpl implements IGoodsService {
         if (imageFiles == null || imageFiles.isEmpty()) {
             return imagePaths;
         }
-
-        // 确保图片目录存在
-        File uploadDir = new File(IMAGE_UPLOAD_PATH);
+        java.io.File uploadDir = new java.io.File(IMAGE_UPLOAD_PATH);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
@@ -91,21 +96,20 @@ public class GoodsServiceImpl implements IGoodsService {
         for (MultipartFile imageFile : imageFiles) {
             if (imageFile != null && !imageFile.isEmpty()) {
                 try {
-                    // 生成唯一文件名
                     String originalFilename = imageFile.getOriginalFilename();
                     String fileExtension = "";
                     if (originalFilename != null && originalFilename.contains(".")) {
                         fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
                     }
-                    String fileName = "goods_" + UUID.randomUUID().toString().replace("-", "") + fileExtension;
+                    String fileName = "goods_" + java.util.UUID.randomUUID().toString().replace("-", "") + fileExtension;
                     
-                    // 保存图片文件
-                    File destFile = new File(IMAGE_UPLOAD_PATH + fileName);
+                    // 保存图片文件到绝对路径
+                    java.io.File destFile = new java.io.File(uploadDir, fileName);
                     imageFile.transferTo(destFile);
                     
-                    // 保存相对路径到数据库
+                    // 根据前端要求，保存完整的URL到数据库
                     imagePaths.add("http://localhost:8686/images/" + fileName);
-                    log.info("图片保存成功: {}", fileName);
+                    log.info("图片保存成功，路径: {}, URL: {}", destFile.getAbsolutePath(), "http://localhost:8686/images/" + fileName);
                 } catch (IOException e) {
                     log.error("图片保存失败: {}", imageFile.getOriginalFilename(), e);
                     return null;

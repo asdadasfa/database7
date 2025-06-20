@@ -4,8 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了买者部分接口的错误">
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/package-lock.json" beforeDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="完删了订单状态转换功能，并修复测试了商品的部分接口">
+      <change afterPath="$PROJECT_DIR$/数据库/handle_timeout_orders.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Register.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +80,7 @@
     "Spring Boot.DatabaseCliApplication.executor": "Run",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database7/log/6.17",
+    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database7",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,28 +89,30 @@
     "npm.build.executor": "Run",
     "npm.dev.executor": "Run",
     "settings.editor.selected.configurable": "vcs.Git",
+    "ts.external.directory.path": "F:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1.6\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\6.17" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\database_cli\src\main\java\com\example\database_cli" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\database_cli\src\main\java\com\example\database_cli\control" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database7\后端服务代码\database_cli" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\img" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\前端代码" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\后端服务代码" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.database_cli.model.result" />
       <recent name="com.example.database_cli.config" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="Spring Boot.DatabaseCliApplication">
     <configuration name="DatabaseCliApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="database_cli" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.database_cli.DatabaseCliApplication" />
@@ -150,7 +169,10 @@
       <workItem from="1750233760560" duration="15829000" />
       <workItem from="1750292765981" duration="12249000" />
       <workItem from="1750312765329" duration="7841000" />
-      <workItem from="1750321636384" duration="583000" />
+      <workItem from="1750321636384" duration="1034000" />
+      <workItem from="1750322714629" duration="331000" />
+      <workItem from="1750324043096" duration="2546000" />
+      <workItem from="1750330382938" duration="26328000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -256,7 +278,23 @@
       <option name="project" value="LOCAL" />
       <updated>1750317975109</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="初步实现了订单状态的转换">
+      <option name="closed" value="true" />
+      <created>1750381960173</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1750381960173</updated>
+    </task>
+    <task id="LOCAL-00015" summary="完删了订单状态转换功能，并修复测试了商品的部分接口">
+      <option name="closed" value="true" />
+      <created>1750389510970</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1750389510970</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,6 +358,8 @@
     <MESSAGE value="对商品的接口进行修改，将图片转存到本地保留相对地址，对部分实体类进行修改" />
     <MESSAGE value="初步实现了添加订单的接口" />
     <MESSAGE value="修改了买者部分接口的错误" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了买者部分接口的错误" />
+    <MESSAGE value="初步实现了订单状态的转换" />
+    <MESSAGE value="完删了订单状态转换功能，并修复测试了商品的部分接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="完删了订单状态转换功能，并修复测试了商品的部分接口" />
   </component>
 </project>
