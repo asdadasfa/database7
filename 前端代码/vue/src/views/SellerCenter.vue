@@ -114,6 +114,8 @@
               <option value="服装">服装</option>
               <option value="食品">食品</option>
               <option value="图书">图书</option>
+              <option value="家居">家居</option>
+              <option value="运动">运动</option>
             </select>
           </div>
           <div class="form-group">
@@ -123,6 +125,13 @@
           <div class="form-group">
             <label>库存</label>
             <input type="number" v-model="goodsForm.num" class="form-control" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>商品图片</label>
+            <input type="file" @change="handleImageUpload" class="form-control" accept="image/*" />
+            <div v-if="goodsForm.images && goodsForm.images.length" class="image-preview">
+              <img v-for="(image, index) in goodsForm.images" :key="index" :src="image" class="preview-image" />
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" @click="closeDialog">取消</button>
@@ -171,7 +180,8 @@ export default {
       goodsName: '',
       type: '',
       price: 0,
-      num: 0
+      num: 0,
+      images: []
     })
     
     const showMessage = (text, type = 'info') => {
@@ -303,6 +313,18 @@ export default {
       }
     }
     
+    const handleImageUpload = (event) => {
+      const files = event.target.files
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          goodsForm.images.push(e.target.result)
+        }
+        reader.readAsDataURL(file)
+      }
+    }
+    
     onMounted(() => {
       loadUserInfo()
       loadMyGoods()
@@ -322,7 +344,8 @@ export default {
       closeDialog,
       saveGoods,
       deleteGoods,
-      updateProfile
+      updateProfile,
+      handleImageUpload
     }
   }
 }
@@ -557,6 +580,22 @@ export default {
 
 .message.info {
   background: #909399;
+}
+
+/* 图片预览样式 */
+.image-preview {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.preview-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
 @keyframes slideIn {

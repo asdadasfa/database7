@@ -50,6 +50,9 @@ export default {
             <router-link v-if="isLoggedIn" to="/cart" class="nav-item" :class="{ active: isActive('/cart') }">
               🛒 购物车
             </router-link>
+            <router-link v-if="isLoggedIn" to="/orders" class="nav-item" :class="{ active: isActive('/orders') }">
+              📋 我的订单
+            </router-link>
           </div>
           
           <div class="nav-right">

@@ -37,7 +37,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { cartAPI } from '../api'
+import { cartAPI, orderAPI } from '../api'
 import Message from '../utils/message'
 
 const router = useRouter()
@@ -94,12 +94,46 @@ const clearCart = async () => {
   }
 }
 
-const checkout = () => {
+const checkout = async () => {
   if (!cartItems.value.length) {
     Message.warning('购物车是空的')
     return
   }
-  Message.info('结算功能开发中...')
+  
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+  if (!userInfo.buyerId) {
+    Message.warning('请先登录')
+    router.push('/login')
+    return
+  }
+
+  try {
+    // 创建订单数据
+    const orderData = {
+      buyerId: userInfo.buyerId,
+      totalAmount: parseFloat(totalAmount.value),
+      orderItems: cartItems.value.map(item => ({
+        goodsId: item.goodsId,
+        goodsName: item.goodsName,
+        price: item.price,
+        num: item.num
+      }))
+    }
+
+    const response = await orderAPI.createOrder(orderData)
+    if (response.code === 200) {
+      Message.success('订单创建成功')
+      // 清空购物车
+      await cartAPI.clearCart(userInfo.buyerId)
+      cartItems.value = []
+      // 跳转到订单页面
+      router.push('/orders')
+    } else {
+      Message.error(response.msg || '订单创建失败')
+    }
+  } catch (error) {
+    Message.error('订单创建失败')
+  }
 }
 
 onMounted(loadCart)

@@ -1,8 +1,55 @@
 <template>
   <div class="goods-list-page">
     <h2 class="page-title">全部商品</h2>
+    
+    <!-- 搜索和筛选区域 -->
+    <div class="search-filter-section">
+      <div class="search-box">
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="搜索商品名称..." 
+          class="search-input"
+          @input="handleSearch"
+        />
+        <button @click="handleSearch" class="search-btn">搜索</button>
+      </div>
+      
+      <div class="filter-section">
+        <select v-model="selectedType" @change="handleFilter" class="filter-select">
+          <option value="">全部类型</option>
+          <option value="电子产品">电子产品</option>
+          <option value="服装">服装</option>
+          <option value="食品">食品</option>
+          <option value="图书">图书</option>
+          <option value="家居">家居</option>
+          <option value="运动">运动</option>
+        </select>
+        
+        <div class="price-filter">
+          <input 
+            v-model="minPrice" 
+            type="number" 
+            placeholder="最低价" 
+            class="price-input"
+            @input="handleFilter"
+          />
+          <span>-</span>
+          <input 
+            v-model="maxPrice" 
+            type="number" 
+            placeholder="最高价" 
+            class="price-input"
+            @input="handleFilter"
+          />
+        </div>
+        
+        <button @click="resetFilter" class="reset-btn">重置筛选</button>
+      </div>
+    </div>
+    
     <div class="goods-list">
-      <div class="goods-card" v-for="goods in goodsList" :key="goods.goodsId">
+      <div class="goods-card" v-for="goods in filteredGoods" :key="goods.goodsId">
         <img :src="goods.images && goods.images[0] ? goods.images[0] : '/default-goods.jpg'" class="goods-image" />
         <h3>{{ goods.goodsName }}</h3>
         <p>类型: {{ goods.type }}</p>
@@ -13,23 +60,80 @@
         </div>
       </div>
     </div>
+    
+    <!-- 无商品提示 -->
+    <div v-if="filteredGoods.length === 0" class="no-goods">
+      <div class="no-goods-content">
+        <div class="no-goods-icon">🔍</div>
+        <p>没有找到相关商品</p>
+        <button @click="resetFilter" class="main-btn">查看全部商品</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { goodsAPI, cartAPI } from '../api/index.js'
 import Message from '../utils/message'
 
 const router = useRouter()
 const goodsList = ref([])
+const searchQuery = ref('')
+const selectedType = ref('')
+const minPrice = ref('')
+const maxPrice = ref('')
+
+// 计算筛选后的商品列表
+const filteredGoods = computed(() => {
+  let filtered = goodsList.value
+
+  // 按名称搜索
+  if (searchQuery.value) {
+    filtered = filtered.filter(goods => 
+      goods.goodsName.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  }
+
+  // 按类型筛选
+  if (selectedType.value) {
+    filtered = filtered.filter(goods => goods.type === selectedType.value)
+  }
+
+  // 按价格范围筛选
+  if (minPrice.value || maxPrice.value) {
+    filtered = filtered.filter(goods => {
+      const price = goods.price
+      const min = minPrice.value ? parseFloat(minPrice.value) : 0
+      const max = maxPrice.value ? parseFloat(maxPrice.value) : Infinity
+      return price >= min && price <= max
+    })
+  }
+
+  return filtered
+})
 
 const loadGoods = async () => {
   const res = await goodsAPI.getAllGoods()
   if (res.code === 200) {
     goodsList.value = res.data
   }
+}
+
+const handleSearch = () => {
+  // 搜索逻辑已在computed中处理
+}
+
+const handleFilter = () => {
+  // 筛选逻辑已在computed中处理
+}
+
+const resetFilter = () => {
+  searchQuery.value = ''
+  selectedType.value = ''
+  minPrice.value = ''
+  maxPrice.value = ''
 }
 
 const viewDetail = (goodsId) => {
@@ -169,5 +273,133 @@ onMounted(loadGoods)
   .page-title {
     font-size: 1.2em;
   }
+}
+
+.search-filter-section {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.search-input:focus {
+  border-color: #409eff;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-btn:hover {
+  background: #3076c9;
+}
+
+.filter-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #409eff;
+}
+
+.price-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-input {
+  width: 100px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.price-input:focus {
+  border-color: #409eff;
+}
+
+.reset-btn {
+  padding: 8px 16px;
+  background: #909399;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reset-btn:hover {
+  background: #606266;
+}
+
+.no-goods {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.no-goods-content {
+  text-align: center;
+}
+
+.no-goods-icon {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.main-btn {
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.main-btn:hover {
+  background: #3076c9;
 }
 </style> 

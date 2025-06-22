@@ -103,4 +103,22 @@ export const cartAPI = {
   clearCart: (buyerId) => api.delete('/cart/clearCart', { params: { buyerId } })
 }
 
+// 订单相关API
+export const orderAPI = {
+  // 创建订单
+  createOrder: (data) => api.post('/order/create', data),
+  // 支付订单
+  payOrder: (orderId) => api.post('/order/pay', null, { params: { orderId } }),
+  // 取消订单
+  cancelOrder: (orderId) => api.post('/order/cancel', null, { params: { orderId } }),
+  // 处理超时订单
+  handleTimeoutOrders: () => api.post('/order/handle-timeout'),
+  // 获取待支付订单
+  getPendingOrders: (buyerId) => api.get('/order/pending', { params: { buyerId } }),
+  // 获取已支付订单
+  getPaidOrders: (buyerId) => api.get('/order/paid', { params: { buyerId } }),
+  // 获取已取消订单
+  getCancelledOrders: (buyerId) => api.get('/order/cancelled', { params: { buyerId } })
+}
+
 export default api 

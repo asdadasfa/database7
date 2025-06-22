@@ -5,6 +5,7 @@ import Register from '../views/Register.vue'
 import GoodsList from '../views/GoodsList.vue'
 import GoodsDetail from '../views/GoodsDetail.vue'
 import Cart from '../views/Cart.vue'
+import Orders from '../views/Orders.vue'
 import UserCenter from '../views/UserCenter.vue'
 import SellerCenter from '../views/SellerCenter.vue'
 
@@ -38,6 +39,12 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: Cart,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: Orders,
     meta: { requiresAuth: true }
   },
   {

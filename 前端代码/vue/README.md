@@ -1,45 +1,37 @@
 # 电商平台前端
 
-基于 Vue 3 + Element Plus 的现代化电商平台前端应用。
-
-## 技术栈
-
-- **Vue 3.5.13** - 渐进式 JavaScript 框架
-- **Vue Router 4.2.5** - 官方路由管理器
-- **Element Plus 2.4.4** - 基于 Vue 3 的组件库
-- **Axios 1.6.0** - HTTP 客户端
-- **Vite 6.3.5** - 下一代前端构建工具
+这是一个基于Vue 3的电商平台前端项目，提供完整的购物功能。
 
 ## 功能特性
 
-### 买家功能
-- 用户注册/登录
-- 商品浏览和搜索
-- 商品详情查看
-- 购物车管理
-- 个人信息管理
-- 订单查看
+### 用户功能
+- **用户注册/登录**: 支持买家和卖家分别注册登录
+- **商品浏览**: 查看所有商品，支持搜索和筛选
+- **商品详情**: 查看商品详细信息，支持图片展示
+- **购物车**: 添加商品到购物车，管理购物车内容
+- **订单管理**: 创建订单、支付、取消订单
+- **个人中心**: 管理个人信息
 
 ### 卖家功能
-- 卖家注册/登录
-- 商品管理（增删改查）
-- 个人信息管理
-- 销售数据查看
+- **商品管理**: 添加、编辑、删除商品
+- **图片上传**: 支持商品图片上传
+- **库存管理**: 管理商品库存
+- **卖家中心**: 管理卖家信息和商品
 
-### 通用功能
-- 响应式设计
-- 路由守卫
-- 状态管理
-- 错误处理
+### 技术特性
+- **响应式设计**: 支持移动端和桌面端
+- **现代化UI**: 美观的用户界面
+- **实时搜索**: 商品名称实时搜索
+- **状态管理**: 完整的订单状态管理
 
 ## 项目结构
 
 ```
 src/
-├── api/           # API 接口
-├── assets/        # 静态资源
+├── api/           # API接口配置
 ├── components/    # 公共组件
 ├── router/        # 路由配置
+├── utils/         # 工具函数
 ├── views/         # 页面组件
 │   ├── Home.vue           # 首页
 │   ├── Login.vue          # 登录页
@@ -47,105 +39,38 @@ src/
 │   ├── GoodsList.vue      # 商品列表
 │   ├── GoodsDetail.vue    # 商品详情
 │   ├── Cart.vue           # 购物车
+│   ├── Orders.vue         # 订单管理
 │   ├── UserCenter.vue     # 用户中心
 │   └── SellerCenter.vue   # 卖家中心
-├── App.vue        # 根组件
-└── main.js        # 入口文件
+└── main.js        # 应用入口
 ```
 
 ## 安装和运行
 
-### 1. 安装依赖
-
+### 安装依赖
 ```bash
 npm install
 ```
 
-### 2. 启动开发服务器
-
+### 开发环境运行
 ```bash
 npm run dev
 ```
 
-应用将在 `http://localhost:3000` 启动。
-
-### 3. 构建生产版本
-
+### 生产环境构建
 ```bash
 npm run build
 ```
 
-### 4. 预览生产版本
+## API接口
 
-```bash
-npm run preview
-```
+项目使用以下后端API接口：
 
-## 环境配置
-
-### 后端API配置
-
-前端默认连接到 `http://localhost:8686` 的后端服务。如需修改，请编辑 `src/api/index.js` 中的 `baseURL`。
-
-### 代理配置
-
-开发环境下已配置代理，将 `/api` 请求转发到后端服务：
-
-```javascript
-proxy: {
-  '/api': {
-    target: 'http://localhost:8686',
-    changeOrigin: true,
-    rewrite: (path) => path.replace(/^\/api/, '')
-  }
-}
-```
-
-## 主要页面说明
-
-### 首页 (Home.vue)
-- 展示热门商品
-- 提供快速导航
-- 介绍平台特色
-
-### 登录页 (Login.vue)
-- 支持买家/卖家登录
-- 表单验证
-- 自动跳转
-
-### 商品列表 (GoodsList.vue)
-- 商品展示
-- 搜索和筛选
-- 分页功能
-- 加入购物车
-
-### 购物车 (Cart.vue)
-- 购物车商品管理
-- 数量修改
-- 商品删除
-- 结算功能
-
-### 用户中心 (UserCenter.vue)
-- 个人信息管理
-- 订单查看
-- 密码修改
-
-### 卖家中心 (SellerCenter.vue)
-- 商品管理
-- 个人信息管理
-- 销售数据
-
-## API 接口
-
-### 买家相关
+### 用户相关
 - `POST /buyer/register` - 买家注册
 - `POST /buyer/login` - 买家登录
-- `PUT /buyer/update` - 更新买家信息
-
-### 卖家相关
 - `POST /seller/register` - 卖家注册
 - `POST /seller/login` - 卖家登录
-- `PUT /seller/update` - 更新卖家信息
 
 ### 商品相关
 - `GET /goods/getAllGoods` - 获取所有商品
@@ -157,41 +82,85 @@ proxy: {
 ### 购物车相关
 - `POST /cart/addToCart` - 添加到购物车
 - `GET /cart/getCartContents` - 获取购物车内容
-- `PUT /cart/updateCartItem` - 更新购物车商品
-- `DELETE /cart/removeFromCart` - 从购物车移除
-- `DELETE /cart/clearCart` - 清空购物车
+- `PUT /cart/updateCartItem` - 更新购物车商品数量
+- `DELETE /cart/removeFromCart` - 从购物车移除商品
 
-## 开发指南
+### 订单相关
+- `POST /order/create` - 创建订单
+- `POST /order/pay` - 支付订单
+- `POST /order/cancel` - 取消订单
+- `GET /order/pending` - 获取待支付订单
+- `GET /order/paid` - 获取已支付订单
 
-### 添加新页面
-1. 在 `src/views/` 创建新的 Vue 组件
-2. 在 `src/router/index.js` 添加路由配置
-3. 在 `src/api/index.js` 添加相关 API 接口
+## 使用说明
 
-### 样式规范
-- 使用 Element Plus 组件库
-- 遵循 BEM 命名规范
-- 响应式设计优先
+### 买家使用流程
+1. 注册/登录买家账号
+2. 浏览商品列表，使用搜索和筛选功能
+3. 点击商品查看详情
+4. 添加到购物车或立即购买
+5. 在购物车中管理商品，进行结算
+6. 在订单页面管理订单状态
 
-### 状态管理
-- 使用 localStorage 存储用户信息
-- 使用 Vue 3 Composition API
-- 避免全局状态管理
+### 卖家使用流程
+1. 注册/登录卖家账号
+2. 进入卖家中心
+3. 添加商品，上传图片
+4. 管理商品库存和信息
+5. 查看订单状态
 
-## 注意事项
+## 技术栈
 
-1. 确保后端服务已启动并运行在 `http://localhost:8686`
-2. 登录状态通过 localStorage 管理
-3. 所有 API 请求都包含错误处理
-4. 表单验证使用 Element Plus 内置验证
+- **Vue 3**: 前端框架
+- **Vue Router**: 路由管理
+- **Axios**: HTTP客户端
+- **CSS3**: 样式和动画
+- **ES6+**: JavaScript语法
 
 ## 浏览器支持
 
-- Chrome >= 87
-- Firefox >= 78
-- Safari >= 14
-- Edge >= 88
+- Chrome (推荐)
+- Firefox
+- Safari
+- Edge
 
-## 许可证
+## 开发说明
 
-MIT License
+### 代码规范
+- 使用Vue 3 Composition API
+- 组件使用PascalCase命名
+- 文件使用kebab-case命名
+- 使用ES6+语法
+
+### 样式规范
+- 使用scoped样式
+- 响应式设计优先
+- 统一的颜色和间距规范
+
+## 部署
+
+### 开发环境
+```bash
+npm run dev
+```
+
+### 生产环境
+```bash
+npm run build
+npm run preview
+```
+
+## 注意事项
+
+1. 确保后端服务运行在 `http://localhost:8686`
+2. 图片上传功能需要后端支持文件上传
+3. 订单超时处理需要后端定时任务支持
+4. 建议使用现代浏览器以获得最佳体验
+
+## 更新日志
+
+### v1.0.0
+- 初始版本发布
+- 完整的电商功能实现
+- 响应式设计支持
+- 用户和卖家功能分离
