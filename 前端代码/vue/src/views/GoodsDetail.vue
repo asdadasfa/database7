@@ -69,7 +69,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { goodsAPI, cartAPI } from '../api'
+import { goodsAPI, cartAPI, orderAPI } from '../api'
 import Message from '../utils/message'
 
 const route = useRoute()
@@ -137,7 +137,7 @@ const addToCart = async () => {
   }
 }
 
-const buyNow = () => {
+const buyNow = async () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
   if (!userInfo.buyerId) {
     Message.warning('请先登录')
@@ -145,7 +145,7 @@ const buyNow = () => {
     return
   }
   
-  if (goods.value.num <= 0) {
+  if (goods.value.num < quantity.value) {
     Message.warning('商品库存不足')
     return
   }
@@ -153,17 +153,22 @@ const buyNow = () => {
   // 创建订单数据
   const orderData = {
     buyerId: userInfo.buyerId,
-    totalAmount: goods.value.price * quantity.value,
-    orderItems: [{
-      goodsId: goods.value.goodsId,
-      goodsName: goods.value.goodsName,
-      price: goods.value.price,
-      num: quantity.value
-    }]
+    sellerId: goods.value.sellerId,
+    goodsId: goods.value.goodsId,
+    num: quantity.value
   }
   
-  // 这里可以跳转到结算页面或直接创建订单
-  Message.info('购买功能开发中...')
+  try {
+    const response = await orderAPI.createOrder(orderData)
+    if (response.code === 200) {
+      Message.success('订单已创建，请尽快支付')
+      router.push('/orders')
+    } else {
+      Message.error(response.msg || '订单创建失败')
+    }
+  } catch (error) {
+    Message.error('订单创建失败')
+  }
 }
 
 onMounted(() => {

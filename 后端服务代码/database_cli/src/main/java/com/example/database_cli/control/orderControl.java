@@ -70,4 +70,24 @@ public class orderControl {
     public Result getCancelledOrders(@RequestParam String buyerId) {
         return orderService.selectByBuyerIdAndState(buyerId, "取消");
     }
+
+    /**
+     * 根据buyerId获取所有订单
+     * @param buyerId
+     * @return
+     */
+    @GetMapping("/by-buyer")
+    public Result getOrdersByBuyerId(@RequestParam String buyerId) {
+        return orderService.selectByBuyerId(buyerId);
+    }
+
+    /**
+     * 根据sellerId获取所有订单
+     * @param sellerId
+     * @return
+     */
+    @GetMapping("/by-seller")
+    public Result getOrdersBySellerId(@RequestParam String sellerId) {
+        return orderService.selectBySellerId(sellerId);
+    }
 }

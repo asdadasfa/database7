@@ -4,6 +4,7 @@
 
     <!-- 结果映射 -->
     <resultMap id="BaseResultMap" type="com.example.database_cli.model.entity.Order">
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
         <result column="buyer_id" property="buyerId" jdbcType="VARCHAR"/>
         <result column="seller_id" property="sellerId" jdbcType="VARCHAR"/>
         <result column="goods_id" property="goodsId" jdbcType="VARCHAR"/>
@@ -16,7 +17,7 @@
 
     <!-- 基础字段 -->
     <sql id="Base_Column_List">
-        buyer_id, seller_id, goods_id, state, num, sum, time,is_bool
+        order_id,buyer_id, seller_id, goods_id, state, num, sum, time,is_bool
     </sql>
 
     <!-- 根据买家ID查询订单 -->
@@ -61,8 +62,8 @@
 
     <!-- 插入订单 -->
     <insert id="insert" parameterType="com.example.database_cli.model.entity.Order">
-        INSERT INTO `order` (buyer_id, seller_id, goods_id, state, num, sum, time)
-        VALUES (#{buyerId}, #{sellerId}, #{goodsId}, #{state}, #{num}, #{sum}, #{time})
+        INSERT INTO `order` (order_id,buyer_id, seller_id, goods_id, state, num, sum, time)
+        VALUES (#{orderId},#{buyerId}, #{sellerId}, #{goodsId}, #{state}, #{num}, #{sum}, #{time})
     </insert>
 
     <!-- 更新订单信息 -->
@@ -72,20 +73,20 @@
             num = #{num},
             sum = #{sum},
             time = #{time}
-        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId} AND is_bool = 1
+        WHERE order_id = #{orderId}  AND is_bool = 1
     </update>
 
     <!-- 根据买家ID、卖家ID、商品ID删除订单 -->
     <update id="deleteByBuyerIdAndSellerIdAndGoodsId">
         UPDATE `order` SET is_bool = 0
-        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId} AND is_bool = 1
+        WHERE order_id = #{orderId}  AND is_bool = 1
     </update>
 
     <!-- 更新订单状态 -->
     <update id="updateState">
         UPDATE `order`
         SET state = #{state}
-        WHERE buyer_id = #{buyerId} AND seller_id = #{sellerId} AND goods_id = #{goodsId} AND is_bool = 1
+        WHERE order_id = #{orderId}  AND is_bool = 1
     </update>
 
     <!-- 根据时间范围查询订单 -->

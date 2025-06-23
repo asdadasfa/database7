@@ -13,10 +13,22 @@ export default {
       return !!localStorage.getItem('token')
     })
 
+    const userType = ref(localStorage.getItem('userType'))
+
+    // 监听登录状态变化
+    const updateUserType = () => {
+      userType.value = localStorage.getItem('userType')
+    }
+    onMounted(() => {
+      window.addEventListener('storage', updateUserType)
+    })
+
     const logout = () => {
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')
+      localStorage.removeItem('userType')
       Message.success('退出成功')
+      userType.value = null
       router.push('/login')
     }
 
@@ -28,6 +40,7 @@ export default {
 
     return {
       isLoggedIn,
+      userType,
       logout,
       isActive
     }
@@ -47,19 +60,19 @@ export default {
             <router-link to="/goods" class="nav-item" :class="{ active: isActive('/goods') }">
               📦 商品列表
             </router-link>
-            <router-link v-if="isLoggedIn" to="/cart" class="nav-item" :class="{ active: isActive('/cart') }">
+            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/cart" class="nav-item" :class="{ active: isActive('/cart') }">
               🛒 购物车
             </router-link>
-            <router-link v-if="isLoggedIn" to="/orders" class="nav-item" :class="{ active: isActive('/orders') }">
+            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/orders" class="nav-item" :class="{ active: isActive('/orders') }">
               📋 我的订单
             </router-link>
           </div>
           
           <div class="nav-right">
-            <router-link v-if="isLoggedIn" to="/user" class="nav-item" :class="{ active: isActive('/user') }">
+            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/user" class="nav-item" :class="{ active: isActive('/user') }">
               👤 个人中心
             </router-link>
-            <router-link v-if="isLoggedIn" to="/seller" class="nav-item" :class="{ active: isActive('/seller') }">
+            <router-link v-if="isLoggedIn && userType === 'seller'" to="/seller" class="nav-item" :class="{ active: isActive('/seller') }">
               🏪 卖家中心
             </router-link>
             <router-link v-if="!isLoggedIn" to="/login" class="nav-item" :class="{ active: isActive('/login') }">

@@ -6,7 +6,7 @@
           <h2>个人中心</h2>
         </div>
         
-        <div class="tabs">
+        <div class.tabs>
           <div class="tab-buttons">
             <button 
               :class="['tab-button', { active: activeTab === 'profile' }]"
@@ -16,7 +16,7 @@
             </button>
             <button 
               :class="['tab-button', { active: activeTab === 'orders' }]"
-              @click="activeTab = 'orders'"
+              @click="switchTab('orders')"
             >
               我的订单
             </button>
@@ -53,7 +53,8 @@
             
             <!-- 我的订单 -->
             <div v-if="activeTab === 'orders'" class="tab-pane">
-              <div v-if="orders.length === 0" class="empty-orders">
+               <div v-if="ordersLoading" class="loading-spinner"></div>
+              <div v-else-if="orders.length === 0" class="empty-orders">
                 <div class="empty-content">
                   <div class="empty-icon">📦</div>
                   <p>暂无订单</p>
@@ -62,367 +63,291 @@
                   </button>
                 </div>
               </div>
-              <div v-else class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>订单号</th>
-                      <th>商品名称</th>
-                      <th>数量</th>
-                      <th>总价</th>
-                      <th>下单时间</th>
-                      <th>状态</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="order in orders" :key="order.orderId">
-                      <td>{{ order.orderId }}</td>
-                      <td>{{ order.goodsName }}</td>
-                      <td>{{ order.num }}</td>
-                      <td>¥{{ order.totalPrice }}</td>
-                      <td>{{ order.orderTime }}</td>
-                      <td>
-                        <span :class="['status-tag', getOrderStatusType(order.status)]">
-                          {{ getOrderStatusText(order.status) }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div v-else class="orders-list">
+                <div class="order-card" v-for="order in orders" :key="order.orderId">
+                  <div class="order-header">
+                    <span class="order-id">订单号: {{ order.orderId }}</span>
+                    <span class="order-time">下单时间: {{ formatTime(order.time) }}</span>
+                    <span :class="['status-tag', getStatusClass(order.state)]">{{ order.state }}</span>
+                  </div>
+                  <div class="order-items">
+                     <div class="order-item" v-for="item in order.items" :key="item.goodsId">
+                        <div class="item-info">
+                        <span class="item-name">{{ item.goodsName }}</span>
+                        <span class="item-price">￥{{ item.price }} × {{ item.num }}</span>
+                        </div>
+                        <span class="item-total">￥{{ (item.price * item.num).toFixed(2) }}</span>
+                    </div>
+                  </div>
+                  <div class="order-footer">
+                    <div class="order-total">总计: <strong>￥{{ order.totalAmount.toFixed(2) }}</strong></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- 消息提示 -->
-    <div v-if="message.show" :class="['message', message.type]">
-      {{ message.text }}
-    </div>
   </div>
 </template>
 
-<script>
-import { ref, reactive, onMounted } from 'vue'
-import { buyerAPI } from '../api'
+<script setup>
+import { ref, reactive, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { buyerAPI, orderAPI } from '../api';
+import Message from '../utils/message';
 
-export default {
-  name: 'UserCenter',
-  setup() {
-    const activeTab = ref('profile')
-    const loading = ref(false)
-    const orders = ref([])
-    
-    const message = reactive({
-      show: false,
-      text: '',
-      type: 'info'
-    })
-    
-    const profileForm = reactive({
-      buyerId: '',
-      buyerName: '',
-      newPassword: ''
-    })
-    
-    const showMessage = (text, type = 'info') => {
-      message.text = text
-      message.type = type
-      message.show = true
-      setTimeout(() => {
-        message.show = false
-      }, 3000)
-    }
-    
-    const loadUserInfo = () => {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-      profileForm.buyerId = userInfo.buyerId || ''
-      profileForm.buyerName = userInfo.buyerName || ''
-    }
-    
-    const updateProfile = async () => {
-      try {
-        loading.value = true
-        
-        const updateData = {
-          buyerId: profileForm.buyerId,
-          buyerName: profileForm.buyerName
-        }
-        
-        if (profileForm.newPassword) {
-          updateData.buyerPassword = profileForm.newPassword
-        }
-        
-        const response = await buyerAPI.update(updateData)
-        if (response.code === 200) {
-          showMessage('个人信息更新成功', 'success')
-          // 更新本地存储的用户信息
-          const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-          userInfo.buyerName = profileForm.buyerName
-          localStorage.setItem('userInfo', JSON.stringify(userInfo))
-          profileForm.newPassword = ''
-        } else {
-          showMessage(response.msg || '更新失败', 'error')
-        }
-      } catch (error) {
-        showMessage('更新失败', 'error')
-      } finally {
-        loading.value = false
-      }
-    }
-    
-    const getOrderStatusType = (status) => {
-      const statusMap = {
-        'pending': 'warning',
-        'paid': 'success',
-        'shipped': 'primary',
-        'delivered': 'success',
-        'cancelled': 'danger'
-      }
-      return statusMap[status] || 'info'
-    }
-    
-    const getOrderStatusText = (status) => {
-      const statusMap = {
-        'pending': '待付款',
-        'paid': '已付款',
-        'shipped': '已发货',
-        'delivered': '已送达',
-        'cancelled': '已取消'
-      }
-      return statusMap[status] || '未知'
-    }
-    
-    onMounted(() => {
-      loadUserInfo()
-      // 这里可以加载订单数据
-      // loadOrders()
-    })
-    
-    return {
-      activeTab,
-      loading,
-      profileForm,
-      orders,
-      message,
-      updateProfile,
-      getOrderStatusType,
-      getOrderStatusText
-    }
+const router = useRouter();
+const activeTab = ref('profile');
+const loading = ref(false);
+const ordersLoading = ref(false);
+const orders = ref([]);
+
+const profileForm = reactive({
+  buyerId: '',
+  buyerName: '',
+  newPassword: '',
+});
+
+const switchTab = (tab) => {
+  activeTab.value = tab;
+  if (tab === 'orders') {
+    loadOrders();
   }
-}
+};
+
+const formatTime = (timeStr) => {
+  if (!timeStr) return 'N/A';
+  const date = new Date(timeStr);
+  return date.toLocaleString('zh-CN');
+};
+
+const getStatusClass = (status) => {
+    switch (status) {
+        case '待支付': return 'status-pending';
+        case '支付成功': return 'status-paid';
+        case '取消': return 'status-cancelled';
+        default: return '';
+    }
+};
+
+const loadUserInfo = () => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+  if (!userInfo.buyerId) {
+    Message.error('请先登录');
+    router.push('/login');
+    return;
+  }
+  profileForm.buyerId = userInfo.buyerId;
+  profileForm.buyerName = userInfo.buyerName;
+};
+
+const loadOrders = async () => {
+  if (!profileForm.buyerId) return;
+  ordersLoading.value = true;
+  try {
+    const response = await orderAPI.getOrdersByBuyerId(profileForm.buyerId);
+    if (response.code === 200) {
+      orders.value = response.data || [];
+    } else {
+      Message.error(response.msg || '获取订单失败');
+    }
+  } catch (error) {
+    Message.error('获取订单失败');
+  } finally {
+    ordersLoading.value = false;
+  }
+};
+
+const updateProfile = async () => {
+  loading.value = true;
+  try {
+    const updateData = {
+      buyerId: profileForm.buyerId,
+      buyerName: profileForm.buyerName,
+    };
+    if (profileForm.newPassword) {
+      updateData.buyerPassword = profileForm.newPassword;
+    }
+    const response = await buyerAPI.update(updateData);
+    if (response.code === 200) {
+      Message.success('个人信息更新成功');
+      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+      userInfo.buyerName = profileForm.buyerName;
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      profileForm.newPassword = '';
+    } else {
+      Message.error(response.msg || '更新失败');
+    }
+  } catch (error) {
+    Message.error('更新失败');
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  loadUserInfo();
+  loadOrders();
+});
+
+// 监听localStorage.userInfo变化，自动重新加载
+watch(
+  () => localStorage.getItem('userInfo'),
+  () => {
+    loadUserInfo();
+    loadOrders();
+  }
+);
 </script>
 
 <style scoped>
+/* Basic styles for user center */
 .user-center {
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 20px auto;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
-
 .container {
-  background: white;
+  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
-
 .card-header {
-  padding: 20px;
-  border-bottom: 1px solid #eee;
+  padding: 20px 25px;
+  background-color: #f7f9fc;
+  border-bottom: 1px solid #e9ecef;
 }
-
 .card-header h2 {
   margin: 0;
+  font-size: 1.5em;
   color: #333;
 }
-
 .tabs {
-  padding: 20px;
+  display: flex;
 }
-
 .tab-buttons {
   display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
+  flex-direction: column;
+  padding: 15px 0;
+  border-right: 1px solid #e9ecef;
+  background-color: #f7f9fc;
 }
-
 .tab-button {
-  padding: 10px 20px;
+  padding: 15px 25px;
   border: none;
   background: none;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s;
+  text-align: left;
+  font-size: 1em;
+  color: #555;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
 }
-
 .tab-button.active {
-  border-bottom-color: #409eff;
+  border-left-color: #409eff;
+  background-color: #fff;
   color: #409eff;
+  font-weight: bold;
 }
-
-.tab-pane {
-  min-height: 400px;
+.tab-content {
+  flex-grow: 1;
+  padding: 25px;
 }
-
-.form {
-  max-width: 500px;
-}
-
 .form-group {
   margin-bottom: 20px;
 }
-
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
 }
-
 .form-control {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 14px;
+  box-sizing: border-box;
 }
-
-.form-control:focus {
-  outline: none;
-  border-color: #409eff;
-}
-
 .form-control:disabled {
-  background: #f5f5f5;
-  color: #999;
+  background-color: #f5f5f5;
 }
-
-.btn {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn:hover {
-  background: #f5f5f5;
-}
-
 .btn-primary {
-  background: #409eff;
+  padding: 10px 20px;
+  background-color: #409eff;
   color: white;
-  border-color: #409eff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: #3076c9;
+}
+.btn-primary:disabled {
+  background-color: #a0cfff;
+  cursor: not-allowed;
 }
 
-.btn-primary:hover {
-  background: #337ecc;
-}
-
-.empty-orders {
-  text-align: center;
-  padding: 40px 0;
-}
-
-.empty-content {
+/* Orders List Styles */
+.orders-list {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+.order-card {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+}
+.order-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 20px;
-}
-
-.empty-icon {
-  font-size: 48px;
-  color: #ccc;
-}
-
-.empty-content p {
-  color: #999;
-  font-size: 16px;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 12px;
-  text-align: left;
+  padding-bottom: 10px;
   border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
 }
-
-.table th {
-  background: #f5f5f5;
-  font-weight: 600;
+.order-id, .order-time { font-size: 0.9em; color: #666; }
+.status-tag { font-weight: bold; }
+.status-pending { color: #f56c6c; }
+.status-paid { color: #67c23a; }
+.status-cancelled { color: #909399; }
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
 }
-
-.status-tag {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: white;
+.item-name { font-weight: bold; }
+.item-price { font-size: 0.9em; color: #888; }
+.order-footer {
+  text-align: right;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
 }
-
-.status-tag.success {
-  background: #67c23a;
+.empty-orders {
+    text-align: center;
+    padding: 40px 0;
 }
-
-.status-tag.warning {
-  background: #e6a23c;
+.empty-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
 }
-
-.status-tag.primary {
-  background: #409eff;
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
 }
-
-.status-tag.danger {
-  background: #f56c6c;
-}
-
-.status-tag.info {
-  background: #909399;
-}
-
-/* 消息提示样式 */
-.message {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  border-radius: 4px;
-  color: white;
-  z-index: 1001;
-  animation: slideIn 0.3s ease;
-}
-
-.message.success {
-  background: #67c23a;
-}
-
-.message.error {
-  background: #f56c6c;
-}
-
-.message.info {
-  background: #909399;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style> 

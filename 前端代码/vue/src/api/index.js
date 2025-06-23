@@ -118,7 +118,11 @@ export const orderAPI = {
   // 获取已支付订单
   getPaidOrders: (buyerId) => api.get('/order/paid', { params: { buyerId } }),
   // 获取已取消订单
-  getCancelledOrders: (buyerId) => api.get('/order/cancelled', { params: { buyerId } })
+  getCancelledOrders: (buyerId) => api.get('/order/cancelled', { params: { buyerId } }),
+  // 根据buyerId获取所有订单
+  getOrdersByBuyerId: (buyerId) => api.get('/order/by-buyer', { params: { buyerId } }),
+  // 根据sellerId获取所有订单
+  getOrdersBySellerId: (sellerId) => api.get('/order/by-seller', { params: { sellerId } })
 }
 
 export default api 

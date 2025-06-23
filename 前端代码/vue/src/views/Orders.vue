@@ -25,7 +25,8 @@
     </div>
 
     <!-- 订单列表 -->
-    <div v-if="!orders.length" class="empty-orders">
+    <div v-if="loading" class="loading-spinner"></div>
+    <div v-else-if="!orders.length" class="empty-orders">
       <div class="empty-content">
         <div class="empty-icon">📦</div>
         <p>暂无{{ getTabText() }}订单</p>
@@ -36,13 +37,14 @@
       <div class="order-card" v-for="order in orders" :key="order.orderId">
         <div class="order-header">
           <span class="order-id">订单号: {{ order.orderId }}</span>
+           <span class="order-time">下单时间: {{ formatTime(order.time) }}</span>
           <span class="order-status" :class="getStatusClass(order.state)">
             {{ order.state }}
           </span>
         </div>
         
         <div class="order-items">
-          <div class="order-item" v-for="item in order.orderItems" :key="item.goodsId">
+          <div class="order-item" v-for="item in order.items" :key="item.goodsId">
             <div class="item-info">
               <span class="item-name">{{ item.goodsName }}</span>
               <span class="item-price">￥{{ item.price }} × {{ item.num }}</span>
@@ -53,23 +55,30 @@
         
         <div class="order-footer">
           <div class="order-total">
-            总计: ￥{{ order.totalAmount }}
+            总计: <strong>￥{{ order.totalAmount.toFixed(2) }}</strong>
           </div>
           <div class="order-actions">
             <button 
               v-if="order.state === '待支付'" 
               class="action-btn pay-btn" 
-              @click="payOrder(order.orderId)"
+              @click="payOrder(order)"
             >
               立即支付
             </button>
             <button 
               v-if="order.state === '待支付'" 
               class="action-btn cancel-btn" 
-              @click="cancelOrder(order.orderId)"
+              @click="cancelOrder(order)"
             >
               取消订单
             </button>
+             <button
+                v-if="order.state === '支付成功'"
+                class="action-btn view-btn"
+                @click="viewOrder(order)"
+              >
+                查看详情
+              </button>
           </div>
         </div>
       </div>
@@ -86,11 +95,25 @@ import Message from '../utils/message'
 const router = useRouter()
 const activeTab = ref('pending')
 const orders = ref([])
+const loading = ref(false)
 
 const switchTab = async (tab) => {
   activeTab.value = tab
   await loadOrders()
 }
+
+const formatTime = (timeStr) => {
+  if (!timeStr) return 'N/A';
+  // Assuming the time is in a format that can be parsed by Date
+  const date = new Date(timeStr);
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
 const loadOrders = async () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
@@ -100,6 +123,7 @@ const loadOrders = async () => {
     return
   }
 
+  loading.value = true
   try {
     let response
     switch (activeTab.value) {
@@ -121,12 +145,14 @@ const loadOrders = async () => {
     }
   } catch (error) {
     Message.error('获取订单失败')
+  } finally {
+    loading.value = false
   }
 }
 
-const payOrder = async (orderId) => {
+const payOrder = async (order) => {
   try {
-    const response = await orderAPI.payOrder(orderId)
+    const response = await orderAPI.payOrder(order.orderId)
     if (response.code === 200) {
       Message.success('支付成功')
       await loadOrders()
@@ -138,9 +164,10 @@ const payOrder = async (orderId) => {
   }
 }
 
-const cancelOrder = async (orderId) => {
+const cancelOrder = async (order) => {
+  if (!confirm('确定要取消这个订单吗？')) return;
   try {
-    const response = await orderAPI.cancelOrder(orderId)
+    const response = await orderAPI.cancelOrder(order.orderId)
     if (response.code === 200) {
       Message.success('订单已取消')
       await loadOrders()
@@ -151,6 +178,12 @@ const cancelOrder = async (orderId) => {
     Message.error('取消订单失败')
   }
 }
+
+const viewOrder = (order) => {
+    // Placeholder for viewing order details, could navigate to a new page
+    alert(`查看订单详情: ${order.orderId}`);
+};
+
 
 const getTabText = () => {
   switch (activeTab.value) {
@@ -249,40 +282,28 @@ onMounted(loadOrders)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .order-id {
-  font-weight: bold;
-  color: #333;
+  font-size: 0.9em;
+  color: #666;
+}
+.order-time {
+  font-size: 0.9em;
+  color: #666;
 }
 
 .order-status {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.9em;
   font-weight: bold;
 }
-
-.status-pending {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.status-paid {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status-cancelled {
-  background: #f8d7da;
-  color: #721c24;
-}
+.status-pending { color: #f56c6c; }
+.status-paid { color: #67c23a; }
+.status-cancelled { color: #909399; }
 
 .order-items {
-  margin-bottom: 16px;
+  padding: 15px 0;
 }
 
 .order-item {
@@ -290,104 +311,82 @@ onMounted(loadOrders)
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #f9f9f9;
-}
-
-.order-item:last-child {
-  border-bottom: none;
 }
 
 .item-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .item-name {
   font-weight: bold;
-  color: #333;
 }
 
 .item-price {
-  color: #666;
   font-size: 0.9em;
+  color: #999;
 }
 
 .item-total {
   font-weight: bold;
-  color: #e74c3c;
 }
 
 .order-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
 }
 
 .order-total {
   font-size: 1.1em;
-  font-weight: bold;
-  color: #e74c3c;
 }
 
-.order-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.action-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9em;
+.order-actions .action-btn {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  margin-left: 10px;
+}
+.action-btn.pay-btn {
+  border-color: #409eff;
+  background-color: #409eff;
+  color: white;
+}
+.action-btn.cancel-btn {
+  border-color: #f56c6c;
+  color: #f56c6c;
+}
+.action-btn.cancel-btn:hover {
+  background-color: #f56c6c;
+  color: white;
 }
 
-.pay-btn {
-  background: #409eff;
-  color: #fff;
+.action-btn.view-btn {
+  border-color: #67c23a;
+  color: #67c23a;
+}
+.action-btn.view-btn:hover {
+  background-color: #67c23a;
+  color: white;
 }
 
-.pay-btn:hover {
-  background: #3076c9;
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
 }
 
-.cancel-btn {
-  background: #f56c6c;
-  color: #fff;
-}
-
-.cancel-btn:hover {
-  background: #e74c3c;
-}
-
-@media (max-width: 600px) {
-  .orders-page {
-    padding: 10px;
-  }
-  
-  .order-tabs {
-    flex-wrap: wrap;
-  }
-  
-  .order-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .order-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  
-  .order-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style> 

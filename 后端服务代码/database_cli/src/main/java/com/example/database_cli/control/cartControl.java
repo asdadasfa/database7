@@ -52,6 +52,9 @@ public class cartControl {
             if (result.getCode() == 200) {
                 VoCartList cartList = (VoCartList) result.getData();
                 log.info("成功获取购物车内容，商品数量: {}", cartList != null ? cartList.getItemCount() : 0);
+                if (cartList != null && cartList.getCartItems() != null) {
+                    log.info("购物车商品详情: {}", cartList.getCartItems());
+                }
             } else {
                 log.warn("获取购物车内容失败: {}", result.getMsg());
             }

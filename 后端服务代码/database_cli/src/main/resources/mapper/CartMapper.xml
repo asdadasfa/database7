@@ -41,8 +41,8 @@
 
     <!-- 插入购物车项 -->
     <insert id="insert" parameterType="com.example.database_cli.model.entity.Cart">
-        INSERT INTO cart (buyer_id, goods_id, num)
-        VALUES (#{buyerId}, #{goodsId}, #{num})
+        INSERT INTO cart (buyer_id, goods_id, num, is_bool)
+        VALUES (#{buyerId}, #{goodsId}, #{num}, 1)
     </insert>
 
     <!-- 更新购物车项 -->

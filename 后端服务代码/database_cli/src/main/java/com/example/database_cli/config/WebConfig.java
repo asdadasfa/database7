@@ -40,9 +40,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 获取当前类文件的父目录（即 database_cli 目录）
-        String basePath = new File("").getAbsolutePath();
-        // 拼接 uploaded_images
+        // 获取当前 module (database_cli) 的绝对路径
+        String basePath = System.getProperty("user.dir");
         String imagePath = Paths.get(basePath, "uploaded_images").toString();
         File dir = new File(imagePath);
         if (!dir.exists()) {
@@ -75,6 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
                     imageFile.transferTo(destFile);
                     imagePaths.add("http://localhost:8686/images/" + fileName);
                 } catch (IOException e) {
+                    e.printStackTrace();
                     // 错误处理
                 }
             }

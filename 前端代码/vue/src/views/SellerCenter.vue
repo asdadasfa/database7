@@ -10,13 +10,19 @@
           <div class="tab-buttons">
             <button 
               :class="['tab-button', { active: activeTab === 'goods' }]"
-              @click="activeTab = 'goods'"
+              @click="switchTab('goods')"
             >
               我的商品
             </button>
             <button 
+              :class="['tab-button', { active: activeTab === 'orders' }]"
+              @click="switchTab('orders')"
+            >
+              订单管理
+            </button>
+            <button 
               :class="['tab-button', { active: activeTab === 'profile' }]"
-              @click="activeTab = 'profile'"
+              @click="switchTab('profile')"
             >
               个人信息
             </button>
@@ -31,7 +37,8 @@
                 </button>
               </div>
               
-              <div class="table-container">
+              <div v-if="goodsLoading" class="loading-spinner"></div>
+              <div v-else class="table-container">
                 <table class="table">
                   <thead>
                     <tr>
@@ -46,7 +53,7 @@
                     <tr v-for="goods in myGoods" :key="goods.goodsId">
                       <td>{{ goods.goodsName }}</td>
                       <td>{{ goods.type }}</td>
-                      <td>¥{{ goods.price }}</td>
+                      <td>¥{{ goods.price.toFixed(2) }}</td>
                       <td>{{ goods.num }}</td>
                       <td>
                         <button class="btn btn-small" @click="editGoods(goods)">
@@ -55,6 +62,43 @@
                         <button class="btn btn-small btn-danger" @click="deleteGoods(goods)">
                           删除
                         </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 订单管理 -->
+            <div v-if="activeTab === 'orders'" class="tab-pane">
+              <div v-if="ordersLoading" class="loading-spinner"></div>
+               <div v-else-if="orders.length === 0" class="empty-orders">
+                <div class="empty-content">
+                  <div class="empty-icon">📦</div>
+                  <p>暂无订单</p>
+                </div>
+              </div>
+              <div v-else class="table-container">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>订单号</th>
+                      <th>买家ID</th>
+                      <th>总价</th>
+                      <th>下单时间</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="order in orders" :key="order.orderId">
+                      <td>{{ order.orderId }}</td>
+                       <td>{{ order.buyerId }}</td>
+                      <td>¥{{ order.totalAmount.toFixed(2) }}</td>
+                      <td>{{ formatTime(order.time) }}</td>
+                      <td>
+                        <span :class="['status-tag', getStatusClass(order.state)]">
+                          {{ order.state }}
+                        </span>
                       </td>
                     </tr>
                   </tbody>
@@ -150,205 +194,232 @@
   </div>
 </template>
 
-<script>
-import { ref, reactive, onMounted } from 'vue'
-import { sellerAPI, goodsAPI } from '../api'
+<script setup>
+import { ref, reactive, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { sellerAPI, goodsAPI, orderAPI } from '../api';
+import Message from '../utils/message';
 
-export default {
-  name: 'SellerCenter',
-  setup() {
-    const activeTab = ref('goods')
-    const loading = ref(false)
-    const myGoods = ref([])
-    const goodsDialogVisible = ref(false)
-    const isEdit = ref(false)
-    
-    const message = reactive({
-      show: false,
-      text: '',
-      type: 'info'
-    })
-    
-    const profileForm = reactive({
-      sellerId: '',
-      sellerName: '',
-      newPassword: ''
-    })
-    
-    const goodsForm = reactive({
-      goodsId: '',
-      goodsName: '',
-      type: '',
-      price: 0,
-      num: 0,
-      images: []
-    })
-    
-    const showMessage = (text, type = 'info') => {
-      message.text = text
-      message.type = type
-      message.show = true
-      setTimeout(() => {
-        message.show = false
-      }, 3000)
-    }
-    
-    const loadUserInfo = () => {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-      profileForm.sellerId = userInfo.sellerId || ''
-      profileForm.sellerName = userInfo.sellerName || ''
-    }
-    
-    const loadMyGoods = async () => {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-      if (!userInfo.sellerId) return
-      
-      try {
-        const response = await goodsAPI.getGoodsBySellerId(userInfo.sellerId)
-        if (response.code === 200) {
-          myGoods.value = response.data
-        }
-      } catch (error) {
-        console.error('加载商品失败:', error)
-        showMessage('加载商品失败', 'error')
-      }
-    }
-    
-    const showAddGoodsDialog = () => {
-      isEdit.value = false
-      Object.keys(goodsForm).forEach(key => {
-        goodsForm[key] = key === 'price' || key === 'num' ? 0 : ''
-      })
-      goodsDialogVisible.value = true
-    }
-    
-    const editGoods = (goods) => {
-      isEdit.value = true
-      Object.keys(goodsForm).forEach(key => {
-        goodsForm[key] = goods[key]
-      })
-      goodsDialogVisible.value = true
-    }
-    
-    const closeDialog = () => {
-      goodsDialogVisible.value = false
-    }
-    
-    const saveGoods = async () => {
-      try {
-        loading.value = true
-        
-        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-        const goodsData = {
-          ...goodsForm,
-          sellerId: userInfo.sellerId
-        }
-        
-        let response
-        if (isEdit.value) {
-          response = await goodsAPI.updateGoods(goodsData)
-        } else {
-          response = await goodsAPI.addGoods(goodsData)
-        }
-        
-        if (response.code === 200) {
-          showMessage(isEdit.value ? '商品更新成功' : '商品添加成功', 'success')
-          goodsDialogVisible.value = false
-          loadMyGoods()
-        } else {
-          showMessage(response.msg || '操作失败', 'error')
-        }
-      } catch (error) {
-        showMessage('操作失败', 'error')
-      } finally {
-        loading.value = false
-      }
-    }
-    
-    const deleteGoods = async (goods) => {
-      if (!confirm('确定要删除这个商品吗？')) {
-        return
-      }
-      
-      try {
-        const response = await goodsAPI.deleteGoods(goods.goodsId)
-        if (response.code === 200) {
-          showMessage('删除成功', 'success')
-          loadMyGoods()
-        } else {
-          showMessage(response.msg || '删除失败', 'error')
-        }
-      } catch (error) {
-        showMessage('删除失败', 'error')
-      }
-    }
-    
-    const updateProfile = async () => {
-      try {
-        loading.value = true
-        
-        const updateData = {
-          sellerId: profileForm.sellerId,
-          sellerName: profileForm.sellerName
-        }
-        
-        if (profileForm.newPassword) {
-          updateData.sellerPassword = profileForm.newPassword
-        }
-        
-        const response = await sellerAPI.update(updateData)
-        if (response.code === 200) {
-          showMessage('个人信息更新成功', 'success')
-          const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-          userInfo.sellerName = profileForm.sellerName
-          localStorage.setItem('userInfo', JSON.stringify(userInfo))
-          profileForm.newPassword = ''
-        } else {
-          showMessage(response.msg || '更新失败', 'error')
-        }
-      } catch (error) {
-        showMessage('更新失败', 'error')
-      } finally {
-        loading.value = false
-      }
-    }
-    
-    const handleImageUpload = (event) => {
-      const files = event.target.files
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i]
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          goodsForm.images.push(e.target.result)
-        }
-        reader.readAsDataURL(file)
-      }
-    }
-    
-    onMounted(() => {
-      loadUserInfo()
-      loadMyGoods()
-    })
-    
-    return {
-      activeTab,
-      loading,
-      profileForm,
-      goodsForm,
-      myGoods,
-      goodsDialogVisible,
-      isEdit,
-      message,
-      showAddGoodsDialog,
-      editGoods,
-      closeDialog,
-      saveGoods,
-      deleteGoods,
-      updateProfile,
-      handleImageUpload
-    }
+const router = useRouter();
+const activeTab = ref('goods');
+const loading = ref(false);
+const goodsLoading = ref(false);
+const ordersLoading = ref(false);
+
+const myGoods = ref([]);
+const orders = ref([]);
+const goodsDialogVisible = ref(false);
+const isEdit = ref(false);
+
+const profileForm = reactive({
+  sellerId: '',
+  sellerName: '',
+  newPassword: '',
+});
+
+const goodsForm = reactive({
+  goodsId: '',
+  goodsName: '',
+  type: '',
+  price: 0,
+  num: 0,
+  images: [],
+});
+
+const message = reactive({ show: false, type: '', text: '' });
+
+const switchTab = (tab) => {
+  activeTab.value = tab;
+  if (tab === 'orders') {
+    loadOrders();
   }
-}
+};
+
+const formatTime = (timeStr) => {
+  if (!timeStr) return 'N/A';
+  const date = new Date(timeStr);
+  return date.toLocaleString('zh-CN');
+};
+
+const getStatusClass = (status) => {
+    switch (status) {
+        case '待支付': return 'status-pending';
+        case '支付成功': return 'status-paid';
+        case '取消': return 'status-cancelled';
+        default: return '';
+    }
+};
+
+const loadUserInfo = () => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+  if (!userInfo.sellerId) {
+    Message.error('请先登录');
+    router.push('/login');
+    return;
+  }
+  profileForm.sellerId = userInfo.sellerId;
+  profileForm.sellerName = userInfo.sellerName;
+};
+
+const loadMyGoods = async () => {
+  if (!profileForm.sellerId) return;
+  goodsLoading.value = true;
+  try {
+    const response = await goodsAPI.getGoodsBySellerId(profileForm.sellerId);
+    if (response.code === 200) {
+      myGoods.value = response.data || [];
+    } else {
+      Message.error(response.msg || '加载商品失败');
+    }
+  } catch (error) {
+    Message.error('加载商品失败');
+  } finally {
+    goodsLoading.value = false;
+  }
+};
+
+const loadOrders = async () => {
+  if (!profileForm.sellerId) return;
+  ordersLoading.value = true;
+  try {
+    const response = await orderAPI.getOrdersBySellerId(profileForm.sellerId);
+    if (response.code === 200) {
+      orders.value = response.data || [];
+    } else {
+      Message.error(response.msg || '获取订单失败');
+    }
+  } catch (error) {
+    Message.error('获取订单失败');
+  } finally {
+    ordersLoading.value = false;
+  }
+};
+
+const showAddGoodsDialog = () => {
+  isEdit.value = false;
+  Object.keys(goodsForm).forEach(key => {
+    goodsForm[key] = key === 'price' || key === 'num' ? 0 : '';
+  });
+  goodsDialogVisible.value = true;
+};
+
+const editGoods = (goods) => {
+  isEdit.value = true;
+  Object.keys(goodsForm).forEach(key => {
+    goodsForm[key] = goods[key];
+  });
+  goodsDialogVisible.value = true;
+};
+
+const deleteGoods = async (goods) => {
+  if (!confirm('确定要删除这个商品吗？')) {
+    return;
+  }
+  
+  try {
+    const response = await goodsAPI.deleteGoods(goods.goodsId);
+    if (response.code === 200) {
+      Message.success('删除成功');
+      loadMyGoods();
+    } else {
+      Message.error(response.msg || '删除失败');
+    }
+  } catch (error) {
+    Message.error('删除失败');
+  }
+};
+
+const saveGoods = async () => {
+  try {
+    loading.value = true;
+    
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const goodsData = {
+      ...goodsForm,
+      sellerId: userInfo.sellerId
+    };
+    
+    let response;
+    if (isEdit.value) {
+      response = await goodsAPI.updateGoods(goodsData);
+    } else {
+      response = await goodsAPI.addGoods(goodsData);
+    }
+    
+    if (response.code === 200) {
+      Message.success(isEdit.value ? '商品更新成功' : '商品添加成功');
+      goodsDialogVisible.value = false;
+      loadMyGoods();
+    } else {
+      Message.error(response.msg || '操作失败');
+    }
+  } catch (error) {
+    Message.error('操作失败');
+  } finally {
+    loading.value = false;
+  }
+};
+
+const closeDialog = () => {
+  goodsDialogVisible.value = false;
+};
+
+const handleImageUpload = (event) => {
+  const files = event.target.files;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      goodsForm.images.push(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const updateProfile = async () => {
+  loading.value = true;
+  try {
+    const updateData = {
+      sellerId: profileForm.sellerId,
+      sellerName: profileForm.sellerName
+    };
+    
+    if (profileForm.newPassword) {
+      updateData.sellerPassword = profileForm.newPassword;
+    }
+    
+    const response = await sellerAPI.update(updateData);
+    if (response.code === 200) {
+      Message.success('个人信息更新成功');
+      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+      userInfo.sellerName = profileForm.sellerName;
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      profileForm.newPassword = '';
+    } else {
+      Message.error(response.msg || '更新失败');
+    }
+  } catch (error) {
+    Message.error('更新失败');
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  loadUserInfo();
+  loadMyGoods();
+  loadOrders();
+});
+
+// 监听localStorage.userInfo变化，自动重新加载
+watch(
+  () => localStorage.getItem('userInfo'),
+  () => {
+    loadUserInfo();
+    loadMyGoods();
+    loadOrders();
+  }
+);
 </script>
 
 <style scoped>
@@ -607,5 +678,40 @@ export default {
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+.status-tag {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.9em;
+}
+
+.status-pending {
+  background-color: #f56c6c;
+}
+
+.status-paid {
+  background-color: #67c23a;
+}
+
+.status-cancelled {
+  background-color: #909399;
+}
+
+.loading-spinner {
+  margin: 50px auto;
+  /* ... spinner styles ... */
+}
+
+.empty-orders {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.empty-icon {
+  font-size: 3em;
+  margin-bottom: 10px;
 }
 </style> 
