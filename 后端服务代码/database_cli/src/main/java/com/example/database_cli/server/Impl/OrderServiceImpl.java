@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.Duration;
 import java.util.UUID;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -221,5 +223,40 @@ public class OrderServiceImpl implements IOrderService {
         } else {
             return Result.fail("订单取消失败");
         }
+    }
+
+    // 分页：根据买家ID查询订单
+    @Override
+    public Result selectByBuyerIdPaged(String buyerId, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return Result.success(orderMapper.selectByBuyerIdPaged(buyerId, offset, pageSize));
+    }
+    // 分页：根据卖家ID查询订单
+    @Override
+    public Result selectBySellerIdPaged(String sellerId, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Order> orders = orderMapper.selectBySellerIdPaged(sellerId, offset, pageSize);
+        int total = orderMapper.countBySellerId(sellerId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", orders);
+        result.put("total", total);
+        return Result.success(result);
+    }
+    // 分页：根据买家ID和状态查询订单，返回Map{data,total}
+    @Override
+    public Result selectByBuyerIdAndStatePaged(String buyerId, String state, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Order> orders = orderMapper.selectByBuyerIdAndStatePaged(buyerId, state, offset, pageSize);
+        int total = orderMapper.countByBuyerIdAndState(buyerId, state);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", orders);
+        result.put("total", total);
+        return Result.success(result);
+    }
+    // 分页：根据卖家ID和状态查询订单
+    @Override
+    public Result selectBySellerIdAndStatePaged(String sellerId, String state, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return Result.success(orderMapper.selectBySellerIdAndStatePaged(sellerId, state, offset, pageSize));
     }
 } 

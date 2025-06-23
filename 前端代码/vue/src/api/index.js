@@ -67,8 +67,8 @@ export const sellerAPI = {
 
 // 商品相关API
 export const goodsAPI = {
-  // 添加商品
-  addGoods: (data) => api.post('/goods/addGoods', data),
+  // 添加商品（支持FormData）
+  addGoods: (formData) => api.post('/goods/addGoods', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   // 获取所有商品
   getAllGoods: () => api.get('/goods/getAllGoods'),
   // 根据ID获取商品
@@ -100,7 +100,9 @@ export const cartAPI = {
   // 从购物车移除商品
   removeFromCart: (buyerId, goodsId) => api.delete('/cart/removeFromCart', { params: { buyerId, goodsId } }),
   // 清空购物车
-  clearCart: (buyerId) => api.delete('/cart/clearCart', { params: { buyerId } })
+  clearCart: (buyerId) => api.delete('/cart/clearCart', { params: { buyerId } }),
+  // 分页获取购物车内容
+  getCartContentsPaged: (buyerId, page = 1, pageSize = 6) => api.get('/cart/getCartContentsPaged', { params: { buyerId, page, pageSize } }),
 }
 
 // 订单相关API
@@ -122,7 +124,26 @@ export const orderAPI = {
   // 根据buyerId获取所有订单
   getOrdersByBuyerId: (buyerId) => api.get('/order/by-buyer', { params: { buyerId } }),
   // 根据sellerId获取所有订单
-  getOrdersBySellerId: (sellerId) => api.get('/order/by-seller', { params: { sellerId } })
+  getOrdersBySellerId: (sellerId) => api.get('/order/by-seller', { params: { sellerId } }),
+  // 分页：根据buyerId获取订单
+  getOrdersByBuyerIdPaged: (buyerId, page = 1, pageSize = 5) => api.get('/order/by-buyer-paged', { params: { buyerId, page, pageSize } }),
+  // 分页：根据sellerId获取订单
+  getOrdersBySellerIdPaged: (sellerId, page = 1, pageSize = 5) => api.get('/order/by-seller-paged', { params: { sellerId, page, pageSize } }),
+  // 分页：根据buyerId和状态获取订单
+  getOrdersByBuyerIdAndStatePaged: (buyerId, state, page = 1, pageSize = 5) => api.get('/order/by-buyer-state-paged', { params: { buyerId, state, page, pageSize } }),
+  // 分页：根据sellerId和状态获取订单
+  getOrdersBySellerIdAndStatePaged: (sellerId, state, page = 1, pageSize = 5) => api.get('/order/by-seller-state-paged', { params: { sellerId, state, page, pageSize } }),
+}
+
+export const adminAPI = {
+  login: (id, password) => api.post('/admin/login', null, { params: { id, password } }),
+  getAllBuyers: () => api.get('/admin/buyers'),
+  getAllSellers: () => api.get('/admin/sellers'),
+  deleteBuyer: (buyerId) => api.post('/admin/deleteBuyer', null, { params: { buyerId } }),
+  restoreBuyer: (buyerId) => api.post('/admin/restoreBuyer', null, { params: { buyerId } }),
+  deleteSeller: (sellerId) => api.post('/admin/deleteSeller', null, { params: { sellerId } }),
+  restoreSeller: (sellerId) => api.post('/admin/restoreSeller', null, { params: { sellerId } }),
+  deleteGoods: (goodsId) => api.post('/admin/deleteGoods', null, { params: { goodsId } })
 }
 
 export default api 

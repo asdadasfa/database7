@@ -32,4 +32,10 @@ public interface CartMapper {
     
     // 更新购物车项数量
     int updateNum(@Param("buyerId") String buyerId, @Param("goodsId") String goodsId, @Param("num") int num);
+    
+    // 分页查询购物车
+    List<Cart> selectByBuyerIdPaged(@Param("buyerId") String buyerId, @Param("offset") int offset, @Param("limit") int limit);
+    
+    // 统计购物车总数
+    int countByBuyerId(@Param("buyerId") String buyerId);
 } 

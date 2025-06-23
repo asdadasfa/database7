@@ -52,4 +52,22 @@ public interface OrderMapper {
     
     // 根据订单ID查询订单
     Order selectById(@Param("orderId") String orderId);
+    
+    // 分页：根据买家ID查询订单
+    List<Order> selectByBuyerIdPaged(@Param("buyerId") String buyerId, @Param("offset") int offset, @Param("limit") int limit);
+    
+    // 分页：根据卖家ID查询订单
+    List<Order> selectBySellerIdPaged(@Param("sellerId") String sellerId, @Param("offset") int offset, @Param("limit") int limit);
+    
+    // 分页：根据买家ID和状态查询订单
+    List<Order> selectByBuyerIdAndStatePaged(@Param("buyerId") String buyerId, @Param("state") String state, @Param("offset") int offset, @Param("limit") int limit);
+    
+    // 分页：根据卖家ID和状态查询订单
+    List<Order> selectBySellerIdAndStatePaged(@Param("sellerId") String sellerId, @Param("state") String state, @Param("offset") int offset, @Param("limit") int limit);
+    
+    // 统计：根据买家ID和状态统计订单总数
+    int countByBuyerIdAndState(@Param("buyerId") String buyerId, @Param("state") String state);
+    
+    // 统计：根据卖家ID统计订单总数
+    int countBySellerId(@Param("sellerId") String sellerId);
 } 

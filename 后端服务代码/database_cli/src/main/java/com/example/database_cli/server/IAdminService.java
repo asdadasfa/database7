@@ -1,6 +1,8 @@
 package com.example.database_cli.server;
 
 import com.example.database_cli.model.result.Result;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface IAdminService {
     Result login(String id, String password);

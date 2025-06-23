@@ -25,10 +25,15 @@
         <div class="cart-sum">小计: ￥{{ (item.price * item.num).toFixed(2) }}</div>
       </div>
       <div class="cart-summary">
-        <div>商品总数: {{ totalItems }} 件</div>
+        <div>商品总数: {{ total }} 件</div>
         <div class="total-price">总金额: ￥{{ totalAmount }}</div>
         <button class="main-btn" @click="checkout">结算</button>
         <button class="main-btn danger" @click="clearCart" :disabled="!cartItems.length">清空购物车</button>
+      </div>
+      <div v-if="totalPages > 1" class="cart-pagination">
+        <button :disabled="page === 1" @click="handlePageChange(page - 1)">上一页</button>
+        <span>第 {{ page }} / {{ totalPages }} 页</span>
+        <button :disabled="page === totalPages" @click="handlePageChange(page + 1)">下一页</button>
       </div>
     </div>
   </div>
@@ -42,9 +47,12 @@ import Message from '../utils/message'
 
 const router = useRouter()
 const cartItems = ref([])
+const total = ref(0)
+const totalAmount = ref(0)
+const page = ref(1)
+const pageSize = ref(6)
 
-const totalItems = computed(() => cartItems.value.reduce((total, item) => total + item.num, 0))
-const totalAmount = computed(() => cartItems.value.reduce((total, item) => total + item.price * item.num, 0).toFixed(2))
+const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
 
 const loadCart = async () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
@@ -53,10 +61,17 @@ const loadCart = async () => {
     router.push('/login')
     return
   }
-  const response = await cartAPI.getCartContents(userInfo.buyerId)
+  const response = await cartAPI.getCartContentsPaged(userInfo.buyerId, page.value, pageSize.value)
   if (response.code === 200) {
-    cartItems.value = response.data.cartItems || []
+    cartItems.value = response.data.data || []
+    total.value = response.data.total || 0
+    totalAmount.value = response.data.totalAmount || 0
   }
+}
+
+const handlePageChange = (newPage) => {
+  page.value = newPage
+  loadCart()
 }
 
 const updateQuantity = async (item, newQuantity) => {
@@ -108,29 +123,25 @@ const checkout = async () => {
   }
 
   try {
-    // 创建订单数据
-    const orderData = {
-      buyerId: userInfo.buyerId,
-      totalAmount: parseFloat(totalAmount.value),
-      orderItems: cartItems.value.map(item => ({
+    for (const item of cartItems.value) {
+      const orderData = {
+        buyerId: userInfo.buyerId,
+        sellerId: item.sellerId,
         goodsId: item.goodsId,
-        goodsName: item.goodsName,
-        price: item.price,
         num: item.num
-      }))
+      }
+      const response = await orderAPI.createOrder(orderData)
+      if (response.code !== 200) {
+        Message.error(response.msg || '订单创建失败')
+        return
+      }
     }
-
-    const response = await orderAPI.createOrder(orderData)
-    if (response.code === 200) {
-      Message.success('订单创建成功')
-      // 清空购物车
-      await cartAPI.clearCart(userInfo.buyerId)
-      cartItems.value = []
-      // 跳转到订单页面
-      router.push('/orders')
-    } else {
-      Message.error(response.msg || '订单创建失败')
-    }
+    Message.success('订单创建成功')
+    // 清空购物车
+    await cartAPI.clearCart(userInfo.buyerId)
+    cartItems.value = []
+    // 跳转到订单页面
+    router.push('/orders')
   } catch (error) {
     Message.error('订单创建失败')
   }
@@ -263,6 +274,25 @@ onMounted(loadCart)
 }
 .main-btn.danger:hover {
   background: #c0392b;
+}
+.cart-pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.cart-pagination button {
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cart-pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }
 @media (max-width: 900px) {
   .cart-page {

@@ -210,4 +210,43 @@ public class CartServiceImpl implements ICartService {
             return Result.fail(ResultEnum.ERROR_OPERATION);
         }
     }
+
+    @Override
+    public Result getCartContentsPaged(String buyerId, int page, int pageSize) {
+        if (!StringUtils.hasText(buyerId)) {
+            return Result.fail(ResultEnum.ERROR_BADPARMETERS);
+        }
+        try {
+            int offset = (page - 1) * pageSize;
+            List<Cart> cartItems = cartMapper.selectByBuyerIdPaged(buyerId, offset, pageSize);
+            int total = cartMapper.countByBuyerId(buyerId);
+
+            List<VoCart> voCartItems = new ArrayList<>();
+            double totalAmount = 0.0;
+            for (Cart cartItem : cartItems) {
+                Goods goods = goodsMapper.selectById(cartItem.getGoodsId());
+                if (goods != null) {
+                    VoCart voCart = new VoCart();
+                    voCart.setBuyerId(cartItem.getBuyerId());
+                    voCart.setGoodsId(cartItem.getGoodsId());
+                    voCart.setNum(cartItem.getNum());
+                    voCart.setGoodsName(goods.getGoodsName());
+                    voCart.setPrice(goods.getPrice());
+                    voCart.setType(goods.getType());
+                    voCart.setSellerId(goods.getSellerId());
+                    voCart.setGoodsImages(goods.getImages());
+                    voCart.setSum(goods.getPrice() * cartItem.getNum());
+                    totalAmount += goods.getPrice() * cartItem.getNum();
+                    voCartItems.add(voCart);
+                }
+            }
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", voCartItems);
+            result.put("total", total);
+            result.put("totalAmount", totalAmount);
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
 } 

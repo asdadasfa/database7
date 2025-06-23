@@ -121,4 +121,53 @@
         WHERE order_id = #{orderId} AND is_bool = 1
     </select>
 
+    <!-- 分页：根据买家ID查询订单 -->
+    <select id="selectByBuyerIdPaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
+        ORDER BY time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据卖家ID查询订单 -->
+    <select id="selectBySellerIdPaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE seller_id = #{sellerId} AND is_bool = 1
+        ORDER BY time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据买家ID和状态查询订单 -->
+    <select id="selectByBuyerIdAndStatePaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE buyer_id = #{buyerId} AND state = #{state} AND is_bool = 1
+        ORDER BY time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据卖家ID和状态查询订单 -->
+    <select id="selectBySellerIdAndStatePaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM `order`
+        WHERE seller_id = #{sellerId} AND state = #{state} AND is_bool = 1
+        ORDER BY time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计：根据买家ID和状态统计订单总数 -->
+    <select id="countByBuyerIdAndState" resultType="int">
+        SELECT COUNT(*) FROM `order` WHERE buyer_id = #{buyerId} AND state = #{state} AND is_bool = 1
+    </select>
+    <!-- 统计：根据卖家ID统计订单总数 -->
+    <select id="countBySellerId" resultType="int">
+        SELECT COUNT(*) FROM `order` WHERE seller_id = #{sellerId} AND is_bool = 1
+    </select>
+
 </mapper> 

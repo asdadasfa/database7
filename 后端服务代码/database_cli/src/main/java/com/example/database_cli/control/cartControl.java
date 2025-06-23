@@ -130,4 +130,18 @@ public class cartControl {
             return Result.fail();
         }
     }
+    
+    /**
+     * 分页获取购物车内容
+     * @param buyerId 买家ID
+     * @param page 页码，默认1
+     * @param pageSize 每页数量，默认6
+     * @return 分页购物车内容
+     */
+    @GetMapping("/getCartContentsPaged")
+    public Result getCartContentsPaged(@RequestParam String buyerId,
+                                      @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "6") int pageSize) {
+        return cartService.getCartContentsPaged(buyerId, page, pageSize);
+    }
 }

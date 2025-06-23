@@ -2,15 +2,16 @@
   <div class="goods-detail-page">
     <div v-if="goods" class="detail-content">
       <div class="goods-image-section">
-        <img :src="goods.images && goods.images[0] ? goods.images[0] : '/default-goods.jpg'" class="goods-image">
-        <div v-if="goods.images && goods.images.length > 1" class="image-gallery">
-          <img 
-            v-for="(image, index) in goods.images.slice(1, 5)" 
-            :key="index" 
-            :src="image" 
-            class="gallery-thumbnail"
-            @click="currentImage = image"
-          />
+        <div class="carousel-wrapper" v-if="goods.images && goods.images.length">
+          <img :src="goods.images[carouselIndex] || '/public/default-goods.jpg'" class="goods-image" />
+          <button v-if="goods.images.length > 1" class="carousel-btn left" @click="prevImage">&#8592;</button>
+          <button v-if="goods.images.length > 1" class="carousel-btn right" @click="nextImage">&#8594;</button>
+          <div v-if="goods.images.length > 1" class="carousel-dots">
+            <span v-for="(img, idx) in goods.images" :key="idx" :class="['dot', { active: idx === carouselIndex }]" @click="goToImage(idx)"></span>
+          </div>
+        </div>
+        <div v-else>
+          <img src="/public/default-goods.jpg" class="goods-image" />
         </div>
       </div>
       
@@ -77,7 +78,7 @@ const router = useRouter()
 const goods = ref(null)
 const loading = ref(true)
 const quantity = ref(1)
-const currentImage = ref('')
+const carouselIndex = ref(0)
 
 const loadGoodsDetail = async () => {
   try {
@@ -85,9 +86,7 @@ const loadGoodsDetail = async () => {
     const response = await goodsAPI.getGoodsById(route.params.id)
     if (response.code === 200) {
       goods.value = response.data
-      if (goods.value.images && goods.value.images.length > 0) {
-        currentImage.value = goods.value.images[0]
-      }
+      carouselIndex.value = 0
     } else {
       goods.value = null
     }
@@ -171,6 +170,18 @@ const buyNow = async () => {
   }
 }
 
+const prevImage = () => {
+  if (!goods.value || !goods.value.images) return
+  carouselIndex.value = (carouselIndex.value - 1 + goods.value.images.length) % goods.value.images.length
+}
+const nextImage = () => {
+  if (!goods.value || !goods.value.images) return
+  carouselIndex.value = (carouselIndex.value + 1) % goods.value.images.length
+}
+const goToImage = (idx) => {
+  carouselIndex.value = idx
+}
+
 onMounted(() => {
   loadGoodsDetail()
 })
@@ -212,24 +223,56 @@ onMounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.image-gallery {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  margin: 0 auto;
 }
-
-.gallery-thumbnail {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 6px;
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.5em;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.2s;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.gallery-thumbnail:hover {
-  border-color: #409eff;
+.carousel-btn.left {
+  left: 10px;
+}
+.carousel-btn.right {
+  right: 10px;
+}
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  display: inline-block;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dot.active {
+  background: #409eff;
 }
 
 .goods-info-section {

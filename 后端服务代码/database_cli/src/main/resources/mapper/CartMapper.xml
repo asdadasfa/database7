@@ -71,4 +71,18 @@
         WHERE buyer_id = #{buyerId} AND goods_id = #{goodsId} AND is_bool = 1
     </update>
 
+    <!-- 分页查询购物车 -->
+    <select id="selectByBuyerIdPaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM cart
+        WHERE buyer_id = #{buyerId} AND is_bool = 1
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计购物车总数 -->
+    <select id="countByBuyerId" resultType="int">
+        SELECT COUNT(*) FROM cart WHERE buyer_id = #{buyerId} AND is_bool = 1
+    </select>
+
 </mapper> 

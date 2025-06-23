@@ -25,6 +25,15 @@ public interface IOrderService {
     Result selectByBuyerIdAndState(String buyerId, String state);
     Result selectBySellerIdAndState(String sellerId, String state);
 
+    // 分页：根据买家ID查询订单
+    Result selectByBuyerIdPaged(String buyerId, int page, int pageSize);
+    // 分页：根据卖家ID查询订单
+    Result selectBySellerIdPaged(String sellerId, int page, int pageSize);
+    // 分页：根据买家ID和状态查询订单
+    Result selectByBuyerIdAndStatePaged(String buyerId, String state, int page, int pageSize);
+    // 分页：根据卖家ID和状态查询订单
+    Result selectBySellerIdAndStatePaged(String sellerId, String state, int page, int pageSize);
+
     // 更新/删除相关
     Result deleteByBuyerIdAndSellerIdAndGoodsId(String buyerId, String sellerId, String goodsId);
     Result updateState(String buyerId, String sellerId, String goodsId, String state);

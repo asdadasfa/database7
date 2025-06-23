@@ -29,7 +29,7 @@ public class AdminServiceImpl implements IAdminService {
     @Override
     public Result login(String id, String password) {
         Admin admin = adminMapper.selectById(id);
-        if (admin != null && admin.getPassword().equals(password) && admin.isBool()) {
+        if (admin != null && admin.getPassword() != null && admin.getPassword().equals(password) && admin.isBool()) {
             return Result.success(admin);
         }
         return Result.fail("账号或密码错误");

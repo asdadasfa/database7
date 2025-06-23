@@ -55,7 +55,7 @@
         
         <div class="order-footer">
           <div class="order-total">
-            总计: <strong>￥{{ order.totalAmount.toFixed(2) }}</strong>
+            总计: <strong>￥{{ (order.totalAmount || order.sum || 0).toFixed(2) }}</strong>
           </div>
           <div class="order-actions">
             <button 
@@ -82,12 +82,18 @@
           </div>
         </div>
       </div>
+      <!-- 分页控件 -->
+      <div class="pagination" v-if="total > pageSize">
+        <button :disabled="page === 1" @click="changePage(page - 1)">上一页</button>
+        <span>第 {{ page }} / {{ totalPages }} 页</span>
+        <button :disabled="page === totalPages" @click="changePage(page + 1)">下一页</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { orderAPI } from '../api'
 import Message from '../utils/message'
@@ -96,9 +102,20 @@ const router = useRouter()
 const activeTab = ref('pending')
 const orders = ref([])
 const loading = ref(false)
+const page = ref(1)
+const pageSize = 5
+const total = ref(0)
+const totalPages = computed(() => Math.ceil(total.value / pageSize))
 
 const switchTab = async (tab) => {
   activeTab.value = tab
+  page.value = 1
+  await loadOrders()
+}
+
+const changePage = async (newPage) => {
+  if (newPage < 1 || newPage > totalPages.value) return
+  page.value = newPage
   await loadOrders()
 }
 
@@ -122,24 +139,25 @@ const loadOrders = async () => {
     router.push('/login')
     return
   }
-
   loading.value = true
   try {
     let response
+    let state
     switch (activeTab.value) {
       case 'pending':
-        response = await orderAPI.getPendingOrders(userInfo.buyerId)
+        state = '待支付'
         break
       case 'paid':
-        response = await orderAPI.getPaidOrders(userInfo.buyerId)
+        state = '支付成功'
         break
       case 'cancelled':
-        response = await orderAPI.getCancelledOrders(userInfo.buyerId)
+        state = '取消'
         break
     }
-    
+    response = await orderAPI.getOrdersByBuyerIdAndStatePaged(userInfo.buyerId, state, page.value, pageSize)
     if (response.code === 200) {
-      orders.value = response.data || []
+      orders.value = response.data.data || []
+      total.value = response.data.total || 0
     } else {
       Message.error(response.msg || '获取订单失败')
     }
@@ -388,5 +406,32 @@ onMounted(loadOrders)
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background: #f5f6fa;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button:disabled {
+  background: #f5f6fa;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 16px;
+  font-size: 1em;
+  color: #666;
 }
 </style> 

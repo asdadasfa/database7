@@ -93,7 +93,7 @@
                     <tr v-for="order in orders" :key="order.orderId">
                       <td>{{ order.orderId }}</td>
                        <td>{{ order.buyerId }}</td>
-                      <td>¥{{ order.totalAmount.toFixed(2) }}</td>
+                      <td>¥{{ (order.totalAmount || order.sum || 0).toFixed(2) }}</td>
                       <td>{{ formatTime(order.time) }}</td>
                       <td>
                         <span :class="['status-tag', getStatusClass(order.state)]">
@@ -103,6 +103,12 @@
                     </tr>
                   </tbody>
                 </table>
+                <!-- 分页控件 -->
+                <div class="pagination" v-if="orderTotal > orderPageSize">
+                  <button :disabled="orderPage === 1" @click="changeOrderPage(orderPage - 1)">上一页</button>
+                  <span>第 {{ orderPage }} / {{ orderTotalPages }} 页</span>
+                  <button :disabled="orderPage === orderTotalPages" @click="changeOrderPage(orderPage + 1)">下一页</button>
+                </div>
               </div>
             </div>
             
@@ -172,9 +178,9 @@
           </div>
           <div class="form-group">
             <label>商品图片</label>
-            <input type="file" @change="handleImageUpload" class="form-control" accept="image/*" />
+            <input type="file" @change="handleImageUpload" class="form-control" accept="image/*" multiple />
             <div v-if="goodsForm.images && goodsForm.images.length" class="image-preview">
-              <img v-for="(image, index) in goodsForm.images" :key="index" :src="image" class="preview-image" />
+              <img v-for="(image, index) in goodsForm.images" :key="index" :src="image instanceof File ? URL.createObjectURL(image) : image" class="preview-image" />
             </div>
           </div>
           <div class="modal-footer">
@@ -195,7 +201,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { sellerAPI, goodsAPI, orderAPI } from '../api';
 import Message from '../utils/message';
@@ -227,6 +233,12 @@ const goodsForm = reactive({
 });
 
 const message = reactive({ show: false, type: '', text: '' });
+
+// 订单分页相关
+const orderPage = ref(1)
+const orderPageSize = 5
+const orderTotal = ref(0)
+const orderTotalPages = computed(() => Math.ceil(orderTotal.value / orderPageSize))
 
 const switchTab = (tab) => {
   activeTab.value = tab;
@@ -278,13 +290,20 @@ const loadMyGoods = async () => {
   }
 };
 
+const changeOrderPage = async (newPage) => {
+  if (newPage < 1 || newPage > orderTotalPages.value) return
+  orderPage.value = newPage
+  await loadOrders()
+}
+
 const loadOrders = async () => {
   if (!profileForm.sellerId) return;
   ordersLoading.value = true;
   try {
-    const response = await orderAPI.getOrdersBySellerId(profileForm.sellerId);
+    const response = await orderAPI.getOrdersBySellerIdPaged(profileForm.sellerId, orderPage.value, orderPageSize)
     if (response.code === 200) {
-      orders.value = response.data || [];
+      orders.value = response.data.data || []
+      orderTotal.value = response.data.total || 0
     } else {
       Message.error(response.msg || '获取订单失败');
     }
@@ -293,12 +312,18 @@ const loadOrders = async () => {
   } finally {
     ordersLoading.value = false;
   }
-};
+}
 
 const showAddGoodsDialog = () => {
   isEdit.value = false;
   Object.keys(goodsForm).forEach(key => {
-    goodsForm[key] = key === 'price' || key === 'num' ? 0 : '';
+    if (key === 'images') {
+      goodsForm.images = [];
+    } else if (key === 'price' || key === 'num') {
+      goodsForm[key] = 0;
+    } else {
+      goodsForm[key] = '';
+    }
   });
   goodsDialogVisible.value = true;
 };
@@ -306,7 +331,11 @@ const showAddGoodsDialog = () => {
 const editGoods = (goods) => {
   isEdit.value = true;
   Object.keys(goodsForm).forEach(key => {
-    goodsForm[key] = goods[key];
+    if (key === 'images') {
+      goodsForm.images = Array.isArray(goods.images) ? goods.images : (goods.images ? [goods.images] : []);
+    } else {
+      goodsForm[key] = goods[key];
+    }
   });
   goodsDialogVisible.value = true;
 };
@@ -332,20 +361,26 @@ const deleteGoods = async (goods) => {
 const saveGoods = async () => {
   try {
     loading.value = true;
-    
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-    const goodsData = {
-      ...goodsForm,
-      sellerId: userInfo.sellerId
-    };
-    
+    if (!goodsForm.goodsName || !goodsForm.type || !goodsForm.price || !goodsForm.num) {
+      Message.error('请填写完整商品信息');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('goodsName', goodsForm.goodsName);
+    formData.append('sellerId', userInfo.sellerId);
+    formData.append('type', goodsForm.type);
+    formData.append('price', goodsForm.price);
+    formData.append('num', goodsForm.num);
+    goodsForm.images.forEach(file => {
+      formData.append('images', file);
+    });
     let response;
     if (isEdit.value) {
-      response = await goodsAPI.updateGoods(goodsData);
+      response = await goodsAPI.updateGoods(goodsForm);
     } else {
-      response = await goodsAPI.addGoods(goodsData);
+      response = await goodsAPI.addGoods(formData);
     }
-    
     if (response.code === 200) {
       Message.success(isEdit.value ? '商品更新成功' : '商品添加成功');
       goodsDialogVisible.value = false;
@@ -366,13 +401,9 @@ const closeDialog = () => {
 
 const handleImageUpload = (event) => {
   const files = event.target.files;
+  goodsForm.images = [];
   for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      goodsForm.images.push(e.target.result);
-    };
-    reader.readAsDataURL(file);
+    goodsForm.images.push(files[i]);
   }
 };
 
@@ -713,5 +744,23 @@ watch(
 .empty-icon {
   font-size: 3em;
   margin-bottom: 10px;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
 }
 </style> 

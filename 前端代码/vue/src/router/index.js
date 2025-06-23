@@ -8,6 +8,7 @@ import Cart from '../views/Cart.vue'
 import Orders from '../views/Orders.vue'
 import UserCenter from '../views/UserCenter.vue'
 import SellerCenter from '../views/SellerCenter.vue'
+import AdminCenter from '../views/AdminCenter.vue'
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
     name: 'SellerCenter',
     component: SellerCenter,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin',
+    name: 'AdminCenter',
+    component: AdminCenter
   }
 ]
 

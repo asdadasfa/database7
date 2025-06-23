@@ -48,27 +48,33 @@ public class orderControl {
     }
 
     /**
-     * 获取待支付订单
+     * 获取待支付订单（分页）
      */
     @GetMapping("/pending")
-    public Result getPendingOrders(@RequestParam String buyerId) {
-        return orderService.selectByBuyerIdAndState(buyerId, "待支付");
+    public Result getPendingOrders(@RequestParam String buyerId,
+                                   @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectByBuyerIdAndStatePaged(buyerId, "待支付", page, pageSize);
     }
 
     /**
-     * 获取已支付订单
+     * 获取已支付订单（分页）
      */
     @GetMapping("/paid")
-    public Result getPaidOrders(@RequestParam String buyerId) {
-        return orderService.selectByBuyerIdAndState(buyerId, "支付成功");
+    public Result getPaidOrders(@RequestParam String buyerId,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectByBuyerIdAndStatePaged(buyerId, "支付成功", page, pageSize);
     }
 
     /**
-     * 获取已取消订单
+     * 获取已取消订单（分页）
      */
     @GetMapping("/cancelled")
-    public Result getCancelledOrders(@RequestParam String buyerId) {
-        return orderService.selectByBuyerIdAndState(buyerId, "取消");
+    public Result getCancelledOrders(@RequestParam String buyerId,
+                                     @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectByBuyerIdAndStatePaged(buyerId, "取消", page, pageSize);
     }
 
     /**
@@ -82,12 +88,54 @@ public class orderControl {
     }
 
     /**
-     * 根据sellerId获取所有订单
+     * 根据sellerId获取所有订
      * @param sellerId
      * @return
      */
     @GetMapping("/by-seller")
     public Result getOrdersBySellerId(@RequestParam String sellerId) {
         return orderService.selectBySellerId(sellerId);
+    }
+
+    /**
+     * 分页：根据buyerId获取订单
+     */
+    @GetMapping("/by-buyer-paged")
+    public Result getOrdersByBuyerIdPaged(@RequestParam String buyerId,
+                                          @RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectByBuyerIdPaged(buyerId, page, pageSize);
+    }
+
+    /**
+     * 分页：根据sellerId获取订单
+     */
+    @GetMapping("/by-seller-paged")
+    public Result getOrdersBySellerIdPaged(@RequestParam String sellerId,
+                                           @RequestParam(defaultValue = "1") int page,
+                                           @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectBySellerIdPaged(sellerId, page, pageSize);
+    }
+
+    /**
+     * 分页：根据buyerId和状态获取订单
+     */
+    @GetMapping("/by-buyer-state-paged")
+    public Result getOrdersByBuyerIdAndStatePaged(@RequestParam String buyerId,
+                                                  @RequestParam String state,
+                                                  @RequestParam(defaultValue = "1") int page,
+                                                  @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectByBuyerIdAndStatePaged(buyerId, state, page, pageSize);
+    }
+
+    /**
+     * 分页：根据sellerId和状态获取订单
+     */
+    @GetMapping("/by-seller-state-paged")
+    public Result getOrdersBySellerIdAndStatePaged(@RequestParam String sellerId,
+                                                   @RequestParam String state,
+                                                   @RequestParam(defaultValue = "1") int page,
+                                                   @RequestParam(defaultValue = "5") int pageSize) {
+        return orderService.selectBySellerIdAndStatePaged(sellerId, state, page, pageSize);
     }
 }

@@ -43,4 +43,13 @@ public interface ICartService {
      * @return 清空结果
      */
     Result clearCart(String buyerId);
+    
+    /**
+     * 分页获取购物车内容
+     * @param buyerId 买家ID
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @return 分页购物车内容
+     */
+    Result getCartContentsPaged(String buyerId, int page, int pageSize);
 } 

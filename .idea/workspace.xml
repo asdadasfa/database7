@@ -4,19 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="6.22日志和对前端接口连接和部分页面调整">
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志">
+      <change afterPath="$PROJECT_DIR$/log/20250623.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623133132631.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623133413131.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623135358524.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623135433004.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623153645857.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/log/img/image-20250623161931311.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端代码/vue/public/default-goods.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/前端代码/vue/src/views/AdminCenter.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_41fb7018987946f481263c22b443131d.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_ffdf30d242f74a04b69e0e3c5fb8ecfe.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/cartControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/cartControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/orderControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/orderControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/model/entity/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/CartMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/CartMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/OrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/OrderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IAdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IAdminService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/ICartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/ICartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/AdminServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/CartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/AdminMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/AdminMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/CartMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/CartMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/OrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/OrderMapper.xml" afterDir="false" />
     </list>
@@ -73,7 +90,7 @@
     "Spring Boot.DatabaseCliApplication.executor": "Run",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database8",
+    "last_opened_file_path": "C:/Users/白峰楠/IdeaProjects/database8/前端代码/vue/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,6 +98,9 @@
     "nodejs_package_manager_path": "npm",
     "npm.build.executor": "Run",
     "npm.dev.executor": "Run",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "vcs.Git",
     "ts.external.directory.path": "F:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1.6\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
@@ -88,11 +108,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8\前端代码\vue\public" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\uploaded_images" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\6.17" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\database_cli\src\main\java\com\example\database_cli" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\后端服务代码\database_cli" />
@@ -171,7 +191,8 @@
       <workItem from="1750513126300" duration="4594000" />
       <workItem from="1750598071906" duration="837000" />
       <workItem from="1750598954076" duration="79000" />
-      <workItem from="1750638787632" duration="9739000" />
+      <workItem from="1750638787632" duration="14897000" />
+      <workItem from="1750660552955" duration="6488000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -325,7 +346,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750598900854</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="修复了部分订单问题，优化了前端的页面逻辑">
+      <option name="closed" value="true" />
+      <created>1750649071405</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1750649071405</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,6 +424,8 @@
     <MESSAGE value="test" />
     <MESSAGE value="6.21日志" />
     <MESSAGE value="6.22日志和对前端接口连接和部分页面调整" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.22日志和对前端接口连接和部分页面调整" />
+    <MESSAGE value="修复了部分订单问题，优化了前端的页面逻辑" />
+    <MESSAGE value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
   </component>
 </project>
