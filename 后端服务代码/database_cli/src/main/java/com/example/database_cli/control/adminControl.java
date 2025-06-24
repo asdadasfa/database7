@@ -50,5 +50,15 @@ public class adminControl {
     public Result deleteGoods(@RequestParam String goodsId) {
         return adminService.deleteGoods(goodsId);
     }
+
+    @GetMapping("/buyersPaged")
+    public Result getAllBuyersPaged(@RequestParam int page, @RequestParam int pageSize) {
+        return adminService.getAllBuyersPaged(page, pageSize);
+    }
+
+    @GetMapping("/sellersPaged")
+    public Result getAllSellersPaged(@RequestParam int page, @RequestParam int pageSize) {
+        return adminService.getAllSellersPaged(page, pageSize);
+    }
     // ... 其他接口
 }

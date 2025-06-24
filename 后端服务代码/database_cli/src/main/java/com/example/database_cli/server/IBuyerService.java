@@ -23,9 +23,10 @@ public interface IBuyerService {
     /**
      * 买家注销
      * @param buyerId 买家ID
+     * @param password 密码
      * @return 注销结果
      */
-    Result logout(String buyerId);
+    Result logout(String buyerId, String password);
     
     /**
      * 根据ID查询买家信息

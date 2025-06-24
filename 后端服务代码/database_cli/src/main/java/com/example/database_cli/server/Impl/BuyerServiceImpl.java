@@ -74,9 +74,9 @@ public class BuyerServiceImpl implements IBuyerService {
     }
 
     @Override
-    public Result logout(String buyerId) {
+    public Result logout(String buyerId, String password) {
         // 参数校验
-        if (!StringUtils.hasText(buyerId)) {
+        if (!StringUtils.hasText(buyerId) || !StringUtils.hasText(password)) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
@@ -86,8 +86,18 @@ public class BuyerServiceImpl implements IBuyerService {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
 
-        // 注销成功（这里可以根据需要添加其他逻辑，比如清除session等）
-        return Result.success();
+        // 验证密码
+        if (!password.equals(buyer.getBuyerPassword())) {
+            return Result.fail("密码错误");
+        }
+        // 执行注销操作
+        int result = buyerMapper.deleteById(buyerId);
+        if (result > 0) {
+            return Result.success("注销成功");
+        }
+        else {
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
     }
 
     @Override

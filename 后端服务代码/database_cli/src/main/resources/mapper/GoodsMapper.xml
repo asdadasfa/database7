@@ -98,4 +98,88 @@
         WHERE goods_id = #{goodsId} AND is_bool = 1
     </update>
 
+    <!-- 分页：查询所有商品 -->
+    <select id="selectAllPaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE is_bool = 1
+        ORDER BY goods_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据卖家ID查询商品 -->
+    <select id="selectBySellerIdPaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE seller_id = #{sellerId} AND is_bool = 1
+        ORDER BY goods_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据商品类型查询 -->
+    <select id="selectByTypePaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE type = #{type} AND is_bool = 1
+        ORDER BY goods_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据商品名称模糊查询 -->
+    <select id="selectByGoodsNameLikePaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE goods_name LIKE CONCAT('%', #{goodsName}, '%') AND is_bool = 1
+        ORDER BY goods_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 分页：根据价格范围查询 -->
+    <select id="selectByPriceRangePaged" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE price BETWEEN #{minPrice} AND #{maxPrice} AND is_bool = 1
+        ORDER BY goods_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计：所有商品总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE is_bool = 1
+    </select>
+
+    <!-- 统计：根据卖家ID统计商品总数 -->
+    <select id="countBySellerId" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE seller_id = #{sellerId} AND is_bool = 1
+    </select>
+
+    <!-- 统计：根据商品类型统计总数 -->
+    <select id="countByType" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE type = #{type} AND is_bool = 1
+    </select>
+
+    <!-- 统计：根据商品名称模糊查询统计总数 -->
+    <select id="countByGoodsNameLike" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE goods_name LIKE CONCAT('%', #{goodsName}, '%') AND is_bool = 1
+    </select>
+
+    <!-- 统计：根据价格范围统计总数 -->
+    <select id="countByPriceRange" resultType="int">
+        SELECT COUNT(*) FROM goods WHERE price BETWEEN #{minPrice} AND #{maxPrice} AND is_bool = 1
+    </select>
+
+    <!-- 根据ID查询商品（加悲观锁） -->
+    <select id="selectByIdForUpdate" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods
+        WHERE goods_id = #{goodsId} AND is_bool = 1
+        FOR UPDATE
+    </select>
+
 </mapper> 

@@ -149,4 +149,75 @@ public class goodsControl {
     public Result deleteGoods(@RequestParam String goodsId) {
         return goodsService.deleteGoods(goodsId);
     }
+    
+    // 分页查询相关接口
+    /**
+     * 分页：查询所有商品
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    @GetMapping("/getAllGoodsPaged")
+    public Result getAllGoodsPaged(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int pageSize) {
+        return goodsService.getAllGoodsPaged(page, pageSize);
+    }
+    
+    /**
+     * 分页：根据卖家ID查询商品
+     * @param sellerId 卖家ID
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    @GetMapping("/getGoodsBySellerIdPaged")
+    public Result getGoodsBySellerIdPaged(@RequestParam String sellerId,
+                                          @RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "10") int pageSize) {
+        return goodsService.getGoodsBySellerIdPaged(sellerId, page, pageSize);
+    }
+    
+    /**
+     * 分页：根据商品类型查询
+     * @param type 商品类型
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    @GetMapping("/getGoodsByTypePaged")
+    public Result getGoodsByTypePaged(@RequestParam String type,
+                                      @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "10") int pageSize) {
+        return goodsService.getGoodsByTypePaged(type, page, pageSize);
+    }
+    
+    /**
+     * 分页：根据商品名称模糊查询
+     * @param goodsName 商品名称
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    @GetMapping("/getGoodsByNameLikePaged")
+    public Result getGoodsByNameLikePaged(@RequestParam String goodsName,
+                                          @RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "10") int pageSize) {
+        return goodsService.getGoodsByNameLikePaged(goodsName, page, pageSize);
+    }
+    
+    /**
+     * 分页：根据价格范围查询
+     * @param minPrice 最低价格
+     * @param maxPrice 最高价格
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    @GetMapping("/getGoodsByPriceRangePaged")
+    public Result getGoodsByPriceRangePaged(@RequestParam double minPrice,
+                                            @RequestParam double maxPrice,
+                                            @RequestParam(defaultValue = "1") int page,
+                                            @RequestParam(defaultValue = "10") int pageSize) {
+        return goodsService.getGoodsByPriceRangePaged(minPrice, maxPrice, page, pageSize);
+    }
 }

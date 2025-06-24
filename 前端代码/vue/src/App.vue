@@ -30,6 +30,10 @@ export default {
       Message.success('退出成功')
       userType.value = null
       router.push('/login')
+      // 强制刷新页面
+      setTimeout(() => {
+        window.location.reload()
+      }, 100)
     }
 
     // 判断当前路由是否激活
@@ -54,36 +58,48 @@ export default {
       <header class="app-header">
         <nav class="nav-menu">
           <div class="nav-left">
-            <router-link to="/" class="nav-item" :class="{ active: isActive('/') }">
-              🏠 首页
-            </router-link>
-            <router-link to="/goods" class="nav-item" :class="{ active: isActive('/goods') }">
-              📦 商品列表
-            </router-link>
-            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/cart" class="nav-item" :class="{ active: isActive('/cart') }">
-              🛒 购物车
-            </router-link>
-            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/orders" class="nav-item" :class="{ active: isActive('/orders') }">
-              📋 我的订单
-            </router-link>
+            <!-- 管理员登录后不显示左侧导航 -->
+            <template v-if="!isLoggedIn || userType !== 'admin'">
+              <router-link to="/" class="nav-item" :class="{ active: isActive('/') }">
+                🏠 首页
+              </router-link>
+              <router-link to="/goods" class="nav-item" :class="{ active: isActive('/goods') }">
+                📦 商品列表
+              </router-link>
+              <router-link v-if="isLoggedIn && userType === 'buyer'" to="/cart" class="nav-item" :class="{ active: isActive('/cart') }">
+                🛒 购物车
+              </router-link>
+              <router-link v-if="isLoggedIn && userType === 'buyer'" to="/orders" class="nav-item" :class="{ active: isActive('/orders') }">
+                📋 我的订单
+              </router-link>
+            </template>
           </div>
           
           <div class="nav-right">
-            <router-link v-if="isLoggedIn && userType === 'buyer'" to="/user" class="nav-item" :class="{ active: isActive('/user') }">
-              👤 个人中心
-            </router-link>
-            <router-link v-if="isLoggedIn && userType === 'seller'" to="/seller" class="nav-item" :class="{ active: isActive('/seller') }">
-              🏪 卖家中心
-            </router-link>
-            <router-link v-if="!isLoggedIn" to="/login" class="nav-item" :class="{ active: isActive('/login') }">
-              🔑 登录
-            </router-link>
-            <router-link v-if="!isLoggedIn" to="/register" class="nav-item" :class="{ active: isActive('/register') }">
-              📝 注册
-            </router-link>
-            <button v-if="isLoggedIn" @click="logout" class="nav-item logout-btn">
-              🚪 退出
-            </button>
+            <!-- 管理员登录后只显示退出按钮 -->
+            <template v-if="isLoggedIn && userType === 'admin'">
+              <button @click="logout" class="nav-item logout-btn">
+                🚪 退出
+              </button>
+            </template>
+            <!-- 其他用户类型的导航 -->
+            <template v-else>
+              <router-link v-if="isLoggedIn && userType === 'buyer'" to="/user" class="nav-item" :class="{ active: isActive('/user') }">
+                👤 个人中心
+              </router-link>
+              <router-link v-if="isLoggedIn && userType === 'seller'" to="/seller" class="nav-item" :class="{ active: isActive('/seller') }">
+                🏪 卖家中心
+              </router-link>
+              <router-link v-if="!isLoggedIn" to="/login" class="nav-item" :class="{ active: isActive('/login') }">
+                🔑 登录
+              </router-link>
+              <router-link v-if="!isLoggedIn" to="/register" class="nav-item" :class="{ active: isActive('/register') }">
+                📝 注册
+              </router-link>
+              <button v-if="isLoggedIn && userType !== 'admin'" @click="logout" class="nav-item logout-btn">
+                🚪 退出
+              </button>
+            </template>
           </div>
         </nav>
       </header>

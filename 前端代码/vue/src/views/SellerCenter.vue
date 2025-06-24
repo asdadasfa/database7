@@ -66,6 +66,12 @@
                     </tr>
                   </tbody>
                 </table>
+                <!-- 分页控件 -->
+                <div class="pagination" v-if="goodsTotal > goodsPageSize">
+                  <button :disabled="goodsPage === 1" @click="changeGoodsPage(goodsPage - 1)">上一页</button>
+                  <span>第 {{ goodsPage }} / {{ goodsTotalPages }} 页</span>
+                  <button :disabled="goodsPage === goodsTotalPages" @click="changeGoodsPage(goodsPage + 1)">下一页</button>
+                </div>
               </div>
             </div>
 
@@ -136,6 +142,9 @@
                   <button type="submit" class="btn btn-primary" :disabled="loading">
                     {{ loading ? '保存中...' : '保存修改' }}
                   </button>
+                  <button type="button" class="btn btn-danger" @click="showLogoutDialog">
+                    注销账户
+                  </button>
                 </div>
               </form>
             </div>
@@ -197,6 +206,37 @@
     <div v-if="message.show" :class="['message', message.type]">
       {{ message.text }}
     </div>
+    
+    <!-- 注销确认对话框 -->
+    <div v-if="logoutDialogVisible" class="modal-overlay" @click="closeLogoutDialog">
+      <div class="modal" @click.stop>
+        <div class="modal-header">
+          <h3>注销账户</h3>
+          <button class="close-btn" @click="closeLogoutDialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="warning-message">
+            <p><strong>⚠️ 警告：</strong>注销账户是不可逆操作，注销后您的账户将被永久删除，所有数据将无法恢复。</p>
+            <p>请输入您的密码确认注销操作：</p>
+          </div>
+          <div class="form-group">
+            <input 
+              type="password" 
+              v-model="logoutPassword" 
+              class="form-control" 
+              placeholder="请输入密码"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" @click="closeLogoutDialog">取消</button>
+            <button type="button" class="btn btn-danger" @click="confirmLogout" :disabled="!logoutPassword">
+              确认注销
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -216,6 +256,12 @@ const myGoods = ref([]);
 const orders = ref([]);
 const goodsDialogVisible = ref(false);
 const isEdit = ref(false);
+
+// 商品分页相关
+const goodsPage = ref(1)
+const goodsPageSize = 10
+const goodsTotal = ref(0)
+const goodsTotalPages = computed(() => Math.ceil(goodsTotal.value / goodsPageSize))
 
 const profileForm = reactive({
   sellerId: '',
@@ -240,10 +286,15 @@ const orderPageSize = 5
 const orderTotal = ref(0)
 const orderTotalPages = computed(() => Math.ceil(orderTotal.value / orderPageSize))
 
+const logoutDialogVisible = ref(false);
+const logoutPassword = ref('');
+
 const switchTab = (tab) => {
   activeTab.value = tab;
   if (tab === 'orders') {
     loadOrders();
+  } else if (tab === 'goods') {
+    loadMyGoods();
   }
 };
 
@@ -273,13 +324,20 @@ const loadUserInfo = () => {
   profileForm.sellerName = userInfo.sellerName;
 };
 
+const changeGoodsPage = async (newPage) => {
+  if (newPage < 1 || newPage > goodsTotalPages.value) return
+  goodsPage.value = newPage
+  await loadMyGoods()
+}
+
 const loadMyGoods = async () => {
   if (!profileForm.sellerId) return;
   goodsLoading.value = true;
   try {
-    const response = await goodsAPI.getGoodsBySellerId(profileForm.sellerId);
+    const response = await goodsAPI.getGoodsBySellerIdPaged(profileForm.sellerId, goodsPage.value, goodsPageSize);
     if (response.code === 200) {
-      myGoods.value = response.data || [];
+      myGoods.value = response.data.data || [];
+      goodsTotal.value = response.data.total || 0;
     } else {
       Message.error(response.msg || '加载商品失败');
     }
@@ -289,12 +347,6 @@ const loadMyGoods = async () => {
     goodsLoading.value = false;
   }
 };
-
-const changeOrderPage = async (newPage) => {
-  if (newPage < 1 || newPage > orderTotalPages.value) return
-  orderPage.value = newPage
-  await loadOrders()
-}
 
 const loadOrders = async () => {
   if (!profileForm.sellerId) return;
@@ -334,7 +386,7 @@ const editGoods = (goods) => {
     if (key === 'images') {
       goodsForm.images = Array.isArray(goods.images) ? goods.images : (goods.images ? [goods.images] : []);
     } else {
-      goodsForm[key] = goods[key];
+    goodsForm[key] = goods[key];
     }
   });
   goodsDialogVisible.value = true;
@@ -433,6 +485,49 @@ const updateProfile = async () => {
     Message.error('更新失败');
   } finally {
     loading.value = false;
+  }
+};
+
+const changeOrderPage = async (newPage) => {
+  if (newPage < 1 || newPage > orderTotalPages.value) return
+  orderPage.value = newPage
+  await loadOrders()
+}
+
+const showLogoutDialog = () => {
+  logoutDialogVisible.value = true;
+};
+
+const closeLogoutDialog = () => {
+  logoutDialogVisible.value = false;
+  logoutPassword.value = '';
+};
+
+const confirmLogout = async () => {
+  if (!logoutPassword.value) {
+    Message.error('请输入密码');
+    return;
+  }
+  
+  try {
+    const response = await sellerAPI.logout(profileForm.sellerId, logoutPassword.value);
+    if (response.code === 200) {
+      Message.success('账户注销成功');
+      // 清除本地存储
+      localStorage.removeItem('token');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userInfo');
+      // 跳转到首页
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      Message.error(response.msg || '注销失败');
+    }
+  } catch (error) {
+    Message.error('注销失败');
+  } finally {
+    closeLogoutDialog();
   }
 };
 

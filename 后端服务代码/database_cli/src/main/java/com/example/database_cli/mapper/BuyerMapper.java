@@ -26,4 +26,16 @@ public interface BuyerMapper {
     
     // 根据用户名查询买家
     Buyer selectByBuyerName(@Param("buyerName") String buyerName);
+    
+    // 查询所有买家（包括已删除的，用于管理员查看）
+    List<Buyer> selectAllForAdmin();
+    
+    // 根据ID查询买家（包括已删除的，用于管理员查看）
+    Buyer selectByIdForAdmin(@Param("buyerId") String buyerId);
+    
+    // 查询所有买家（分页）
+    List<Buyer> selectAllPaged(@Param("offset") int offset, @Param("limit") int limit);
+    
+    // 统计所有买家数量
+    int countAll();
 } 

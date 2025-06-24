@@ -1,24 +1,24 @@
 <template>
   <div class="orders-page">
     <h2 class="page-title">我的订单</h2>
-    
+
     <!-- 订单状态切换 -->
     <div class="order-tabs">
-      <button 
-        :class="['tab-btn', activeTab === 'pending' ? 'active' : '']" 
-        @click="switchTab('pending')"
+      <button
+          :class="['tab-btn', activeTab === 'pending' ? 'active' : '']"
+          @click="switchTab('pending')"
       >
         待支付
       </button>
-      <button 
-        :class="['tab-btn', activeTab === 'paid' ? 'active' : '']" 
-        @click="switchTab('paid')"
+      <button
+          :class="['tab-btn', activeTab === 'paid' ? 'active' : '']"
+          @click="switchTab('paid')"
       >
         已支付
       </button>
-      <button 
-        :class="['tab-btn', activeTab === 'cancelled' ? 'active' : '']" 
-        @click="switchTab('cancelled')"
+      <button
+          :class="['tab-btn', activeTab === 'cancelled' ? 'active' : '']"
+          @click="switchTab('cancelled')"
       >
         已取消
       </button>
@@ -26,23 +26,23 @@
 
     <!-- 订单列表 -->
     <div v-if="loading" class="loading-spinner"></div>
-    <div v-else-if="!orders.length" class="empty-orders">
+    <div v-else-if="!orders.value || !orders.value.length" class="empty-orders">
       <div class="empty-content">
         <div class="empty-icon">📦</div>
         <p>暂无{{ getTabText() }}订单</p>
       </div>
     </div>
-    
+
     <div v-else class="orders-list">
-      <div class="order-card" v-for="order in orders" :key="order.orderId">
+      <div class="order-card" v-for="order in orders.value || []" :key="order.orderId">
         <div class="order-header">
           <span class="order-id">订单号: {{ order.orderId }}</span>
-           <span class="order-time">下单时间: {{ formatTime(order.time) }}</span>
+          <span class="order-time">下单时间: {{ formatTime(order.time) }}</span>
           <span class="order-status" :class="getStatusClass(order.state)">
             {{ order.state }}
           </span>
         </div>
-        
+
         <div class="order-items">
           <div class="order-item" v-for="item in order.items" :key="item.goodsId">
             <div class="item-info">
@@ -52,33 +52,33 @@
             <span class="item-total">￥{{ (item.price * item.num).toFixed(2) }}</span>
           </div>
         </div>
-        
+
         <div class="order-footer">
           <div class="order-total">
             总计: <strong>￥{{ (order.totalAmount || order.sum || 0).toFixed(2) }}</strong>
           </div>
           <div class="order-actions">
-            <button 
-              v-if="order.state === '待支付'" 
-              class="action-btn pay-btn" 
-              @click="payOrder(order)"
+            <button
+                v-if="order.state === '待支付'"
+                class="action-btn pay-btn"
+                @click="payOrder(order)"
             >
               立即支付
             </button>
-            <button 
-              v-if="order.state === '待支付'" 
-              class="action-btn cancel-btn" 
-              @click="cancelOrder(order)"
+            <button
+                v-if="order.state === '待支付'"
+                class="action-btn cancel-btn"
+                @click="cancelOrder(order)"
             >
               取消订单
             </button>
-             <button
+            <button
                 v-if="order.state === '支付成功'"
                 class="action-btn view-btn"
                 @click="viewOrder(order)"
-              >
-                查看详情
-              </button>
+            >
+              查看详情
+            </button>
           </div>
         </div>
       </div>
@@ -155,13 +155,20 @@ const loadOrders = async () => {
         break
     }
     response = await orderAPI.getOrdersByBuyerIdAndStatePaged(userInfo.buyerId, state, page.value, pageSize)
-    if (response.code === 200) {
-      orders.value = response.data.data || []
-      total.value = response.data.total || 0
+    // 兼容 axios 响应结构
+    const resData = response.data || response
+    if (resData.code === 200) {
+      const raw = Array.isArray(resData.data) ? resData.data : []
+      orders.value = await processOrders(raw)
+      total.value = resData.total || orders.value.length
     } else {
-      Message.error(response.msg || '获取订单失败')
+      orders.value = []
+      total.value = 0
+      Message.error(resData.msg || '获取订单失败')
     }
   } catch (error) {
+    orders.value = []
+    total.value = 0
     Message.error('获取订单失败')
   } finally {
     loading.value = false
@@ -198,8 +205,8 @@ const cancelOrder = async (order) => {
 }
 
 const viewOrder = (order) => {
-    // Placeholder for viewing order details, could navigate to a new page
-    alert(`查看订单详情: ${order.orderId}`);
+  // Placeholder for viewing order details, could navigate to a new page
+  alert(`查看订单详情: ${order.orderId}`);
 };
 
 

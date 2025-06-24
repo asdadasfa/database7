@@ -7,7 +7,7 @@
         <id column="buyer_id" property="buyerId" jdbcType="VARCHAR"/>
         <result column="buyer_name" property="buyerName" jdbcType="VARCHAR"/>
         <result column="buyer_password" property="buyerPassword" jdbcType="VARCHAR"/>
-        <result column="id_bool" property="idBool" jdbcType="BOOLEAN"/>
+        <result column="is_bool" property="isBool" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <!-- 基础字段 -->
@@ -41,8 +41,9 @@
     <update id="update" parameterType="com.example.database_cli.model.entity.Buyer">
         UPDATE buyer
         SET buyer_name = #{buyerName},
-            buyer_password = #{buyerPassword}
-        WHERE buyer_id = #{buyerId} AND is_bool = 1
+            buyer_password = #{buyerPassword},
+            is_bool = #{isBool}
+        WHERE buyer_id = #{buyerId}
     </update>
 
     <!-- 根据ID删除买家 -->
@@ -56,6 +57,31 @@
         <include refid="Base_Column_List"/>
         FROM buyer
         WHERE buyer_name = #{buyerName} AND is_bool = 1
+    </select>
+
+    <!-- 查询所有买家（包括已删除的，用于管理员查看） -->
+    <select id="selectAllForAdmin" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM buyer
+    </select>
+
+    <!-- 根据ID查询买家（包括已删除的，用于管理员查看） -->
+    <select id="selectByIdForAdmin" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM buyer
+        WHERE buyer_id = #{buyerId}
+    </select>
+
+    <select id="selectAllPaged" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM buyer
+        ORDER BY buyer_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM buyer
     </select>
 
 </mapper> 

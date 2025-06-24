@@ -41,12 +41,13 @@ public class buyerControl {
     /**
      * 买家注销(逻辑删除)
      * @param buyerId 买家ID
+     * @param password 密码
      * @return 注销结果
      */
     @PostMapping("/logout")
-    public Result logout(@RequestParam String buyerId) {
+    public Result logout(@RequestParam String buyerId, @RequestParam String password) {
         log.info("买家注销请求: {}", buyerId);
-        return buyerService.logout(buyerId);
+        return buyerService.logout(buyerId, password);
     }
 
     /**

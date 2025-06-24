@@ -23,9 +23,10 @@ public interface ISellerService {
     /**
      * 卖家注销
      * @param sellerId 卖家ID
+     * @param password 密码
      * @return 注销结果
      */
-    Result logout(String sellerId);
+    Result logout(String sellerId, String password);
     
     /**
      * 根据ID查询卖家信息

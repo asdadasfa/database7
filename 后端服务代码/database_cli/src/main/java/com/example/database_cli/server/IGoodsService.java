@@ -83,4 +83,50 @@ public interface IGoodsService {
      * @return 删除结果
      */
     Result deleteGoods(String goodsId);
+    
+    // 分页查询相关方法
+    /**
+     * 分页：查询所有商品
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    Result getAllGoodsPaged(int page, int pageSize);
+    
+    /**
+     * 分页：根据卖家ID查询商品
+     * @param sellerId 卖家ID
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    Result getGoodsBySellerIdPaged(String sellerId, int page, int pageSize);
+    
+    /**
+     * 分页：根据商品类型查询
+     * @param type 商品类型
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    Result getGoodsByTypePaged(String type, int page, int pageSize);
+    
+    /**
+     * 分页：根据商品名称模糊查询
+     * @param goodsName 商品名称
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    Result getGoodsByNameLikePaged(String goodsName, int page, int pageSize);
+    
+    /**
+     * 分页：根据价格范围查询
+     * @param minPrice 最低价格
+     * @param maxPrice 最高价格
+     * @param page 页码
+     * @param pageSize 每页大小
+     * @return 分页商品列表
+     */
+    Result getGoodsByPriceRangePaged(double minPrice, double maxPrice, int page, int pageSize);
 } 

@@ -64,6 +64,9 @@ const handleBuyerLogin = async () => {
     localStorage.setItem('userType', 'buyer')
     Message.success('买家登录成功')
     router.push('/')
+    setTimeout(() => {
+      window.location.reload()
+    }, 100)
   } else {
     Message.error(response.msg || '登录失败')
   }
@@ -83,6 +86,9 @@ const handleSellerLogin = async () => {
     localStorage.setItem('userType', 'seller')
     Message.success('卖家登录成功')
     router.push('/seller')
+    setTimeout(() => {
+      window.location.reload()
+    }, 100)
   } else {
     Message.error(response.msg || '登录失败')
   }

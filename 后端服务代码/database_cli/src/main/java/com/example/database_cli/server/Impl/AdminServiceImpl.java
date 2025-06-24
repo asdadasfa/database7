@@ -37,7 +37,7 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public Result deleteBuyer(String buyerId) {
-        Buyer buyer = buyerMapper.selectById(buyerId);
+        Buyer buyer = buyerMapper.selectByIdForAdmin(buyerId);
         if (buyer == null) return Result.fail("买家不存在");
         buyer.setBool(false);
         int res = buyerMapper.update(buyer);
@@ -46,7 +46,7 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public Result restoreBuyer(String buyerId) {
-        Buyer buyer = buyerMapper.selectById(buyerId);
+        Buyer buyer = buyerMapper.selectByIdForAdmin(buyerId);
         if (buyer == null) return Result.fail("买家不存在");
         buyer.setBool(true);
         int res = buyerMapper.update(buyer);
@@ -55,7 +55,7 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public Result deleteSeller(String sellerId) {
-        Seller seller = sellerMapper.selectById(sellerId);
+        Seller seller = sellerMapper.selectByIdForAdmin(sellerId);
         if (seller == null) return Result.fail("卖家不存在");
         seller.setBool(false);
         int res = sellerMapper.update(seller);
@@ -64,7 +64,7 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public Result restoreSeller(String sellerId) {
-        Seller seller = sellerMapper.selectById(sellerId);
+        Seller seller = sellerMapper.selectByIdForAdmin(sellerId);
         if (seller == null) return Result.fail("卖家不存在");
         seller.setBool(true);
         int res = sellerMapper.update(seller);
@@ -73,13 +73,13 @@ public class AdminServiceImpl implements IAdminService {
 
     @Override
     public Result getAllBuyers() {
-        List<Buyer> buyers = buyerMapper.selectAll();
+        List<Buyer> buyers = buyerMapper.selectAllForAdmin();
         return Result.success(buyers);
     }
 
     @Override
     public Result getAllSellers() {
-        List<Seller> sellers = sellerMapper.selectAll();
+        List<Seller> sellers = sellerMapper.selectAllForAdmin();
         return Result.success(sellers);
     }
 
@@ -90,5 +90,27 @@ public class AdminServiceImpl implements IAdminService {
         goods.setBool(false);
         int res = goodsMapper.update(goods);
         return res > 0 ? Result.success("删除成功") : Result.fail("删除失败");
+    }
+
+    @Override
+    public Result getAllBuyersPaged(int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Buyer> buyers = buyerMapper.selectAllPaged(offset, pageSize);
+        int total = buyerMapper.countAll();
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("data", buyers);
+        result.put("total", total);
+        return Result.success(result);
+    }
+
+    @Override
+    public Result getAllSellersPaged(int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Seller> sellers = sellerMapper.selectAllPaged(offset, pageSize);
+        int total = sellerMapper.countAll();
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("data", sellers);
+        result.put("total", total);
+        return Result.success(result);
     }
 }

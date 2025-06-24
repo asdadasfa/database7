@@ -13,4 +13,6 @@ public interface IAdminService {
     Result getAllBuyers();
     Result getAllSellers();
     Result deleteGoods(String goodsId);
+    Result getAllBuyersPaged(int page, int pageSize);
+    Result getAllSellersPaged(int page, int pageSize);
 } 

@@ -14,12 +14,6 @@
             >
               个人信息
             </button>
-            <button 
-              :class="['tab-button', { active: activeTab === 'orders' }]"
-              @click="switchTab('orders')"
-            >
-              我的订单
-            </button>
           </div>
           
           <div class="tab-content">
@@ -47,44 +41,43 @@
                   <button type="submit" class="btn btn-primary" :disabled="loading">
                     {{ loading ? '保存中...' : '保存修改' }}
                   </button>
+                  <button type="button" class="btn btn-danger" @click="showLogoutDialog">
+                    注销账户
+                  </button>
                 </div>
               </form>
             </div>
-            
-            <!-- 我的订单 -->
-            <div v-if="activeTab === 'orders'" class="tab-pane">
-               <div v-if="ordersLoading" class="loading-spinner"></div>
-              <div v-else-if="orders.length === 0" class="empty-orders">
-                <div class="empty-content">
-                  <div class="empty-icon">📦</div>
-                  <p>暂无订单</p>
-                  <button class="btn btn-primary" @click="$router.push('/goods')">
-                    去购物
-                  </button>
-                </div>
-              </div>
-              <div v-else class="orders-list">
-                <div class="order-card" v-for="order in orders" :key="order.orderId">
-                  <div class="order-header">
-                    <span class="order-id">订单号: {{ order.orderId }}</span>
-                    <span class="order-time">下单时间: {{ formatTime(order.time) }}</span>
-                    <span :class="['status-tag', getStatusClass(order.state)]">{{ order.state }}</span>
-                  </div>
-                  <div class="order-items">
-                     <div class="order-item" v-for="item in order.items" :key="item.goodsId">
-                        <div class="item-info">
-                        <span class="item-name">{{ item.goodsName }}</span>
-                        <span class="item-price">￥{{ item.price }} × {{ item.num }}</span>
-                        </div>
-                        <span class="item-total">￥{{ (item.price * item.num).toFixed(2) }}</span>
-                    </div>
-                  </div>
-                  <div class="order-footer">
-                    <div class="order-total">总计: <strong>￥{{ order.totalAmount.toFixed(2) }}</strong></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 注销确认对话框 -->
+    <div v-if="logoutDialogVisible" class="modal-overlay" @click="closeLogoutDialog">
+      <div class="modal" @click.stop>
+        <div class="modal-header">
+          <h3>注销账户</h3>
+          <button class="close-btn" @click="closeLogoutDialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="warning-message">
+            <p><strong>⚠️ 警告：</strong>注销账户是不可逆操作，注销后您的账户将被永久删除，所有数据将无法恢复。</p>
+            <p>请输入您的密码确认注销操作：</p>
+          </div>
+          <div class="form-group">
+            <input 
+              type="password" 
+              v-model="logoutPassword" 
+              class="form-control" 
+              placeholder="请输入密码"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" @click="closeLogoutDialog">取消</button>
+            <button type="button" class="btn btn-danger" @click="confirmLogout" :disabled="!logoutPassword">
+              确认注销
+            </button>
           </div>
         </div>
       </div>
@@ -103,6 +96,8 @@ const activeTab = ref('profile');
 const loading = ref(false);
 const ordersLoading = ref(false);
 const orders = ref([]);
+const logoutDialogVisible = ref(false);
+const logoutPassword = ref('');
 
 const profileForm = reactive({
   buyerId: '',
@@ -184,6 +179,43 @@ const updateProfile = async () => {
     Message.error('更新失败');
   } finally {
     loading.value = false;
+  }
+};
+
+const showLogoutDialog = () => {
+  logoutDialogVisible.value = true;
+};
+
+const closeLogoutDialog = () => {
+  logoutDialogVisible.value = false;
+  logoutPassword.value = '';
+};
+
+const confirmLogout = async () => {
+  if (!logoutPassword.value) {
+    Message.error('请输入密码');
+    return;
+  }
+  
+  try {
+    const response = await buyerAPI.logout(profileForm.buyerId, logoutPassword.value);
+    if (response.code === 200) {
+      Message.success('账户注销成功');
+      // 清除本地存储
+      localStorage.removeItem('token');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userInfo');
+      // 跳转到首页
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      Message.error(response.msg || '注销失败');
+    }
+  } catch (error) {
+    Message.error('注销失败');
+  } finally {
+    closeLogoutDialog();
   }
 };
 
@@ -277,7 +309,7 @@ watch(
 }
 .btn-primary {
   padding: 10px 20px;
-  background-color: #409eff;
+  background-color: #1d4ed8;
   color: white;
   border: none;
   border-radius: 4px;
@@ -285,11 +317,110 @@ watch(
   transition: background-color 0.2s;
 }
 .btn-primary:hover:not(:disabled) {
-  background-color: #3076c9;
+  background-color: #1741a6;
 }
 .btn-primary:disabled {
   background-color: #a0cfff;
   cursor: not-allowed;
+}
+
+.btn-danger {
+  background-color: #f56c6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 10px;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.warning-message {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.warning-message p {
+  margin: 5px 0;
+  color: #856404;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: #e9ecef;
 }
 
 /* Orders List Styles */

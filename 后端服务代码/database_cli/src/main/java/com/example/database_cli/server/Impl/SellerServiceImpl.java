@@ -73,9 +73,9 @@ public class SellerServiceImpl implements ISellerService {
     }
 
     @Override
-    public Result logout(String sellerId) {
+    public Result logout(String sellerId, String password) {
         // 参数校验
-        if (!StringUtils.hasText(sellerId)) {
+        if (!StringUtils.hasText(sellerId) || !StringUtils.hasText(password)) {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
@@ -85,8 +85,17 @@ public class SellerServiceImpl implements ISellerService {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
 
-        // 注销成功（这里可以根据需要添加其他逻辑，比如清除session等）
-        return Result.success();
+        // 验证密码
+        if (!password.equals(seller.getSellerPassword())) {
+            return Result.fail("密码错误");
+        }
+        int result = sellerMapper.deleteById(sellerId);
+        if (result > 0) {
+            return Result.success("注销成功");
+        }
+        else {
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
     }
 
     @Override

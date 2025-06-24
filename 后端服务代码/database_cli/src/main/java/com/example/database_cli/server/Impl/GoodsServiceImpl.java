@@ -229,8 +229,8 @@ public class GoodsServiceImpl implements IGoodsService {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
-        // 检查商品是否存在
-        Goods existGoods = goodsMapper.selectById(goods.getGoodsId());
+        // 检查商品是否存在（加悲观锁）
+        Goods existGoods = goodsMapper.selectByIdForUpdate(goods.getGoodsId());
         if (existGoods == null) {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
@@ -265,8 +265,8 @@ public class GoodsServiceImpl implements IGoodsService {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
-        // 检查商品是否存在
-        Goods existGoods = goodsMapper.selectById(goodsId);
+        // 检查商品是否存在（加悲观锁）
+        Goods existGoods = goodsMapper.selectByIdForUpdate(goodsId);
         if (existGoods == null) {
             return Result.fail(ResultEnum.ERROR_NOTFOUND);
         }
@@ -287,17 +287,114 @@ public class GoodsServiceImpl implements IGoodsService {
             return Result.fail(ResultEnum.ERROR_BADPARMETERS);
         }
 
-        // 检查商品是否存在
-        Goods existGoods = goodsMapper.selectById(goodsId);
-        if (existGoods == null) {
-            return Result.fail(ResultEnum.ERROR_NOTFOUND);
-        }
-
-        // 删除商品
+        // 删除商品（软删除）
         int result = goodsMapper.deleteById(goodsId);
         if (result > 0) {
-            return Result.success();
+            log.info("商品删除成功: 商品ID={}", goodsId);
+            return Result.success("商品删除成功");
         } else {
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
+
+    // 分页查询相关方法实现
+    @Override
+    public Result getAllGoodsPaged(int page, int pageSize) {
+        try {
+            int offset = (page - 1) * pageSize;
+            List<Goods> goodsList = goodsMapper.selectAllPaged(offset, pageSize);
+            int total = goodsMapper.countAll();
+            
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", goodsList);
+            result.put("total", total);
+            return Result.success(result);
+        } catch (Exception e) {
+            log.error("分页查询所有商品时发生异常: ", e);
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
+
+    @Override
+    public Result getGoodsBySellerIdPaged(String sellerId, int page, int pageSize) {
+        try {
+            if (!StringUtils.hasText(sellerId)) {
+                return Result.fail(ResultEnum.ERROR_BADPARMETERS);
+            }
+            
+            int offset = (page - 1) * pageSize;
+            List<Goods> goodsList = goodsMapper.selectBySellerIdPaged(sellerId, offset, pageSize);
+            int total = goodsMapper.countBySellerId(sellerId);
+            
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", goodsList);
+            result.put("total", total);
+            return Result.success(result);
+        } catch (Exception e) {
+            log.error("分页查询卖家商品时发生异常: ", e);
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
+
+    @Override
+    public Result getGoodsByTypePaged(String type, int page, int pageSize) {
+        try {
+            if (!StringUtils.hasText(type)) {
+                return Result.fail(ResultEnum.ERROR_BADPARMETERS);
+            }
+            
+            int offset = (page - 1) * pageSize;
+            List<Goods> goodsList = goodsMapper.selectByTypePaged(type, offset, pageSize);
+            int total = goodsMapper.countByType(type);
+            
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", goodsList);
+            result.put("total", total);
+            return Result.success(result);
+        } catch (Exception e) {
+            log.error("分页查询商品类型时发生异常: ", e);
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
+
+    @Override
+    public Result getGoodsByNameLikePaged(String goodsName, int page, int pageSize) {
+        try {
+            if (!StringUtils.hasText(goodsName)) {
+                return Result.fail(ResultEnum.ERROR_BADPARMETERS);
+            }
+            
+            int offset = (page - 1) * pageSize;
+            List<Goods> goodsList = goodsMapper.selectByGoodsNameLikePaged(goodsName, offset, pageSize);
+            int total = goodsMapper.countByGoodsNameLike(goodsName);
+            
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", goodsList);
+            result.put("total", total);
+            return Result.success(result);
+        } catch (Exception e) {
+            log.error("分页查询商品名称时发生异常: ", e);
+            return Result.fail(ResultEnum.ERROR_OPERATION);
+        }
+    }
+
+    @Override
+    public Result getGoodsByPriceRangePaged(double minPrice, double maxPrice, int page, int pageSize) {
+        try {
+            if (minPrice < 0 || maxPrice < 0 || minPrice > maxPrice) {
+                return Result.fail(ResultEnum.ERROR_BADPARMETERS);
+            }
+            
+            int offset = (page - 1) * pageSize;
+            List<Goods> goodsList = goodsMapper.selectByPriceRangePaged(minPrice, maxPrice, offset, pageSize);
+            int total = goodsMapper.countByPriceRange(minPrice, maxPrice);
+            
+            java.util.Map<String, Object> result = new java.util.HashMap<>();
+            result.put("data", goodsList);
+            result.put("total", total);
+            return Result.success(result);
+        } catch (Exception e) {
+            log.error("分页查询价格范围时发生异常: ", e);
             return Result.fail(ResultEnum.ERROR_OPERATION);
         }
     }

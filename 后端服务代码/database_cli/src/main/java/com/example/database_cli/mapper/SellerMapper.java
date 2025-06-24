@@ -29,4 +29,16 @@ public interface SellerMapper {
     
     // 根据卖家名称和密码查询
     Seller selectBySellerNameAndPassword(@Param("sellerName") String sellerName, @Param("sellerPassword") String sellerPassword);
+    
+    // 查询所有卖家（包括已删除的，用于管理员查看）
+    List<Seller> selectAllForAdmin();
+    
+    // 根据ID查询卖家（包括已删除的，用于管理员查看）
+    Seller selectByIdForAdmin(@Param("sellerId") String sellerId);
+    
+    // 查询所有卖家（分页）
+    List<Seller> selectAllPaged(@Param("offset") int offset, @Param("limit") int limit);
+    
+    // 统计所有卖家数量
+    int countAll();
 } 

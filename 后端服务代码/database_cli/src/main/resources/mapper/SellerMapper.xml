@@ -41,8 +41,9 @@
     <update id="update" parameterType="com.example.database_cli.model.entity.Seller">
         UPDATE seller
         SET seller_name = #{sellerName},
-            seller_password = #{sellerPassword}
-        WHERE seller_id = #{sellerId} AND is_bool = 1
+            seller_password = #{sellerPassword},
+            is_bool = #{isBool}
+        WHERE seller_id = #{sellerId}
     </update>
 
     <!-- 根据ID删除卖家 -->
@@ -64,6 +65,31 @@
         <include refid="Base_Column_List"/>
         FROM seller
         WHERE seller_name = #{sellerName} AND seller_password = #{sellerPassword} AND is_bool = 1
+    </select>
+
+    <!-- 查询所有卖家（包括已删除的，用于管理员查看） -->
+    <select id="selectAllForAdmin" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+    </select>
+
+    <!-- 根据ID查询卖家（包括已删除的，用于管理员查看） -->
+    <select id="selectByIdForAdmin" parameterType="string" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM seller
+        WHERE seller_id = #{sellerId}
+    </select>
+
+    <select id="selectAllPaged" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM seller
+        ORDER BY seller_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM seller
     </select>
 
 </mapper> 

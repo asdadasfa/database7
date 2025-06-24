@@ -12,7 +12,6 @@
     <div v-else class="admin-panel">
       <div class="admin-header">
         <h2>管理员后台</h2>
-        <button class="main-btn danger" @click="logout">退出登录</button>
       </div>
       <div class="admin-tabs">
         <button :class="['tab-btn', {active: tab==='buyers'}]" @click="tab='buyers'">买家管理</button>
@@ -29,14 +28,19 @@
               <tr v-for="buyer in buyers" :key="buyer.buyerId">
                 <td>{{ buyer.buyerId }}</td>
                 <td>{{ buyer.buyerName }}</td>
-                <td>{{ buyer.isBool ? '正常' : '已删除' }}</td>
+                <td>{{ buyer.bool ? '正常' : '已删除' }}</td>
                 <td>
-                  <button v-if="buyer.isBool" @click="deleteBuyer(buyer.buyerId)">删除</button>
-                  <button v-else @click="restoreBuyer(buyer.buyerId)">恢复</button>
+                  <button v-if="buyer.bool" @click="deleteBuyer(buyer.buyerId)" class="btn btn-danger">删除</button>
+                  <button v-else @click="restoreBuyer(buyer.buyerId)" class="btn btn-success">恢复</button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="pagination" v-if="buyerTotal > buyerPageSize">
+            <button :disabled="buyerPage===1" @click="changeBuyerPage(buyerPage-1)">上一页</button>
+            <span>第 {{buyerPage}} / {{Math.ceil(buyerTotal/buyerPageSize)}} 页</span>
+            <button :disabled="buyerPage===Math.ceil(buyerTotal/buyerPageSize)" @click="changeBuyerPage(buyerPage+1)">下一页</button>
+          </div>
         </div>
         <!-- 卖家管理 -->
         <div v-if="tab==='sellers'">
@@ -47,14 +51,19 @@
               <tr v-for="seller in sellers" :key="seller.sellerId">
                 <td>{{ seller.sellerId }}</td>
                 <td>{{ seller.sellerName }}</td>
-                <td>{{ seller.isBool ? '正常' : '已删除' }}</td>
+                <td>{{ seller.bool ? '正常' : '已删除' }}</td>
                 <td>
-                  <button v-if="seller.isBool" @click="deleteSeller(seller.sellerId)">删除</button>
-                  <button v-else @click="restoreSeller(seller.sellerId)">恢复</button>
+                  <button v-if="seller.bool" @click="deleteSeller(seller.sellerId)" class="btn btn-danger">删除</button>
+                  <button v-else @click="restoreSeller(seller.sellerId)" class="btn btn-success">恢复</button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="pagination" v-if="sellerTotal > sellerPageSize">
+            <button :disabled="sellerPage===1" @click="changeSellerPage(sellerPage-1)">上一页</button>
+            <span>第 {{sellerPage}} / {{Math.ceil(sellerTotal/sellerPageSize)}} 页</span>
+            <button :disabled="sellerPage===Math.ceil(sellerTotal/sellerPageSize)" @click="changeSellerPage(sellerPage+1)">下一页</button>
+          </div>
         </div>
         <!-- 商品管理 -->
         <div v-if="tab==='goods'">
@@ -69,13 +78,18 @@
                 <td>{{ goods.type }}</td>
                 <td>{{ goods.price }}</td>
                 <td>{{ goods.num }}</td>
-                <td>{{ goods.isBool ? '正常' : '已删除' }}</td>
+                <td>{{ goods.bool ? '正常' : '已删除' }}</td>
                 <td>
-                  <button v-if="goods.isBool" @click="deleteGoods(goods.goodsId)">删除</button>
+                  <button v-if="goods.bool" @click="deleteGoods(goods.goodsId)" class="btn btn-danger">删除</button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div class="pagination" v-if="goodsTotal > goodsPageSize">
+            <button :disabled="goodsPage===1" @click="changeGoodsPage(goodsPage-1)">上一页</button>
+            <span>第 {{goodsPage}} / {{Math.ceil(goodsTotal/goodsPageSize)}} 页</span>
+            <button :disabled="goodsPage===Math.ceil(goodsTotal/goodsPageSize)" @click="changeGoodsPage(goodsPage+1)">下一页</button>
+          </div>
         </div>
       </div>
     </div>
@@ -83,7 +97,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { adminAPI, goodsAPI } from '../api'
 
 const isLoggedIn = ref(false)
@@ -93,31 +107,57 @@ const tab = ref('buyers')
 const buyers = ref([])
 const sellers = ref([])
 const goodsList = ref([])
+const buyerPage = ref(1)
+const buyerPageSize = 5
+const buyerTotal = ref(0)
+const sellerPage = ref(1)
+const sellerPageSize = 5
+const sellerTotal = ref(0)
+const goodsPage = ref(1)
+const goodsPageSize = 5
+const goodsTotal = ref(0)
+
+// 检查是否已经登录
+onMounted(() => {
+  const userType = localStorage.getItem('userType')
+  const token = localStorage.getItem('token')
+  if (userType === 'admin' && token) {
+    isLoggedIn.value = true
+    loadAll()
+  }
+})
 
 const handleLogin = async () => {
   loginError.value = ''
   const res = await adminAPI.login(loginForm.id, loginForm.password)
   if (res.code === 200) {
     isLoggedIn.value = true
+    localStorage.setItem('token', res.data.token || 'admin-token')
+    localStorage.setItem('userType', 'admin')
+    localStorage.setItem('userInfo', JSON.stringify(res.data))
     loadAll()
+    setTimeout(() => {
+      window.location.reload()
+    }, 100)
   } else {
     loginError.value = res.msg || '登录失败'
   }
 }
-const logout = () => {
-  isLoggedIn.value = false
-  loginForm.id = ''
-  loginForm.password = ''
+const goBack = () => {
+  window.history.back();
 }
 const loadAll = async () => {
   const [buyerRes, sellerRes, goodsRes] = await Promise.all([
-    adminAPI.getAllBuyers(),
-    adminAPI.getAllSellers(),
-    goodsAPI.getAllGoods()
+    adminAPI.getAllBuyersPaged(buyerPage.value, buyerPageSize),
+    adminAPI.getAllSellersPaged(sellerPage.value, sellerPageSize),
+    goodsAPI.getAllGoodsPaged(goodsPage.value, goodsPageSize)
   ])
-  buyers.value = buyerRes.data || []
-  sellers.value = sellerRes.data || []
-  goodsList.value = goodsRes.data || []
+  buyers.value = buyerRes.data.data || []
+  buyerTotal.value = buyerRes.data.total || 0
+  sellers.value = sellerRes.data.data || []
+  sellerTotal.value = sellerRes.data.total || 0
+  goodsList.value = goodsRes.data.data || []
+  goodsTotal.value = goodsRes.data.total || 0
 }
 const deleteBuyer = async (buyerId) => {
   await adminAPI.deleteBuyer(buyerId)
@@ -139,6 +179,9 @@ const deleteGoods = async (goodsId) => {
   await adminAPI.deleteGoods(goodsId)
   loadAll()
 }
+const changeBuyerPage = (page) => { buyerPage.value = page; loadAll() }
+const changeSellerPage = (page) => { sellerPage.value = page; loadAll() }
+const changeGoodsPage = (page) => { goodsPage.value = page; loadAll() }
 </script>
 
 <style scoped>
@@ -198,6 +241,14 @@ const deleteGoods = async (goodsId) => {
   align-items: center;
   margin-bottom: 18px;
 }
+.admin-header h2 {
+  font-size: 2.4em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
 .admin-tabs {
   display: flex;
   gap: 16px;
@@ -250,5 +301,37 @@ const deleteGoods = async (goodsId) => {
 }
 .table button:hover {
   background: #3076c9;
+}
+
+.btn {
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: background 0.2s;
+  font-size: 0.9em;
+}
+
+.btn:hover {
+  background: #3076c9;
+}
+
+.btn-danger {
+  background: #f56c6c;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-success {
+  background: #67c23a;
+}
+
+.btn-success:hover {
+  background: #5aad2e;
 }
 </style> 

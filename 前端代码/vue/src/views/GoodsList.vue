@@ -48,8 +48,12 @@
       </div>
     </div>
     
-    <div class="goods-list">
-      <div class="goods-card" v-for="goods in filteredGoods" :key="goods.goodsId">
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-spinner"></div>
+    
+    <!-- 商品列表 -->
+    <div v-else class="goods-list">
+      <div class="goods-card" v-for="goods in goodsList" :key="goods.goodsId">
         <img :src="goods.images && goods.images[0] ? goods.images[0] : '/default-goods.jpg'" class="goods-image" />
         <h3>{{ goods.goodsName }}</h3>
         <p>类型: {{ goods.type }}</p>
@@ -62,12 +66,19 @@
     </div>
     
     <!-- 无商品提示 -->
-    <div v-if="filteredGoods.length === 0" class="no-goods">
+    <div v-if="!loading && goodsList.length === 0" class="no-goods">
       <div class="no-goods-content">
         <div class="no-goods-icon">🔍</div>
         <p>没有找到相关商品</p>
         <button @click="resetFilter" class="main-btn">查看全部商品</button>
       </div>
+    </div>
+    
+    <!-- 分页控件 -->
+    <div class="pagination" v-if="total > pageSize">
+      <button :disabled="page === 1" @click="changePage(page - 1)">上一页</button>
+      <span>第 {{ page }} / {{ totalPages }} 页</span>
+      <button :disabled="page === totalPages" @click="changePage(page + 1)">下一页</button>
     </div>
   </div>
 </template>
@@ -80,53 +91,60 @@ import Message from '../utils/message'
 
 const router = useRouter()
 const goodsList = ref([])
+const loading = ref(false)
 const searchQuery = ref('')
 const selectedType = ref('')
 const minPrice = ref('')
 const maxPrice = ref('')
+const page = ref(1)
+const pageSize = 10
+const total = ref(0)
 
-// 计算筛选后的商品列表
-const filteredGoods = computed(() => {
-  let filtered = goodsList.value
-
-  // 按名称搜索
-  if (searchQuery.value) {
-    filtered = filtered.filter(goods => 
-      goods.goodsName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-  }
-
-  // 按类型筛选
-  if (selectedType.value) {
-    filtered = filtered.filter(goods => goods.type === selectedType.value)
-  }
-
-  // 按价格范围筛选
-  if (minPrice.value || maxPrice.value) {
-    filtered = filtered.filter(goods => {
-      const price = goods.price
-      const min = minPrice.value ? parseFloat(minPrice.value) : 0
-      const max = maxPrice.value ? parseFloat(maxPrice.value) : Infinity
-      return price >= min && price <= max
-    })
-  }
-
-  return filtered
-})
+const totalPages = computed(() => Math.ceil(total.value / pageSize))
 
 const loadGoods = async () => {
-  const res = await goodsAPI.getAllGoods()
-  if (res.code === 200) {
-    goodsList.value = res.data
+  loading.value = true
+  try {
+    let response
+    
+    // 根据筛选条件调用不同的API
+    if (searchQuery.value) {
+      // 按名称搜索
+      response = await goodsAPI.getGoodsByNameLikePaged(searchQuery.value, page.value, pageSize)
+    } else if (selectedType.value) {
+      // 按类型筛选
+      response = await goodsAPI.getGoodsByTypePaged(selectedType.value, page.value, pageSize)
+    } else if (minPrice.value || maxPrice.value) {
+      // 按价格范围筛选
+      const min = minPrice.value ? parseFloat(minPrice.value) : 0
+      const max = maxPrice.value ? parseFloat(maxPrice.value) : 999999
+      response = await goodsAPI.getGoodsByPriceRangePaged(min, max, page.value, pageSize)
+    } else {
+      // 获取所有商品
+      response = await goodsAPI.getAllGoodsPaged(page.value, pageSize)
+    }
+    
+    if (response.code === 200) {
+      goodsList.value = response.data.data || []
+      total.value = response.data.total || 0
+    } else {
+      Message.error(response.msg || '获取商品失败')
+    }
+  } catch (error) {
+    Message.error('获取商品失败')
+  } finally {
+    loading.value = false
   }
 }
 
 const handleSearch = () => {
-  // 搜索逻辑已在computed中处理
+  page.value = 1
+  loadGoods()
 }
 
 const handleFilter = () => {
-  // 筛选逻辑已在computed中处理
+  page.value = 1
+  loadGoods()
 }
 
 const resetFilter = () => {
@@ -134,6 +152,14 @@ const resetFilter = () => {
   selectedType.value = ''
   minPrice.value = ''
   maxPrice.value = ''
+  page.value = 1
+  loadGoods()
+}
+
+const changePage = (newPage) => {
+  if (newPage < 1 || newPage > totalPages.value) return
+  page.value = newPage
+  loadGoods()
 }
 
 const viewDetail = (goodsId) => {
@@ -401,5 +427,61 @@ onMounted(loadGoods)
 
 .main-btn:hover {
   background: #3076c9;
+}
+
+.loading-spinner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.loading-spinner::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #409eff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination button:hover {
+  background: #3076c9;
+}
+
+.pagination button:disabled {
+  background: #909399;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 16px;
+  font-size: 1em;
+  color: #666;
 }
 </style> 

@@ -41,12 +41,13 @@ public class sellerConfig {
     /**
      * 卖家注销(逻辑删除)
      * @param sellerId 卖家ID
+     * @param password 密码
      * @return 注销结果
      */
     @PostMapping("/logout")
-    public Result logout(@RequestParam String sellerId) {
+    public Result logout(@RequestParam String sellerId, @RequestParam String password) {
         log.info("卖家注销请求: {}", sellerId);
-        return sellerService.logout(sellerId);
+        return sellerService.logout(sellerId, password);
     }
 
     /**

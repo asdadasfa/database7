@@ -16,8 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.Duration;
 import java.util.UUID;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -29,8 +27,8 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public Result createOrder(VoOrder voorder) {
-        // 查询商品
-        Goods goods = goodsMapper.selectById(voorder.getGoodsId());
+        // 查询商品（加悲观锁）
+        Goods goods = goodsMapper.selectByIdForUpdate(voorder.getGoodsId());
         if (goods == null || !goods.isBool() || goods.getNum() < voorder.getNum()) {
             return Result.fail("商品不存在或库存不足");
         }
@@ -65,7 +63,8 @@ public class OrderServiceImpl implements IOrderService {
      * 恢复商品库存
      */
     private void restoreGoodsStock(Order order) {
-        Goods goods = goodsMapper.selectById(order.getGoodsId());
+        // 加悲观锁
+        Goods goods = goodsMapper.selectByIdForUpdate(order.getGoodsId());
         if (goods != null) {
             goodsMapper.updateNum(goods.getGoodsId(), goods.getNum() + order.getNum());
         }
@@ -235,23 +234,13 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Result selectBySellerIdPaged(String sellerId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        List<Order> orders = orderMapper.selectBySellerIdPaged(sellerId, offset, pageSize);
-        int total = orderMapper.countBySellerId(sellerId);
-        Map<String, Object> result = new HashMap<>();
-        result.put("data", orders);
-        result.put("total", total);
-        return Result.success(result);
+        return Result.success(orderMapper.selectBySellerIdPaged(sellerId, offset, pageSize));
     }
-    // 分页：根据买家ID和状态查询订单，返回Map{data,total}
+    // 分页：根据买家ID和状态查询订单
     @Override
     public Result selectByBuyerIdAndStatePaged(String buyerId, String state, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        List<Order> orders = orderMapper.selectByBuyerIdAndStatePaged(buyerId, state, offset, pageSize);
-        int total = orderMapper.countByBuyerIdAndState(buyerId, state);
-        Map<String, Object> result = new HashMap<>();
-        result.put("data", orders);
-        result.put("total", total);
-        return Result.success(result);
+        return Result.success(orderMapper.selectByBuyerIdAndStatePaged(buyerId, state, offset, pageSize));
     }
     // 分页：根据卖家ID和状态查询订单
     @Override
