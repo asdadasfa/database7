@@ -20,7 +20,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8686',
+        target: 'http://47.121.122.230:8686',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
@@ -34,7 +34,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['vue', 'vue-router'],
-          elementPlus: ['element-plus']
+          // elementPlus: ['element-plus']
         }
       }
     }

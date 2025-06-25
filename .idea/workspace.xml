@@ -6,33 +6,34 @@
   <component name="ChangeListManager">
     <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/AdminCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/AdminCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/GoodsList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/adminControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/adminControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/buyerControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/buyerControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/goodsControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/goodsControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/sellerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/control/sellerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/BuyerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/BuyerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/GoodsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/GoodsMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/SellerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/mapper/SellerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IAdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IAdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IBuyerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IBuyerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IGoodsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/IGoodsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/ISellerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/ISellerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/AdminServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/BuyerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/BuyerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/前端代码/vue/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/OrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/SellerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/SellerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/BuyerMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/GoodsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/GoodsMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/resources/mapper/SellerMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/test/java/com/example/database_cli/GoodsControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/test/java/com/example/database_cli/GoodsServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_30ec332a4e114617a40f1315b78dc7a6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_3be5d615acb94bd0ac50d32e91806c78.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_41fb7018987946f481263c22b443131d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_5f7b8d483ff144b3a7d30d920812eb5f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_8f28f0f6d4fd4b1fa5f89c621677731c.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_a41e7f097f944b3484c50e9dece42370.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_b43f5569dc924dcf8711431b7b3b71eb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f0cf7ddbbe6b4a979967fff694342354.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f90a20f3ed924702b0f9ac61a0b047ce.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_ffdf30d242f74a04b69e0e3c5fb8ecfe.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/数据库/handle_timeout_orders.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/数据库/simple_timeout_orders.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/数据库/数据库设计.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +88,7 @@
     &quot;Spring Boot.DatabaseCliApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/白峰楠/IdeaProjects/database8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/白峰楠/IdeaProjects/database8/后端服务代码/database_cli&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -105,18 +106,18 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\前端代码\vue\public" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\uploaded_images" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\6.17" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\后端服务代码\database_cli" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\img" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\数据库" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\前端代码" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.database_cli.model.result" />
@@ -193,6 +194,9 @@
       <workItem from="1750688454518" duration="256000" />
       <workItem from="1750724830978" duration="4458000" />
       <workItem from="1750729487904" duration="14353000" />
+      <workItem from="1750754576584" duration="8910000" />
+      <workItem from="1750833015086" duration="3047000" />
+      <workItem from="1750840705539" duration="590000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />

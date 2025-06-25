@@ -72,7 +72,7 @@ public class WebConfig implements WebMvcConfigurer {
                     String fileName = "goods_" + UUID.randomUUID().toString().replace("-", "") + fileExtension;
                     File destFile = new File(uploadDir, fileName);
                     imageFile.transferTo(destFile);
-                    imagePaths.add("http://localhost:8686/images/" + fileName);
+                    imagePaths.add("http://47.121.122.230:8686/images/" + fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                     // 错误处理

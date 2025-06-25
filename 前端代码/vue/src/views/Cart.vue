@@ -10,7 +10,12 @@
     </div>
     <div v-else class="cart-list">
       <div class="cart-card" v-for="item in cartItems" :key="item.goodsId">
-        <img :src="(item.goodsImages && item.goodsImages.length > 0 ? item.goodsImages[0] : '/default-goods.jpg')" class="cart-image" />
+        <img 
+          :src="(item.goodsImages && item.goodsImages.length > 0 ? item.goodsImages[0] : '/default-goods.jpg')"
+          class="cart-image"
+          style="cursor:pointer"
+          @click="goToGoodsDetail(item.goodsId)"
+        />
         <div class="cart-info">
           <h3>{{ item.goodsName }}</h3>
           <p>类型: {{ item.type }}</p>
@@ -145,6 +150,10 @@ const checkout = async () => {
   } catch (error) {
     Message.error('订单创建失败')
   }
+}
+
+const goToGoodsDetail = (goodsId) => {
+  router.push(`/goods/${goodsId}`)
 }
 
 onMounted(loadCart)

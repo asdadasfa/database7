@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>database_cli</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>database7.1</version>
 	<name>database_cli</name>
 	<description>database_cli</description>
 	<url/>
@@ -102,5 +102,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<packaging>jar</packaging>
 </project>

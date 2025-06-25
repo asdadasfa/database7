@@ -26,13 +26,13 @@ public class GoodsServiceImpl implements IGoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    // 图片保存路径 (始终相对于database_cli目录)
+    // 图片保存路径 (始终相对于项目根目录)
     private static final String IMAGE_UPLOAD_PATH;
     static {
         // 获取当前项目根目录
         String projectRoot = System.getProperty("user.dir");
-        // 拼接到后端服务代码/database_cli/uploaded_images
-        IMAGE_UPLOAD_PATH = java.nio.file.Paths.get(projectRoot, "后端服务代码", "database_cli", "uploaded_images").toString();
+        // 拼接到根目录下的 uploaded_images
+        IMAGE_UPLOAD_PATH = java.nio.file.Paths.get(projectRoot, "uploaded_images").toString();
     }
 
     @Override
@@ -106,10 +106,9 @@ public class GoodsServiceImpl implements IGoodsService {
                     // 保存图片文件到绝对路径
                     java.io.File destFile = new java.io.File(uploadDir, fileName);
                     imageFile.transferTo(destFile);
-                    
-                    // 根据前端要求，保存完整的URL到数据库
-                    imagePaths.add("http://localhost:8686/images/" + fileName);
-                    log.info("图片保存成功，路径: {}, URL: {}", destFile.getAbsolutePath(), "http://localhost:8686/images/" + fileName);
+                    // 保存相对路径到数据库
+                    imagePaths.add("http://47.121.122.230:8686/images/"+fileName);
+                    log.info("图片保存成功，路径: {}, 文件名: {}", destFile.getAbsolutePath(), fileName);
                 } catch (IOException e) {
                     log.error("图片保存失败: {}", imageFile.getOriginalFilename(), e);
                     return null;

@@ -15,12 +15,6 @@
               我的商品
             </button>
             <button 
-              :class="['tab-button', { active: activeTab === 'orders' }]"
-              @click="switchTab('orders')"
-            >
-              订单管理
-            </button>
-            <button 
               :class="['tab-button', { active: activeTab === 'profile' }]"
               @click="switchTab('profile')"
             >
@@ -71,49 +65,6 @@
                   <button :disabled="goodsPage === 1" @click="changeGoodsPage(goodsPage - 1)">上一页</button>
                   <span>第 {{ goodsPage }} / {{ goodsTotalPages }} 页</span>
                   <button :disabled="goodsPage === goodsTotalPages" @click="changeGoodsPage(goodsPage + 1)">下一页</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 订单管理 -->
-            <div v-if="activeTab === 'orders'" class="tab-pane">
-              <div v-if="ordersLoading" class="loading-spinner"></div>
-               <div v-else-if="orders.length === 0" class="empty-orders">
-                <div class="empty-content">
-                  <div class="empty-icon">📦</div>
-                  <p>暂无订单</p>
-                </div>
-              </div>
-              <div v-else class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>订单号</th>
-                      <th>买家ID</th>
-                      <th>总价</th>
-                      <th>下单时间</th>
-                      <th>状态</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="order in orders" :key="order.orderId">
-                      <td>{{ order.orderId }}</td>
-                       <td>{{ order.buyerId }}</td>
-                      <td>¥{{ (order.totalAmount || order.sum || 0).toFixed(2) }}</td>
-                      <td>{{ formatTime(order.time) }}</td>
-                      <td>
-                        <span :class="['status-tag', getStatusClass(order.state)]">
-                          {{ order.state }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- 分页控件 -->
-                <div class="pagination" v-if="orderTotal > orderPageSize">
-                  <button :disabled="orderPage === 1" @click="changeOrderPage(orderPage - 1)">上一页</button>
-                  <span>第 {{ orderPage }} / {{ orderTotalPages }} 页</span>
-                  <button :disabled="orderPage === orderTotalPages" @click="changeOrderPage(orderPage + 1)">下一页</button>
                 </div>
               </div>
             </div>
@@ -291,9 +242,7 @@ const logoutPassword = ref('');
 
 const switchTab = (tab) => {
   activeTab.value = tab;
-  if (tab === 'orders') {
-    loadOrders();
-  } else if (tab === 'goods') {
+  if (tab === 'goods') {
     loadMyGoods();
   }
 };
@@ -487,12 +436,6 @@ const updateProfile = async () => {
     loading.value = false;
   }
 };
-
-const changeOrderPage = async (newPage) => {
-  if (newPage < 1 || newPage > orderTotalPages.value) return
-  orderPage.value = newPage
-  await loadOrders()
-}
 
 const showLogoutDialog = () => {
   logoutDialogVisible.value = true;
