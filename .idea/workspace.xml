@@ -4,22 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/api/index.js" afterDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了部分配置，未了在服务器部署做了部分细微调整">
       <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Orders.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/SellerCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/UserCenter.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/后端服务代码/database_cli/src/main/java/com/example/database_cli/server/Impl/GoodsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/test/java/com/example/database_cli/GoodsControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/src/test/java/com/example/database_cli/GoodsServiceTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_30ec332a4e114617a40f1315b78dc7a6.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_3be5d615acb94bd0ac50d32e91806c78.jpg" beforeDir="false" />
@@ -31,9 +17,6 @@
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f0cf7ddbbe6b4a979967fff694342354.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f90a20f3ed924702b0f9ac61a0b047ce.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_ffdf30d242f74a04b69e0e3c5fb8ecfe.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/数据库/handle_timeout_orders.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/数据库/simple_timeout_orders.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/数据库/数据库设计.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +179,7 @@
       <workItem from="1750729487904" duration="14353000" />
       <workItem from="1750754576584" duration="8910000" />
       <workItem from="1750833015086" duration="3047000" />
-      <workItem from="1750840705539" duration="590000" />
+      <workItem from="1750840705539" duration="1356000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -366,7 +349,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750667142058</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="修改了部分配置，未了在服务器部署做了部分细微调整">
+      <option name="closed" value="true" />
+      <created>1750842320263</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1750842320263</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -438,6 +429,7 @@
     <MESSAGE value="6.22日志和对前端接口连接和部分页面调整" />
     <MESSAGE value="修复了部分订单问题，优化了前端的页面逻辑" />
     <MESSAGE value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
+    <MESSAGE value="修改了部分配置，未了在服务器部署做了部分细微调整" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改了部分配置，未了在服务器部署做了部分细微调整" />
   </component>
 </project>
