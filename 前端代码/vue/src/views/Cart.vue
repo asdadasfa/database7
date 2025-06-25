@@ -9,7 +9,12 @@
       </div>
     </div>
     <div v-else class="cart-list">
+      <div style="margin-bottom: 10px;display:flex;align-items:center;gap:10px;">
+        <input type="checkbox" v-model="allSelected" @change="toggleAll" id="selectAll" style="width:18px;height:18px;"/>
+        <label for="selectAll" style="user-select:none;cursor:pointer;">全选</label>
+      </div>
       <div class="cart-card" v-for="item in cartItems" :key="item.goodsId">
+        <input type="checkbox" v-model="selectedIds" :value="item.goodsId" style="margin-right:10px;width:18px;height:18px;"/>
         <img 
           :src="(item.goodsImages && item.goodsImages.length > 0 ? item.goodsImages[0] : '/default-goods.jpg')"
           class="cart-image"
@@ -30,9 +35,9 @@
         <div class="cart-sum">小计: ￥{{ (item.price * item.num).toFixed(2) }}</div>
       </div>
       <div class="cart-summary">
-        <div>商品总数: {{ total }} 件</div>
-        <div class="total-price">总金额: ￥{{ totalAmount }}</div>
-        <button class="main-btn" @click="checkout">结算</button>
+        <div>已选商品: {{ selectedTotal }} 件</div>
+        <div class="total-price">总金额: ￥{{ selectedTotalAmount }}</div>
+        <button class="main-btn" @click="checkout" :disabled="!selectedIds.length">结算</button>
         <button class="main-btn danger" @click="clearCart" :disabled="!cartItems.length">清空购物车</button>
       </div>
       <div v-if="totalPages > 1" class="cart-pagination">
@@ -45,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { cartAPI, orderAPI } from '../api'
 import Message from '../utils/message'
@@ -56,8 +61,26 @@ const total = ref(0)
 const totalAmount = ref(0)
 const page = ref(1)
 const pageSize = ref(6)
+const selectedIds = ref([])
+const allSelected = ref(false)
 
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+
+const selectedItems = computed(() => cartItems.value.filter(item => selectedIds.value.includes(item.goodsId)))
+const selectedTotal = computed(() => selectedItems.value.reduce((sum, item) => sum + item.num, 0))
+const selectedTotalAmount = computed(() => selectedItems.value.reduce((sum, item) => sum + item.price * item.num, 0).toFixed(2))
+
+const toggleAll = () => {
+  if (allSelected.value) {
+    selectedIds.value = cartItems.value.map(item => item.goodsId)
+  } else {
+    selectedIds.value = []
+  }
+}
+
+watch([cartItems, selectedIds], () => {
+  allSelected.value = cartItems.value.length > 0 && selectedIds.value.length === cartItems.value.length
+})
 
 const loadCart = async () => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
@@ -71,6 +94,8 @@ const loadCart = async () => {
     cartItems.value = response.data.data || []
     total.value = response.data.total || 0
     totalAmount.value = response.data.totalAmount || 0
+    // 默认全选
+    selectedIds.value = cartItems.value.map(item => item.goodsId)
   }
 }
 
@@ -115,20 +140,18 @@ const clearCart = async () => {
 }
 
 const checkout = async () => {
-  if (!cartItems.value.length) {
-    Message.warning('购物车是空的')
+  if (!selectedItems.value.length) {
+    Message.warning('请选择要结算的商品')
     return
   }
-  
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
   if (!userInfo.buyerId) {
     Message.warning('请先登录')
     router.push('/login')
     return
   }
-
   try {
-    for (const item of cartItems.value) {
+    for (const item of selectedItems.value) {
       const orderData = {
         buyerId: userInfo.buyerId,
         sellerId: item.sellerId,
@@ -142,9 +165,11 @@ const checkout = async () => {
       }
     }
     Message.success('订单创建成功')
-    // 清空购物车
-    await cartAPI.clearCart(userInfo.buyerId)
-    cartItems.value = []
+    // 移除已结算商品
+    for (const item of selectedItems.value) {
+      await cartAPI.removeFromCart(userInfo.buyerId, item.goodsId)
+    }
+    await loadCart()
     // 跳转到订单页面
     router.push('/orders')
   } catch (error) {
