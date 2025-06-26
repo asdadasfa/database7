@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了部分配置，未了在服务器部署做了部分细微调整">
-      <change beforePath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" beforeDir="false" afterPath="$PROJECT_DIR$/前端代码/vue/src/views/Cart.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_269209066572464bb00bee76b9f7953f.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_30ec332a4e114617a40f1315b78dc7a6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_3be5d615acb94bd0ac50d32e91806c78.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_41fb7018987946f481263c22b443131d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_5f7b8d483ff144b3a7d30d920812eb5f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_8f28f0f6d4fd4b1fa5f89c621677731c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_a41e7f097f944b3484c50e9dece42370.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_b43f5569dc924dcf8711431b7b3b71eb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f0cf7ddbbe6b4a979967fff694342354.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_f90a20f3ed924702b0f9ac61a0b047ce.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/后端服务代码/database_cli/uploaded_images/goods_ffdf30d242f74a04b69e0e3c5fb8ecfe.jpg" beforeDir="false" />
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +60,7 @@
     &quot;Spring Boot.DatabaseCliApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/白峰楠/IdeaProjects/database8/后端服务代码/database_cli&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/白峰楠/IdeaProjects/database8&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -89,18 +78,18 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\白峰楠\IdeaProjects\database8\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8" />
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\前端代码\vue\public" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\uploaded_images" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8\报告" />
+      <recent name="C:\Users\白峰楠\IdeaProjects\database8" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database8\数据库" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7\后端服务代码\database_cli" />
       <recent name="C:\Users\白峰楠\IdeaProjects\database7" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\log\img" />
-      <recent name="C:\Users\白峰楠\IdeaProjects\database7\数据库" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.database_cli.model.result" />
@@ -179,7 +168,7 @@
       <workItem from="1750729487904" duration="14353000" />
       <workItem from="1750754576584" duration="8910000" />
       <workItem from="1750833015086" duration="3047000" />
-      <workItem from="1750840705539" duration="1356000" />
+      <workItem from="1750840705539" duration="9022000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -357,7 +346,23 @@
       <option name="project" value="LOCAL" />
       <updated>1750842320263</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="修改了部分配置，未了在服务器部署做了部分细微调整">
+      <option name="closed" value="true" />
+      <created>1750842341321</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1750842341321</updated>
+    </task>
+    <task id="LOCAL-00024" summary="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志">
+      <option name="closed" value="true" />
+      <created>1750842433075</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1750842433075</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -430,6 +435,7 @@
     <MESSAGE value="修复了部分订单问题，优化了前端的页面逻辑" />
     <MESSAGE value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
     <MESSAGE value="修改了部分配置，未了在服务器部署做了部分细微调整" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了部分配置，未了在服务器部署做了部分细微调整" />
+    <MESSAGE value="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志" />
   </component>
 </project>
