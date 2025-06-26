@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="917a8899-767e-4eb2-af39-57423a416363" name="更改" comment="报告" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,6 +167,7 @@
       <workItem from="1750754576584" duration="8910000" />
       <workItem from="1750833015086" duration="3047000" />
       <workItem from="1750840705539" duration="9022000" />
+      <workItem from="1750897529475" duration="349000" />
     </task>
     <task id="LOCAL-00001" summary="6.17">
       <option name="closed" value="true" />
@@ -362,7 +361,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750842433075</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="报告">
+      <option name="closed" value="true" />
+      <created>1750897732818</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1750897732818</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -436,6 +443,7 @@
     <MESSAGE value="优化前端界面，并添加了管理员界面，修复了部分后端接口，还有6.23日志" />
     <MESSAGE value="修改了部分配置，未了在服务器部署做了部分细微调整" />
     <MESSAGE value="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了部分配置，未了在服务器部署做了部分细微调整,还有6.25日志" />
+    <MESSAGE value="报告" />
+    <option name="LAST_COMMIT_MESSAGE" value="报告" />
   </component>
 </project>
